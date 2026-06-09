@@ -12,6 +12,19 @@
       "raised":  { "value": "{color.neutral.50}",  "type": "color" },
       "overlay": { "value": "{color.neutral.100}", "type": "color" }
     },
+    "overlay": {
+      "default": { "value": "rgba(0,0,0,0.4)",  "type": "color", "description": "Modal/dialog backdrop — light" },
+      "strong":  { "value": "rgba(0,0,0,0.6)",  "type": "color", "description": "Modal/dialog backdrop — heavy" }
+    },
+    "disabled": {
+      "background": { "value": "{color.neutral.100}", "type": "color", "description": "Background for disabled inputs, buttons" },
+      "border":     { "value": "{color.neutral.200}", "type": "color", "description": "Border for disabled inputs" },
+      "text":       { "value": "{color.neutral.400}", "type": "color", "description": "Text on disabled elements (AA exempt per WCAG 1.4.3)" }
+    },
+    "focus": {
+      "ring":        { "value": "{color.blue.500}",    "type": "color", "description": "Focus ring outline — 2px offset ring" },
+      "ring-offset": { "value": "{color.neutral.0}",   "type": "color", "description": "Gap between element and focus ring" }
+    },
     "border": {
       "default": { "value": "{color.neutral.200}", "type": "color" },
       "strong":  { "value": "{color.neutral.400}", "type": "color" },
