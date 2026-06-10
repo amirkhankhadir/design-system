@@ -26,14 +26,18 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const theme = (context.globals.theme as string) || 'light';
-      return (
-        <div
-          data-theme={theme}
-          style={{ background: 'var(--ds-color-background-default)' }}
-        >
-          <Story />
-        </div>
-      );
+
+      React.useEffect(() => {
+        const html = document.documentElement;
+        html.setAttribute('data-theme', theme);
+        document.body.style.background = 'var(--ds-color-background-default)';
+        return () => {
+          html.removeAttribute('data-theme');
+          document.body.style.background = '';
+        };
+      }, [theme]);
+
+      return <Story />;
     },
   ],
   parameters: {
