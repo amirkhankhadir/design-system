@@ -9,29 +9,31 @@ import { playwright } from '@vitest/browser-playwright';
 const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
 /**
- * Virtual module plugin for Material Symbols SVGs.
- * Resolves `virtual:icon/outlined/home` → raw SVG string from node_modules.
- * This avoids Vite's node_modules glob restriction and ?raw dynamic import issues.
+ * Material Symbols plugin — serves SVGs via a dev middleware at
+ * GET /__icons/{variant}/{name}.svg
+ * The Icon component fetches from this endpoint at runtime.
  */
 function materialIconsPlugin(): Plugin {
-  const PREFIX = '\0virtual:icon/';
   const ICONS_DIR = path.resolve(dirname, '../../node_modules/@material-symbols/svg-400');
 
   return {
     name: 'material-icons',
-    resolveId(id) {
-      if (id.startsWith('virtual:icon/')) return PREFIX + id.slice('virtual:icon/'.length);
-    },
-    load(id) {
-      if (!id.startsWith(PREFIX)) return;
-      const rest = id.slice(PREFIX.length); // e.g. "outlined/home" or "rounded/search-fill"
-      const svgPath = path.join(ICONS_DIR, rest + '.svg');
-      try {
-        const content = fs.readFileSync(svgPath, 'utf-8');
-        return `export default ${JSON.stringify(content)};`;
-      } catch {
-        return `export default null;`;
-      }
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const match = req.url?.match(/^\/__icons\/(outlined|rounded)\/(.+)\.svg$/);
+        if (!match) return next();
+        const [, variant, name] = match;
+        const svgPath = path.join(ICONS_DIR, variant, `${name}.svg`);
+        try {
+          const content = fs.readFileSync(svgPath, 'utf-8');
+          res.setHeader('Content-Type', 'image/svg+xml');
+          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+          res.end(content);
+        } catch {
+          res.statusCode = 404;
+          res.end('Icon not found');
+        }
+      });
     },
   };
 }

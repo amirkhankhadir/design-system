@@ -47,10 +47,11 @@ async function loadSvg(name: string, variant: IconVariant, filled: boolean): Pro
 
   const suffix = filled ? '-fill' : '';
   try {
-    // Virtual module resolved by materialIconsPlugin in vite.config.ts
-    const mod = await import(/* @vite-ignore */ `virtual:icon/${variant}/${name}${suffix}`);
-    if (!mod.default) throw new Error('not found');
-    const svg = injectCurrentColor(mod.default as string);
+    // Dev server middleware at /__icons/ served by materialIconsPlugin in vite.config.ts
+    const res = await fetch(`/__icons/${variant}/${name}${suffix}.svg`);
+    if (!res.ok) throw new Error(`${res.status}`);
+    const text = await res.text();
+    const svg = injectCurrentColor(text);
     svgCache.set(key, svg);
     return svg;
   } catch {
