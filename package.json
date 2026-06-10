@@ -12,6 +12,7 @@
     "style-dictionary": "^4.3.0"
   },
   "dependencies": {
+    "@fontsource/source-sans-3": "^5.2.9",
     "@material-symbols/svg-400": "^0.23.0"
   }
 }

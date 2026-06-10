@@ -86,8 +86,14 @@ function buildCSS(mode) {
   const typoVars = typography.variables ?? {};
   const typoFlat = flatten(typoVars);
   for (const [path, val] of Object.entries(typoFlat)) {
-    const unit = path.startsWith('font-size') || path.startsWith('line-height')
-      ? `${val}px` : val;
+    let unit;
+    if (path.startsWith('font-size') || path.startsWith('line-height')) {
+      unit = `${val}px`;
+    } else if (path.startsWith('font-family') && typeof val === 'string' && val.includes(' ')) {
+      unit = `"${val}"`;  // quote multi-word font names
+    } else {
+      unit = val;
+    }
     lines.push(`  ${cssVar(path)}: ${unit};`);
   }
 
