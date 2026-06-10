@@ -207,3 +207,37 @@
 
 .btn--link.btn--danger { color: var(--ds-color-status-error-text); }
 .btn--link.btn--danger .icon { color: var(--ds-color-status-error-text); }
+
+/* ─────────────────────────────────────────────────────────────
+   DANGER + DISABLED — reset to standard disabled appearance
+   These rules come last to override danger color specificity.
+   ───────────────────────────────────────────────────────────── */
+
+.btn--danger:disabled {
+  color: var(--ds-color-text-disabled);
+  border-color: transparent;
+  cursor: not-allowed;
+}
+.btn--danger:disabled .icon { color: var(--ds-color-icon-disabled); }
+.btn--danger:disabled::after { display: none; }
+
+/* primary danger disabled: same gray bg as primary disabled */
+.btn--primary.btn--danger:disabled {
+  background: var(--ds-color-background-muted);
+}
+
+/* secondary danger disabled: transparent bg + subtle border */
+.btn--secondary.btn--danger:disabled {
+  background: transparent;
+  border-color: var(--ds-color-border-subtle);
+}
+
+/* tertiary danger disabled: muted bg */
+.btn--tertiary.btn--danger:disabled {
+  background: var(--ds-color-background-muted);
+}
+
+/* link danger disabled: transparent bg */
+.btn--link.btn--danger:disabled {
+  background: transparent;
+}
