@@ -1,7 +1,7 @@
 import './Loader.css';
 
 export type LoaderSize  = 'sm' | 'md' | 'lg' | number;
-export type LoaderColor = 'brand' | 'inverse' | 'on-brand' | 'on-dark' | 'on-light';
+export type LoaderColor = 'brand' | 'inverse' | 'on-brand' | 'static-white' | 'static-black';
 
 export interface LoaderProps {
   /** Predefined size or explicit px value, e.g. size={32} */

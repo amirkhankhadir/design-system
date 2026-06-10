@@ -15,7 +15,7 @@ const meta: Meta<typeof Loader> = {
     },
     color: {
       control: { type: 'select' },
-      options: ['brand', 'inverse', 'on-brand', 'on-dark', 'on-light'],
+      options: ['brand', 'inverse', 'on-brand', 'static-white', 'static-black'],
       description: 'Color variant',
     },
     label: {
@@ -106,7 +106,7 @@ export const AllVariants: Story = {
         </div>
       </div>
 
-      {/* On Dark */}
+      {/* Static White */}
       <div style={{
         display: 'flex', alignItems: 'center', gap: 16,
         padding: '16px 20px',
@@ -115,14 +115,14 @@ export const AllVariants: Story = {
         borderRight: '1px solid var(--ds-color-border-subtle)',
         borderBottom: '1px solid var(--ds-color-border-subtle)',
       }}>
-        <Loader size={24} color="on-dark" />
+        <Loader size={24} color="static-white" />
         <div>
-          <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: '#ffffff' }}>on-dark</p>
-          <p style={{ margin: 0, fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>--ds-color-base-white · поверх тёмных поверхностей</p>
+          <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: '#ffffff' }}>static-white</p>
+          <p style={{ margin: 0, fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>--ds-color-icon-static-white · поверх тёмных поверхностей</p>
         </div>
       </div>
 
-      {/* On Light */}
+      {/* Static Black */}
       <div style={{
         display: 'flex', alignItems: 'center', gap: 16,
         padding: '16px 20px',
@@ -132,10 +132,10 @@ export const AllVariants: Story = {
         borderRight: '1px solid var(--ds-color-border-subtle)',
         borderBottom: '1px solid var(--ds-color-border-subtle)',
       }}>
-        <Loader size={24} color="on-light" />
+        <Loader size={24} color="static-black" />
         <div>
-          <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: '#000000' }}>on-light</p>
-          <p style={{ margin: 0, fontSize: 11, color: 'rgba(0,0,0,0.45)' }}>--ds-color-base-black · поверх светлых поверхностей</p>
+          <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: '#000000' }}>static-black</p>
+          <p style={{ margin: 0, fontSize: 11, color: 'rgba(0,0,0,0.45)' }}>--ds-color-icon-static-black · поверх светлых поверхностей</p>
         </div>
       </div>
 

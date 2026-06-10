@@ -39,9 +39,9 @@
 /* For use on brand-colored backgrounds */
 .loader--on-brand { color: var(--ds-color-text-on-brand); }
 /* For use on dark backgrounds — always white */
-.loader--on-dark  { color: var(--ds-color-base-white, #ffffff); }
+.loader--static-white { color: var(--ds-color-icon-static-white); }
 /* For use on light backgrounds — always black */
-.loader--on-light { color: var(--ds-color-base-black, #000000); }
+.loader--static-black { color: var(--ds-color-icon-static-black); }
 
 /* ── Animation ──────────────────────────────────────────── */
 

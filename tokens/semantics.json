@@ -19,15 +19,19 @@
       "secondary":  { "Light": "{color.neutral.20}",    "Dark": "{color.neutral.70}" },
       "tertiary":   { "Light": "{color.neutral.40}",    "Dark": "{color.neutral.50}" },
       "disabled":   { "Light": "{color.neutral.60}",    "Dark": "{color.neutral.30}" },
-      "inverse":    { "Light": "{color.base.white}",    "Dark": "{color.neutral.5}" },
-      "on-brand":   { "Light": "{color.base.white}",    "Dark": "{color.base.white}" }
+      "inverse":      { "Light": "{color.base.white}",    "Dark": "{color.neutral.5}" },
+      "on-brand":     { "Light": "{color.base.white}",    "Dark": "{color.base.white}" },
+      "static-white": { "Light": "{color.base.white}",    "Dark": "{color.base.white}" },
+      "static-black": { "Light": "{color.base.black}",    "Dark": "{color.base.black}" }
     },
     "icon": {
-      "default":  { "Light": "{color.neutral.10}",   "Dark": "{color.neutral.80}" },
-      "secondary": { "Light": "{color.neutral.30}",   "Dark": "{color.neutral.60}" },
-      "disabled":  { "Light": "{color.neutral.60}",   "Dark": "{color.neutral.30}" },
-      "inverse":   { "Light": "{color.base.white}",   "Dark": "{color.neutral.10}" },
-      "on-brand":  { "Light": "{color.base.white}",   "Dark": "{color.base.white}" }
+      "default":      { "Light": "{color.neutral.10}",   "Dark": "{color.neutral.80}" },
+      "secondary":    { "Light": "{color.neutral.30}",   "Dark": "{color.neutral.60}" },
+      "disabled":     { "Light": "{color.neutral.60}",   "Dark": "{color.neutral.30}" },
+      "inverse":      { "Light": "{color.base.white}",   "Dark": "{color.neutral.10}" },
+      "on-brand":     { "Light": "{color.base.white}",   "Dark": "{color.base.white}" },
+      "static-white": { "Light": "{color.base.white}",   "Dark": "{color.base.white}" },
+      "static-black": { "Light": "{color.base.black}",   "Dark": "{color.base.black}" }
     },
     "border": {
       "subtle":  { "Light": "{color.overlay.black.8}",  "Dark": "{color.overlay.white.8}" },

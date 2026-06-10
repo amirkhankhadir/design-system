@@ -135,18 +135,18 @@ export const All: Story = {
 
       <SectionLabel>Text</SectionLabel>
       <ColorTable
-        rows={['primary','secondary','tertiary','disabled','inverse','on-brand']}
+        rows={['primary','secondary','tertiary','disabled','inverse','on-brand','static-white','static-black']}
         variants={['value']}
         getVariable={(row) => `--ds-color-text-${row}`}
-        showBorderFor={(row) => row === 'inverse' || row === 'on-brand'}
+        showBorderFor={(row) => ['inverse','on-brand','static-white','static-black'].includes(row)}
       />
 
       <SectionLabel>Icon</SectionLabel>
       <ColorTable
-        rows={['default','secondary','disabled','inverse','on-brand']}
+        rows={['default','secondary','disabled','inverse','on-brand','static-white','static-black']}
         variants={['value']}
         getVariable={(row) => `--ds-color-icon-${row}`}
-        showBorderFor={(row) => row === 'inverse' || row === 'on-brand'}
+        showBorderFor={(row) => ['inverse','on-brand','static-white','static-black'].includes(row)}
       />
 
       <SectionLabel>Border</SectionLabel>
