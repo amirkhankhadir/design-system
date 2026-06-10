@@ -41,11 +41,45 @@ const preview: Preview = {
 
         if (theme === 'dark') {
           style.textContent = `
+            /* Canvas & docs background */
             body, .sb-show-main, #storybook-root,
-            .docs-story, .sbdocs-wrapper, #storybook-docs,
-            .sb-bar, .os-content {
+            .sbdocs-wrapper, #storybook-docs, .os-content,
+            .docs-story > div {
               background: var(--ds-color-background-default) !important;
+            }
+
+            /* Docs text */
+            .sbdocs-wrapper, .sbdocs-wrapper h1, .sbdocs-wrapper h2,
+            .sbdocs-wrapper h3, .sbdocs-wrapper p, .sbdocs-wrapper span,
+            .sbdocs-wrapper div, .sbdocs-wrapper label,
+            #storybook-docs, #storybook-docs * {
               color: var(--ds-color-text-primary) !important;
+            }
+
+            /* Controls / ArgsTable */
+            .docblock-argstable, .docblock-argstable th,
+            .docblock-argstable td, .docblock-argstable tr,
+            .docblock-argstable thead, .docblock-argstable tbody {
+              background: var(--ds-color-background-subtle) !important;
+              color: var(--ds-color-text-primary) !important;
+              border-color: var(--ds-color-border-subtle) !important;
+            }
+            .docblock-argstable input, .docblock-argstable select,
+            .docblock-argstable button {
+              background: var(--ds-color-background-muted) !important;
+              color: var(--ds-color-text-primary) !important;
+              border-color: var(--ds-color-border-default) !important;
+            }
+
+            /* Story canvas container */
+            .docs-story {
+              background: var(--ds-color-background-subtle) !important;
+              border-color: var(--ds-color-border-subtle) !important;
+            }
+
+            /* Section headers like STORIES */
+            .sbdocs-wrapper .css-1x7q2op, [class*="StoriesHeader"] {
+              color: var(--ds-color-text-tertiary) !important;
             }
           `;
         } else {
