@@ -53,21 +53,6 @@ export const Variants: Story = {
   ),
 };
 
-// ── Sizes ──────────────────────────────────────────────────
-
-export const Sizes: Story = {
-  render: () => (
-    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 24 }}>
-      {[16, 20, 24, 32, 40, 48].map(size => (
-        <div key={size} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-          <Icon name="star" size={size} />
-          <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>{size}px</p>
-        </div>
-      ))}
-    </div>
-  ),
-};
-
 // ── Colors ─────────────────────────────────────────────────
 
 export const Colors: Story = {
