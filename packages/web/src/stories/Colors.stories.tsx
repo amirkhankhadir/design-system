@@ -145,20 +145,6 @@ export const All: Story = {
             </div>
           ))}
         </div>
-        {/* Same swatches on dark bg */}
-        <div style={{ display: 'flex', gap: 12, marginTop: 8, padding: 12, background: '#2a2a2a', borderRadius: 'var(--ds-radius-8)' }}>
-          {['1','2','3','4'].map(n => (
-            <div key={n} style={{ flex: 1 }}>
-              <div style={{
-                height: 44,
-                borderRadius: 'var(--ds-radius-6)',
-                background: `var(--ds-color-surface-${n})`,
-                marginBottom: 6,
-              }} />
-              <p className="ds-text-xsmall-1" style={{ color: '#888', margin: 0, textAlign: 'center' }}>on dark</p>
-            </div>
-          ))}
-        </div>
       </div>
 
       <Divider />
