@@ -134,20 +134,26 @@ export const All: Story = {
 
       <SectionLabel>Status</SectionLabel>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginBottom: 40 }}>
+        {/* Header */}
+        <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr 1fr 1fr 1fr', gap: 8, marginBottom: 8, paddingBottom: 8, borderBottom: '1px solid var(--ds-color-border-subtle)' }}>
+          <div />
+          {(['default', 'subtle', 'text', 'border'] as const).map(v => (
+            <p key={v} className="ds-text-xsmall-2" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{v}</p>
+          ))}
+        </div>
+        {/* Rows */}
         {(['success', 'warning', 'error', 'info'] as const).map(status => (
-          <div key={status} style={{ display: 'flex', gap: 8 }}>
+          <div key={status} style={{ display: 'grid', gridTemplateColumns: '80px 1fr 1fr 1fr 1fr', gap: 8, alignItems: 'center', padding: '6px 0', borderBottom: '1px solid var(--ds-color-border-subtle)' }}>
+            <p className="ds-text-small-2" style={{ color: 'var(--ds-color-text-primary)', margin: 0, textTransform: 'capitalize' }}>{status}</p>
             {(['default', 'subtle', 'text', 'border'] as const).map(variant => (
-              <div key={variant} style={{ display: 'flex', flexDirection: 'column', gap: 6, width: 96 }}>
+              <div key={variant} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                 <div style={{
-                  height: 56,
-                  borderRadius: 'var(--ds-radius-8)',
+                  height: 40,
+                  borderRadius: 'var(--ds-radius-6)',
                   background: `var(--ds-color-status-${status}-${variant})`,
                   border: variant === 'subtle' || variant === 'text' ? '1px solid var(--ds-color-border-default)' : undefined,
                 }} />
-                <div>
-                  <p className="ds-text-small-2" style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 2px' }}>{status} / {variant}</p>
-                  <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>--ds-color-status-{status}-{variant}</p>
-                </div>
+                <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>--ds-color-status-{status}-{variant}</p>
               </div>
             ))}
           </div>
@@ -157,21 +163,27 @@ export const All: Story = {
       <Divider />
 
       <SectionLabel>Extended Palette</SectionLabel>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
+      <div style={{ marginBottom: 40 }}>
+        {/* Header row */}
+        <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr 1fr 1fr', gap: 8, marginBottom: 8, paddingBottom: 8, borderBottom: '1px solid var(--ds-color-border-subtle)' }}>
+          <div />
+          {(['default', 'subtle', 'text'] as const).map(v => (
+            <p key={v} className="ds-text-xsmall-2" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{v}</p>
+          ))}
+        </div>
+        {/* Color rows */}
         {['lime','mint','cyan','blue','indigo','purple','pink','rose','yellow'].map(color => (
-          <div key={color} style={{ display: 'flex', gap: 8 }}>
+          <div key={color} style={{ display: 'grid', gridTemplateColumns: '80px 1fr 1fr 1fr', gap: 8, alignItems: 'center', padding: '6px 0', borderBottom: '1px solid var(--ds-color-border-subtle)' }}>
+            <p className="ds-text-small-2" style={{ color: 'var(--ds-color-text-primary)', margin: 0, textTransform: 'capitalize' }}>{color}</p>
             {(['default', 'subtle', 'text'] as const).map(variant => (
-              <div key={variant} style={{ display: 'flex', flexDirection: 'column', gap: 6, width: 96 }}>
+              <div key={variant} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                 <div style={{
-                  height: 56,
-                  borderRadius: 'var(--ds-radius-8)',
+                  height: 40,
+                  borderRadius: 'var(--ds-radius-6)',
                   background: `var(--ds-color-extended-${color}-${variant})`,
                   border: variant === 'subtle' ? '1px solid var(--ds-color-border-default)' : undefined,
                 }} />
-                <div>
-                  <p className="ds-text-small-2" style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 2px' }}>{color} / {variant}</p>
-                  <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>--ds-color-extended-{color}-{variant}</p>
-                </div>
+                <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>--ds-color-extended-{color}-{variant}</p>
               </div>
             ))}
           </div>
