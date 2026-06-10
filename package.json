@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "description": "Cross-platform design system — tokens, icons, and component references for Web, iOS, and Android.",
   "private": true,
+  "type": "module",
   "scripts": {
-    "build:tokens": "style-dictionary build --config style-dictionary.config.js",
+    "build:tokens": "node build-tokens.js",
     "build": "npm run build:tokens"
   },
   "devDependencies": {
