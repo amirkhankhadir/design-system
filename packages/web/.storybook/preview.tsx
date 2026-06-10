@@ -78,9 +78,30 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
+    iconName: {
+      description: 'Icon name (Material Symbols) — syncs across all Icon stories',
+      toolbar: {
+        title: 'Icon',
+        icon: 'star',
+        items: [
+          { value: 'home',          title: 'home' },
+          { value: 'search',        title: 'search' },
+          { value: 'settings',      title: 'settings' },
+          { value: 'favorite',      title: 'favorite' },
+          { value: 'person',        title: 'person' },
+          { value: 'notifications', title: 'notifications' },
+          { value: 'arrow_back',    title: 'arrow_back' },
+          { value: 'close',         title: 'close' },
+          { value: 'add',           title: 'add' },
+          { value: 'edit',          title: 'edit' },
+        ],
+        dynamicTitle: true,
+      },
+    },
   },
   initialGlobals: {
     theme: 'light',
+    iconName: 'home',
   },
   decorators: [
     (Story, context) => {
