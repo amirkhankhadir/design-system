@@ -37,7 +37,7 @@ const LOADER_COLOR_DANGER = {
   link:      'brand',
 } as const;
 
-const ICON_SIZE: Record<ButtonSize, number> = { sm: 16, md: 18, lg: 20 };
+const ICON_SIZE: Record<ButtonSize, number> = { sm: 16, md: 20, lg: 20 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   variant  = 'primary',
@@ -61,8 +61,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     'btn',
     `btn--${variant}`,
     `btn--${size}`,
-    danger  && 'btn--danger',
-    loading && 'btn--loading',
+    danger    && 'btn--danger',
+    loading   && 'btn--loading',
+    iconLeft  && 'btn--has-icon-left',
+    iconRight && 'btn--has-icon-right',
     className,
   ].filter(Boolean).join(' ');
 

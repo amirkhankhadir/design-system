@@ -7,15 +7,17 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  border-radius: var(--ds-radius-8);
+  border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
-  transition: background 120ms ease, color 120ms ease, box-shadow 120ms ease,
-              border-color 120ms ease, opacity 120ms ease;
+  box-sizing: border-box;
+  font-family: var(--ds-font-family-primary, 'Source Sans 3', sans-serif);
+  font-weight: 600;
   -webkit-font-smoothing: antialiased;
   outline: none;
+  transition: background 120ms ease, color 120ms ease, box-shadow 120ms ease,
+              border-color 120ms ease, opacity 120ms ease;
 }
 
 /* ── Content / loader layout ────────────────────────────────── */
@@ -41,39 +43,59 @@
 }
 
 /* ── Sizes ──────────────────────────────────────────────────── */
+/*
+  Heights from Figma reference: sm=24 md=32 lg=40
+  Padding: sm px=8/py=4 · md px=12/py=6 · lg px=12/py=10
+  Gap:     sm/md = 4 · lg = 8
+  Radius (bumped +2 per user request): sm=8 · md=10 · lg=12
+  Font:    sm 12/16 · md/lg 14/18
+*/
 
 .btn--sm {
-  height: var(--ds-sizing-32);
-  padding: 0 var(--ds-spacing-12);
-  gap: var(--ds-spacing-4);
-  font-family: var(--ds-font-family-primary, sans-serif);
+  height: 24px;
+  padding: 0 8px;
+  gap: 4px;
+  border-radius: 8px;
   font-size: 12px;
   line-height: 16px;
-  font-weight: 500;
 }
 
 .btn--md {
-  height: var(--ds-sizing-40);
-  padding: 0 var(--ds-spacing-16);
-  gap: var(--ds-spacing-6);
-  font-family: var(--ds-font-family-primary, sans-serif);
+  height: 32px;
+  padding: 0 12px;
+  gap: 4px;
+  border-radius: 10px;
   font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
+  line-height: 18px;
 }
 
 .btn--lg {
-  height: var(--ds-sizing-48);
-  padding: 0 var(--ds-spacing-20);
-  gap: var(--ds-spacing-8);
-  font-family: var(--ds-font-family-primary, sans-serif);
-  font-size: 16px;
-  line-height: 20px;
-  font-weight: 500;
+  height: 40px;
+  padding: 0 12px;
+  gap: 8px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 18px;
 }
 
+/* ── Icon safe-zone compensation ────────────────────────────── */
+/*
+  Material Symbols icons have a built-in safe zone (~3.5–4px per side).
+  Without compensation the icon side visually looks wider than the text side.
+  We reduce padding on the icon side by 4px to equalise visual weight.
+*/
+
+.btn--sm.btn--has-icon-left  { padding-left:  4px; }
+.btn--sm.btn--has-icon-right { padding-right: 4px; }
+
+.btn--md.btn--has-icon-left,
+.btn--lg.btn--has-icon-left  { padding-left:  8px; }
+
+.btn--md.btn--has-icon-right,
+.btn--lg.btn--has-icon-right { padding-right: 8px; }
+
 /* ── Focus ring (visible on any background) ─────────────────── */
-/* Inner white ring creates contrast gap between button & ring  */
+/* Inner gap ring creates contrast against the button surface    */
 
 .btn:focus-visible {
   box-shadow:
@@ -88,16 +110,13 @@
 .btn--primary {
   background: var(--ds-color-brand-default);
   color: var(--ds-color-text-on-brand);
-  border: 1px solid transparent;
+  border-color: transparent;
 }
 .btn--primary .icon { color: var(--ds-color-icon-on-brand); }
 
-.btn--primary:hover:not(:disabled) {
-  filter: brightness(0.92);
-}
-.btn--primary:active:not(:disabled) {
-  filter: brightness(0.84);
-}
+.btn--primary:hover:not(:disabled) { filter: brightness(0.92); }
+.btn--primary:active:not(:disabled) { filter: brightness(0.84); }
+
 .btn--primary:disabled {
   background: var(--ds-color-background-muted);
   color: var(--ds-color-text-disabled);
@@ -105,10 +124,7 @@
 }
 .btn--primary:disabled .icon { color: var(--ds-color-icon-disabled); }
 
-/* Primary danger */
-.btn--primary.btn--danger {
-  background: var(--ds-color-status-error-default);
-}
+.btn--primary.btn--danger { background: var(--ds-color-status-error-default); }
 
 /* ─────────────────────────────────────────────────────────────
    SECONDARY
@@ -117,16 +133,13 @@
 .btn--secondary {
   background: transparent;
   color: var(--ds-color-text-primary);
-  border: 1px solid var(--ds-color-border-default);
+  border-color: var(--ds-color-border-default);
 }
 .btn--secondary .icon { color: var(--ds-color-icon-default); }
 
-.btn--secondary:hover:not(:disabled) {
-  background: var(--ds-color-surface-1);
-}
-.btn--secondary:active:not(:disabled) {
-  background: var(--ds-color-surface-2);
-}
+.btn--secondary:hover:not(:disabled)  { background: var(--ds-color-surface-1); }
+.btn--secondary:active:not(:disabled) { background: var(--ds-color-surface-2); }
+
 .btn--secondary:disabled {
   color: var(--ds-color-text-disabled);
   border-color: var(--ds-color-border-subtle);
@@ -134,19 +147,13 @@
 }
 .btn--secondary:disabled .icon { color: var(--ds-color-icon-disabled); }
 
-/* Secondary danger */
 .btn--secondary.btn--danger {
   color: var(--ds-color-status-error-text);
   border-color: var(--ds-color-status-error-border);
 }
 .btn--secondary.btn--danger .icon { color: var(--ds-color-status-error-text); }
-.btn--secondary.btn--danger:hover:not(:disabled) {
-  background: var(--ds-color-status-error-subtle);
-}
-.btn--secondary.btn--danger:active:not(:disabled) {
-  background: var(--ds-color-status-error-subtle);
-  filter: brightness(0.95);
-}
+.btn--secondary.btn--danger:hover:not(:disabled)  { background: var(--ds-color-status-error-subtle); }
+.btn--secondary.btn--danger:active:not(:disabled) { background: var(--ds-color-status-error-subtle); filter: brightness(0.95); }
 
 /* ─────────────────────────────────────────────────────────────
    TERTIARY
@@ -155,16 +162,13 @@
 .btn--tertiary {
   background: var(--ds-color-surface-1);
   color: var(--ds-color-text-primary);
-  border: 1px solid transparent;
+  border-color: transparent;
 }
 .btn--tertiary .icon { color: var(--ds-color-icon-default); }
 
-.btn--tertiary:hover:not(:disabled) {
-  background: var(--ds-color-surface-2);
-}
-.btn--tertiary:active:not(:disabled) {
-  background: var(--ds-color-surface-3);
-}
+.btn--tertiary:hover:not(:disabled)  { background: var(--ds-color-surface-2); }
+.btn--tertiary:active:not(:disabled) { background: var(--ds-color-surface-3); }
+
 .btn--tertiary:disabled {
   color: var(--ds-color-text-disabled);
   background: var(--ds-color-background-muted);
@@ -172,46 +176,33 @@
 }
 .btn--tertiary:disabled .icon { color: var(--ds-color-icon-disabled); }
 
-/* Tertiary danger */
-.btn--tertiary.btn--danger {
-  color: var(--ds-color-status-error-text);
-}
+.btn--tertiary.btn--danger { color: var(--ds-color-status-error-text); }
 .btn--tertiary.btn--danger .icon { color: var(--ds-color-status-error-text); }
-.btn--tertiary.btn--danger:hover:not(:disabled) {
-  background: var(--ds-color-status-error-subtle);
-}
-.btn--tertiary.btn--danger:active:not(:disabled) {
-  background: var(--ds-color-status-error-subtle);
-  filter: brightness(0.95);
-}
+.btn--tertiary.btn--danger:hover:not(:disabled)  { background: var(--ds-color-status-error-subtle); }
+.btn--tertiary.btn--danger:active:not(:disabled) { background: var(--ds-color-status-error-subtle); filter: brightness(0.95); }
 
 /* ─────────────────────────────────────────────────────────────
    LINK
+   Full-height button with transparent bg — shows subtle brand
+   fill on hover (same pattern as tertiary but brand-tinted).
    ───────────────────────────────────────────────────────────── */
 
 .btn--link {
   background: transparent;
   color: var(--ds-color-brand-text);
-  border: 1px solid transparent;
-  padding-left: var(--ds-spacing-4);
-  padding-right: var(--ds-spacing-4);
+  border-color: transparent;
 }
 .btn--link .icon { color: var(--ds-color-brand-default); }
 
-.btn--link:hover:not(:disabled) {
-  text-decoration: underline;
-}
-.btn--link:active:not(:disabled) {
-  opacity: 0.75;
-}
+.btn--link:hover:not(:disabled)  { background: var(--ds-color-brand-subtle); }
+.btn--link:active:not(:disabled) { background: var(--ds-color-brand-subtle); filter: brightness(0.93); }
+
 .btn--link:disabled {
   color: var(--ds-color-text-disabled);
   cursor: not-allowed;
 }
 .btn--link:disabled .icon { color: var(--ds-color-icon-disabled); }
 
-/* Link danger */
-.btn--link.btn--danger {
-  color: var(--ds-color-status-error-text);
-}
+.btn--link.btn--danger { color: var(--ds-color-status-error-text); }
 .btn--link.btn--danger .icon { color: var(--ds-color-status-error-text); }
+.btn--link.btn--danger:hover:not(:disabled)  { background: var(--ds-color-status-error-subtle); }
