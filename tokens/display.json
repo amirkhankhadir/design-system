@@ -1,0 +1,45 @@
+{
+  "$collection": "display-semantics",
+  "$description": "Theme-independent display tokens: spacing, radius, border-width, sizing. Single mode — no Light/Dark.",
+  "spacing": {
+    "0":  { "$alias": "dimensions.0",  "$value": 0 },
+    "2":  { "$alias": "dimensions.2",  "$value": 2 },
+    "4":  { "$alias": "dimensions.4",  "$value": 4 },
+    "6":  { "$alias": "dimensions.6",  "$value": 6 },
+    "8":  { "$alias": "dimensions.8",  "$value": 8 },
+    "12": { "$alias": "dimensions.12", "$value": 12 },
+    "16": { "$alias": "dimensions.16", "$value": 16 },
+    "20": { "$alias": "dimensions.20", "$value": 20 },
+    "24": { "$alias": "dimensions.24", "$value": 24 },
+    "32": { "$alias": "dimensions.32", "$value": 32 },
+    "40": { "$alias": "dimensions.40", "$value": 40 },
+    "48": { "$alias": "dimensions.48", "$value": 48 },
+    "64": { "$alias": "dimensions.64", "$value": 64 }
+  },
+  "radius": {
+    "0":    { "$alias": "dimensions.0",    "$value": 0 },
+    "4":    { "$alias": "dimensions.4",    "$value": 4 },
+    "6":    { "$alias": "dimensions.6",    "$value": 6 },
+    "8":    { "$alias": "dimensions.8",    "$value": 8 },
+    "10":   { "$alias": "dimensions.10",   "$value": 10 },
+    "12":   { "$alias": "dimensions.12",   "$value": 12 },
+    "16":   { "$alias": "dimensions.16",   "$value": 16 },
+    "24":   { "$alias": "dimensions.24",   "$value": 24 },
+    "40":   { "$alias": "dimensions.40",   "$value": 40 },
+    "full": { "$alias": "dimensions.full", "$value": 1000 }
+  },
+  "border": {
+    "width": {
+      "1": { "$alias": "dimensions.1", "$value": 1 },
+      "2": { "$alias": "dimensions.2", "$value": 2 },
+      "4": { "$alias": "dimensions.4", "$value": 4 }
+    }
+  },
+  "sizing": {
+    "xs": { "$alias": "dimensions.24", "$value": 24, "$comment": "e.g. compact chip, icon button" },
+    "sm": { "$alias": "dimensions.32", "$value": 32, "$comment": "e.g. small button, input sm" },
+    "md": { "$alias": "dimensions.40", "$value": 40, "$comment": "e.g. default button, input" },
+    "lg": { "$alias": "dimensions.48", "$value": 48, "$comment": "e.g. large button, input lg" },
+    "xl": { "$alias": "dimensions.56", "$value": 56, "$comment": "e.g. hero input, FAB" }
+  }
+}

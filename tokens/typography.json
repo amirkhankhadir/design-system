@@ -1,0 +1,57 @@
+{
+  "$collection": "typography",
+  "$description": "Typography tokens and text styles. Font: Source Sans 3.",
+  "variables": {
+    "font-family": {
+      "primary": "Source Sans 3"
+    },
+    "font-size": {
+      "10": 10, "12": 12, "14": 14, "16": 16, "18": 18,
+      "20": 20, "24": 24, "32": 32, "40": 40, "48": 48, "56": 56
+    },
+    "line-height": {
+      "14": 14, "16": 16, "18": 18, "20": 20, "22": 22,
+      "24": 24, "28": 28, "36": 36, "48": 48, "56": 56, "68": 68
+    }
+  },
+  "text-styles": {
+    "display": {
+      "large":  { "1": { "size": 56, "lineHeight": 68, "weight": "Regular" },  "2": { "size": 56, "lineHeight": 68, "weight": "SemiBold" } },
+      "medium": { "1": { "size": 48, "lineHeight": 56, "weight": "Regular" },  "2": { "size": 48, "lineHeight": 56, "weight": "SemiBold" } },
+      "small":  { "1": { "size": 40, "lineHeight": 48, "weight": "Regular" },  "2": { "size": 40, "lineHeight": 48, "weight": "SemiBold" } }
+    },
+    "headline": {
+      "large":  { "1": { "size": 32, "lineHeight": 36, "weight": "Regular" },  "2": { "size": 32, "lineHeight": 36, "weight": "SemiBold" } },
+      "medium": { "1": { "size": 24, "lineHeight": 28, "weight": "Regular" },  "2": { "size": 24, "lineHeight": 28, "weight": "Medium" } },
+      "small":  {
+        "1": { "size": 20, "lineHeight": 24, "weight": "Regular" },
+        "2": { "size": 20, "lineHeight": 24, "weight": "Medium" },
+        "3": { "size": 20, "lineHeight": 24, "weight": "SemiBold" }
+      }
+    },
+    "text": {
+      "xlarge": { "1": { "size": 18, "lineHeight": 22, "weight": "Regular" }, "2": { "size": 18, "lineHeight": 22, "weight": "SemiBold" }, "3": { "size": 18, "lineHeight": 22, "weight": "Bold" } },
+      "large":  { "1": { "size": 16, "lineHeight": 20, "weight": "Regular" }, "2": { "size": 16, "lineHeight": 20, "weight": "SemiBold" }, "3": { "size": 16, "lineHeight": 20, "weight": "Bold" } },
+      "medium": { "1": { "size": 14, "lineHeight": 20, "weight": "Regular" }, "2": { "size": 14, "lineHeight": 20, "weight": "SemiBold" }, "3": { "size": 14, "lineHeight": 20, "weight": "Bold" } },
+      "small":  { "1": { "size": 12, "lineHeight": 16, "weight": "Regular" }, "2": { "size": 12, "lineHeight": 16, "weight": "SemiBold" }, "3": { "size": 12, "lineHeight": 16, "weight": "Bold" } },
+      "xsmall": { "1": { "size": 10, "lineHeight": 14, "weight": "Regular" }, "2": { "size": 10, "lineHeight": 14, "weight": "SemiBold" }, "3": { "size": 10, "lineHeight": 14, "weight": "Bold" } }
+    }
+  },
+  "effect-styles": {
+    "elevation": {
+      "0": [],
+      "1": [
+        { "type": "DROP_SHADOW", "boundColor": "{color.shadow.sm}", "offset": { "x": 0, "y": 1 }, "radius": 3, "spread": 0 },
+        { "type": "DROP_SHADOW", "boundColor": "{color.shadow.sm}", "offset": { "x": 0, "y": 1 }, "radius": 2, "spread": 0 }
+      ],
+      "2": [
+        { "type": "DROP_SHADOW", "boundColor": "{color.shadow.md}", "offset": { "x": 0, "y": 4 }, "radius": 8,  "spread": 0 },
+        { "type": "DROP_SHADOW", "boundColor": "{color.shadow.sm}", "offset": { "x": 0, "y": 2 }, "radius": 4,  "spread": 0 }
+      ],
+      "3": [
+        { "type": "DROP_SHADOW", "boundColor": "{color.shadow.lg}", "offset": { "x": 0, "y": 16 }, "radius": 40, "spread": 0 },
+        { "type": "DROP_SHADOW", "boundColor": "{color.shadow.md}", "offset": { "x": 0, "y": 4  }, "radius": 8,  "spread": 0 }
+      ]
+    }
+  }
+}
