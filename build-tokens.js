@@ -136,15 +136,20 @@ function buildElevationCSS() {
   const lines = ['\n/* ── Elevation ──────────────────────────────────────────────────── */'];
   const elevations = typography['effect-styles']?.elevation ?? {};
 
-  // Resolve shadow color values from primitives
-  const shadowSm = resolvePrim('{color.shadow.sm}');
-  const shadowMd = resolvePrim('{color.shadow.md}');
-  const shadowLg = resolvePrim('{color.shadow.lg}');
+  // Shadow colors live in semantics → resolve via primitives
+  const semFlat = flatten(semantics.color ?? {});
+  function resolveSem(alias) {
+    const key = alias.slice(1, -1).replace(/^color\./, '');
+    const semVal = semFlat[key];
+    if (!semVal) return alias;
+    const lightVal = typeof semVal === 'object' && 'Light' in semVal ? semVal['Light'] : semVal;
+    return resolvePrim(lightVal);
+  }
 
   const colorMap = {
-    '{color.shadow.sm}': shadowSm,
-    '{color.shadow.md}': shadowMd,
-    '{color.shadow.lg}': shadowLg,
+    '{color.shadow.sm}': resolveSem('{color.shadow.sm}'),
+    '{color.shadow.md}': resolveSem('{color.shadow.md}'),
+    '{color.shadow.lg}': resolveSem('{color.shadow.lg}'),
   };
 
   for (const [level, shadows] of Object.entries(elevations)) {
