@@ -1,0 +1,84 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Loader } from './Loader';
+
+const meta: Meta<typeof Loader> = {
+  title: 'Components/Loader',
+  component: Loader,
+  tags: ['autodocs'],
+  parameters: {
+    layout: 'centered',
+  },
+  argTypes: {
+    size: {
+      control: { type: 'select' },
+      options: ['sm', 'md', 'lg'],
+      description: 'Preset size or any number (px)',
+    },
+    color: {
+      control: { type: 'select' },
+      options: ['brand', 'white', 'current'],
+    },
+    label: {
+      control: 'text',
+      description: 'Screen reader label',
+    },
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof Loader>;
+
+// ── Default ────────────────────────────────────────────────
+
+export const Default: Story = {
+  args: {
+    size: 'md',
+    color: 'brand',
+  },
+};
+
+// ── Sizes ──────────────────────────────────────────────────
+
+export const Sizes: Story = {
+  render: () => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+      <Loader size="sm" />
+      <Loader size="md" />
+      <Loader size="lg" />
+    </div>
+  ),
+};
+
+// ── Custom size ────────────────────────────────────────────
+
+export const CustomSize: Story = {
+  render: () => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+      <Loader size={12} />
+      <Loader size={32} />
+      <Loader size={48} />
+      <Loader size={64} />
+    </div>
+  ),
+};
+
+// ── Colors ─────────────────────────────────────────────────
+
+export const OnLight: Story = {
+  render: () => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+      <Loader color="brand" />
+      <Loader color="current" />
+    </div>
+  ),
+};
+
+export const OnBrand: Story = {
+  parameters: { backgrounds: { default: 'brand' } },
+  render: () => <Loader color="white" />,
+};
+
+export const OnDark: Story = {
+  parameters: { backgrounds: { default: 'dark' } },
+  render: () => <Loader color="white" />,
+};
