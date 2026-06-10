@@ -105,6 +105,64 @@ function buildCSS(mode) {
   return `/* Auto-generated — do not edit. Source: tokens/ */\n\n${selector} {\n${lines.join('\n')}\n}\n`;
 }
 
+// ─── Build text-style CSS classes ─────────────────────────────────────────────
+
+const WEIGHT_MAP = { Regular: 400, Medium: 500, SemiBold: 600, Bold: 700 };
+
+function buildTextStyleCSS() {
+  const lines = ['\n/* ── Text styles ────────────────────────────────────────────────── */'];
+  const styles = typography['text-styles'] ?? {};
+
+  for (const [category, sizes] of Object.entries(styles)) {
+    for (const [size, variants] of Object.entries(sizes)) {
+      for (const [variant, def] of Object.entries(variants)) {
+        const className = `.ds-${category}-${size}-${variant}`;
+        lines.push(`${className} {`);
+        lines.push(`  font-family: var(--ds-font-family-primary, sans-serif);`);
+        lines.push(`  font-size: ${def.size}px;`);
+        lines.push(`  line-height: ${def.lineHeight}px;`);
+        lines.push(`  font-weight: ${WEIGHT_MAP[def.weight] ?? 400};`);
+        lines.push(`}`);
+      }
+    }
+  }
+
+  return lines.join('\n') + '\n';
+}
+
+// ─── Build elevation CSS classes ──────────────────────────────────────────────
+
+function buildElevationCSS() {
+  const lines = ['\n/* ── Elevation ──────────────────────────────────────────────────── */'];
+  const elevations = typography['effect-styles']?.elevation ?? {};
+
+  // Resolve shadow color values from primitives
+  const shadowSm = resolvePrim('{color.shadow.sm}');
+  const shadowMd = resolvePrim('{color.shadow.md}');
+  const shadowLg = resolvePrim('{color.shadow.lg}');
+
+  const colorMap = {
+    '{color.shadow.sm}': shadowSm,
+    '{color.shadow.md}': shadowMd,
+    '{color.shadow.lg}': shadowLg,
+  };
+
+  for (const [level, shadows] of Object.entries(elevations)) {
+    const className = `.ds-elevation-${level}`;
+    if (!Array.isArray(shadows) || shadows.length === 0) {
+      lines.push(`${className} { box-shadow: none; }`);
+    } else {
+      const boxShadow = shadows.map(s => {
+        const color = colorMap[s.boundColor] ?? 'rgba(0,0,0,0.1)';
+        return `${s.offset.x}px ${s.offset.y}px ${s.radius}px ${s.spread}px ${color}`;
+      }).join(', ');
+      lines.push(`${className} { box-shadow: ${boxShadow}; }`);
+    }
+  }
+
+  return lines.join('\n') + '\n';
+}
+
 // ─── Build Swift ──────────────────────────────────────────────────────────────
 
 function buildSwift() {
@@ -196,8 +254,11 @@ mkdirSync('dist/web',     { recursive: true });
 mkdirSync('dist/ios',     { recursive: true });
 mkdirSync('dist/android', { recursive: true });
 
-writeFileSync('dist/web/tokens.light.css',     buildCSS('Light'));
-writeFileSync('dist/web/tokens.dark.css',      buildCSS('Dark'));
+const textStyleCSS = buildTextStyleCSS();
+const elevationCSS = buildElevationCSS();
+
+writeFileSync('dist/web/tokens.light.css',     buildCSS('Light') + textStyleCSS + elevationCSS);
+writeFileSync('dist/web/tokens.dark.css',      buildCSS('Dark')  + textStyleCSS + elevationCSS);
 writeFileSync('dist/ios/DesignTokens.swift',   buildSwift());
 writeFileSync('dist/android/colors.xml',       buildAndroidColors());
 writeFileSync('dist/android/dimens.xml',       buildAndroidDimens());
