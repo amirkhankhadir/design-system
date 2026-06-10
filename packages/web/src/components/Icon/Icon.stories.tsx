@@ -81,7 +81,7 @@ export const Colors: Story = {
           borderTop: i === 0 ? '1px solid var(--ds-color-border-subtle)' : 'none',
           borderRadius: i === 0 ? '8px 8px 0 0' : i === arr.length - 1 ? '0 0 8px 8px' : 0,
         }}>
-          <Icon name="favorite" size={24} color={color as any} />
+          <Icon name="home" size={24} color={color as any} />
           <div>
             <p className="ds-text-small-2" style={{ color: textPrimary, margin: '0 0 2px' }}>{label}</p>
             <p className="ds-text-xsmall-1" style={{ color: textSecondary, margin: 0 }}>{token}</p>
