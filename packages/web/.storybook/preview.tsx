@@ -1,5 +1,7 @@
 import type { Preview } from '@storybook/react-vite';
 import React from 'react';
+import { addons } from '@storybook/preview-api';
+import { lightTheme, darkTheme } from './manager';
 
 // Both themes loaded — light via :root, dark via [data-theme="dark"]
 import '../../../dist/web/tokens.light.css';
@@ -30,6 +32,9 @@ const preview: Preview = {
       React.useEffect(() => {
         const html = document.documentElement;
         html.setAttribute('data-theme', theme);
+
+        // Sync Storybook manager theme
+        addons.setConfig({ theme: theme === 'dark' ? darkTheme : lightTheme });
 
         const styleId = 'ds-theme-override';
         let style = document.getElementById(styleId) as HTMLStyleElement | null;
@@ -116,6 +121,9 @@ const preview: Preview = {
       },
     },
     backgrounds: { disable: true }, // replaced by our theme switcher
+    docs: {
+      theme: lightTheme,
+    },
   },
 };
 
