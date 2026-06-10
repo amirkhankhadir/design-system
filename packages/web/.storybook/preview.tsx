@@ -29,11 +29,7 @@ const preview: Preview = {
       return (
         <div
           data-theme={theme}
-          style={{
-            background: 'var(--ds-color-background-default)',
-            minHeight: '100vh',
-            padding: '0',
-          }}
+          style={{ background: 'var(--ds-color-background-default)' }}
         >
           <Story />
         </div>
