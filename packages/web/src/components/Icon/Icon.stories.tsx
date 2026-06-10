@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from './Icon';
 
 const meta: Meta<typeof Icon> = {
-  title: 'Components/Icon',
+  title: 'Utilities/Icon',
   component: Icon,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
