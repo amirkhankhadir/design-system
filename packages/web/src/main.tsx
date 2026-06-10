@@ -13,16 +13,27 @@ const bg = {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <div style={{ fontFamily: 'system-ui', padding: 40, display: 'flex', flexDirection: 'column', gap: 48 }}>
+    <div style={{ fontFamily: 'system-ui', padding: 40, display: 'flex', flexDirection: 'column', gap: 48, background: 'var(--ds-color-background-default)', minHeight: '100vh', color: 'var(--ds-color-text-primary)' }}>
       <h2 style={{ margin: 0, fontSize: 20, fontWeight: 600 }}>Loader</h2>
 
       {/* Sizes */}
       <section>
-        <p style={{ margin: '0 0 16px', fontSize: 13, color: '#737373' }}>Sizes</p>
+        <p style={{ margin: '0 0 16px', fontSize: 13, color: '#737373' }}>Preset sizes</p>
         <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
           <Loader size="sm" />
           <Loader size="md" />
           <Loader size="lg" />
+        </div>
+      </section>
+
+      {/* Custom sizes */}
+      <section>
+        <p style={{ margin: '0 0 16px', fontSize: 13, color: '#737373' }}>Custom sizes (number)</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+          <Loader size={12} />
+          <Loader size={32} />
+          <Loader size={48} />
+          <Loader size={64} />
         </div>
       </section>
 

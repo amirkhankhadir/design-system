@@ -1,6 +1,6 @@
 /* Loader — SVG spinner component
-   Uses design tokens via CSS custom properties.
-   Animation is pure CSS — portable to any framework. */
+   stroke-dasharray is calculated dynamically in Loader.tsx
+   based on the actual radius, so any size works correctly. */
 
 .loader {
   display: inline-flex;
@@ -21,62 +21,28 @@
 .loader__fill {
   stroke: currentColor;
   stroke-linecap: round;
-  /* Arc covers ~75% of the circle */
-  stroke-dasharray: 56.5 18.8; /* 75% / 25% of circumference (r=12, c≈75.4) */
   transform-origin: center;
 }
 
-/* ── Sizes ─────────────────────────────────────────────── */
+/* ── Preset sizes ───────────────────────────────────────── */
 
-.loader--sm {
-  width: 16px;
-  height: 16px;
-}
-.loader--sm .loader__track,
-.loader--sm .loader__fill {
-  stroke-width: 2;
-  /* r=6, circumference ≈ 37.7 */
-  stroke-dasharray: 28.3 9.4;
-}
+.loader--sm { width: 16px; height: 16px; }
+.loader--md { width: 20px; height: 20px; }
+.loader--lg { width: 24px; height: 24px; }
 
-.loader--md {
-  width: 20px;
-  height: 20px;
-}
-.loader--md .loader__track,
-.loader--md .loader__fill {
-  stroke-width: 2;
-  /* r=8, circumference ≈ 50.3 */
-  stroke-dasharray: 37.7 12.6;
-}
-
-.loader--lg {
-  width: 24px;
-  height: 24px;
-}
-.loader--lg .loader__track,
-.loader--lg .loader__fill {
-  stroke-width: 2.5;
-  /* r=10, circumference ≈ 62.8 */
-  stroke-dasharray: 47.1 15.7;
-}
-
-/* ── Colors ────────────────────────────────────────────── */
+/* ── Colors ─────────────────────────────────────────────── */
 
 .loader--brand   { color: var(--ds-color-brand-default); }
-.loader--white   { color: #ffffff; }
+.loader--white   { color: var(--ds-color-text-inverse); }
 .loader--current { color: currentColor; }
 
-/* ── Animation ─────────────────────────────────────────── */
+/* ── Animation ──────────────────────────────────────────── */
 
 @keyframes loader-rotate {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
 
-/* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .loader__svg {
-    animation-duration: 2s;
-  }
+  .loader__svg { animation-duration: 2s; }
 }
