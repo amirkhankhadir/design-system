@@ -100,7 +100,7 @@ export const All: Story = {
       <PageTitle>Primitives</PageTitle>
       <PageSubtitle>Raw color values that power all semantic tokens.</PageSubtitle>
       <Warning>
-        Примитивы — это только источник значений. Никогда не используй их напрямую в компонентах. Всегда ссылайся на семантические токены (<code>--ds-color-*</code>).
+        Primitives are raw values only. Never reference them directly in components — always use semantic tokens (<code>--ds-color-*</code>) instead.
       </Warning>
 
       {/* Base */}

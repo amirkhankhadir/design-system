@@ -70,7 +70,7 @@ export const AllVariants: Story = {
         <Loader size={24} color="brand" />
         <div>
           <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: 'var(--ds-color-text-primary)' }}>brand</p>
-          <p style={{ margin: 0, fontSize: 11, color: 'var(--ds-color-text-tertiary)' }}>--ds-color-brand-default · основные действия</p>
+          <p style={{ margin: 0, fontSize: 11, color: 'var(--ds-color-text-tertiary)' }}>--ds-color-brand-default · primary actions</p>
         </div>
       </div>
 
@@ -86,7 +86,7 @@ export const AllVariants: Story = {
         <Loader size={24} color="inverse" />
         <div>
           <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: 'var(--ds-color-text-primary)' }}>inverse</p>
-          <p style={{ margin: 0, fontSize: 11, color: 'var(--ds-color-text-tertiary)' }}>--ds-color-text-primary · адаптируется к теме</p>
+          <p style={{ margin: 0, fontSize: 11, color: 'var(--ds-color-text-tertiary)' }}>--ds-color-text-primary · adapts to theme</p>
         </div>
       </div>
 
@@ -102,7 +102,7 @@ export const AllVariants: Story = {
         <Loader size={24} color="on-brand" />
         <div>
           <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: 'var(--ds-color-text-on-brand)' }}>on-brand</p>
-          <p style={{ margin: 0, fontSize: 11, color: 'var(--ds-color-text-on-brand)', opacity: 0.7 }}>--ds-color-text-on-brand · поверх брендового фона</p>
+          <p style={{ margin: 0, fontSize: 11, color: 'var(--ds-color-text-on-brand)', opacity: 0.7 }}>--ds-color-text-on-brand · on brand-colored surfaces</p>
         </div>
       </div>
 
@@ -118,7 +118,7 @@ export const AllVariants: Story = {
         <Loader size={24} color="static-white" />
         <div>
           <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: '#ffffff' }}>static-white</p>
-          <p style={{ margin: 0, fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>--ds-color-icon-static-white · поверх тёмных поверхностей</p>
+          <p style={{ margin: 0, fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>--ds-color-icon-static-white · on dark surfaces</p>
         </div>
       </div>
 
@@ -135,7 +135,7 @@ export const AllVariants: Story = {
         <Loader size={24} color="static-black" />
         <div>
           <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: '#000000' }}>static-black</p>
-          <p style={{ margin: 0, fontSize: 11, color: 'rgba(0,0,0,0.45)' }}>--ds-color-icon-static-black · поверх светлых поверхностей</p>
+          <p style={{ margin: 0, fontSize: 11, color: 'rgba(0,0,0,0.45)' }}>--ds-color-icon-static-black · on light surfaces</p>
         </div>
       </div>
 
