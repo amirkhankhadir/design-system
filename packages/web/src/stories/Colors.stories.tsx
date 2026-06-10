@@ -92,13 +92,12 @@ function ColorTable({
                 }} />
               </div>
 
-              {/* Dark swatch */}
-              <div data-theme="dark">
+              {/* Dark swatch — dark bg so rgba overlays are visible */}
+              <div data-theme="dark" style={{ background: 'var(--ds-color-background-default)', borderRadius: 'var(--ds-radius-6)', padding: 2 }}>
                 <div style={{
                   height: 36,
-                  borderRadius: 'var(--ds-radius-6)',
+                  borderRadius: 'var(--ds-radius-4)',
                   background: `var(${variable})`,
-                  border: '1px solid rgba(255,255,255,0.08)',
                 }} />
               </div>
             </div>
