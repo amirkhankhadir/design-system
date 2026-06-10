@@ -1,0 +1,108 @@
+import { forwardRef } from 'react';
+import { Loader } from '../Loader/Loader';
+import { Icon } from '../Icon/Icon';
+import './Button.css';
+
+export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'link';
+export type ButtonSize    = 'sm' | 'md' | 'lg';
+
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Visual style */
+  variant?: ButtonVariant;
+  /** Height tier */
+  size?: ButtonSize;
+  /** Destructive/danger mode */
+  danger?: boolean;
+  /** Shows loader, disables interaction, preserves layout */
+  loading?: boolean;
+  /** Material Symbol name for left icon */
+  iconLeft?: string;
+  /** Material Symbol name for right icon */
+  iconRight?: string;
+}
+
+const LOADER_SIZE: Record<ButtonSize, number> = { sm: 14, md: 16, lg: 18 };
+
+const LOADER_COLOR = {
+  primary:   'static-white',
+  secondary: 'default',
+  tertiary:  'default',
+  link:      'brand',
+} as const;
+
+const LOADER_COLOR_DANGER = {
+  primary:   'static-white',
+  secondary: 'brand',
+  tertiary:  'brand',
+  link:      'brand',
+} as const;
+
+const ICON_SIZE: Record<ButtonSize, number> = { sm: 16, md: 18, lg: 20 };
+
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
+  variant  = 'primary',
+  size     = 'md',
+  danger   = false,
+  loading  = false,
+  iconLeft,
+  iconRight,
+  disabled,
+  className,
+  children,
+  ...rest
+}, ref) => {
+  const isDisabled = disabled || loading;
+
+  const loaderColor = danger
+    ? LOADER_COLOR_DANGER[variant]
+    : LOADER_COLOR[variant];
+
+  const classes = [
+    'btn',
+    `btn--${variant}`,
+    `btn--${size}`,
+    danger  && 'btn--danger',
+    loading && 'btn--loading',
+    className,
+  ].filter(Boolean).join(' ');
+
+  return (
+    <button
+      ref={ref}
+      className={classes}
+      disabled={isDisabled}
+      aria-busy={loading}
+      {...rest}
+    >
+      {/* Real content — hidden during loading to preserve width */}
+      <span className="btn__content" aria-hidden={loading}>
+        {iconLeft && (
+          <Icon
+            name={iconLeft}
+            size={ICON_SIZE[size]}
+            className="btn__icon"
+            aria-hidden
+          />
+        )}
+        {children && <span className="btn__label">{children}</span>}
+        {iconRight && (
+          <Icon
+            name={iconRight}
+            size={ICON_SIZE[size]}
+            className="btn__icon"
+            aria-hidden
+          />
+        )}
+      </span>
+
+      {/* Loader overlay — absolutely positioned, preserves button dimensions */}
+      {loading && (
+        <span className="btn__loader" aria-hidden="true">
+          <Loader size={LOADER_SIZE[size]} color={loaderColor as any} />
+        </span>
+      )}
+    </button>
+  );
+});
+
+Button.displayName = 'Button';
