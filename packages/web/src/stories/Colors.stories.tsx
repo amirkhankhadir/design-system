@@ -135,21 +135,21 @@ export const All: Story = {
       <SectionLabel>Status</SectionLabel>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginBottom: 40 }}>
         {(['success', 'warning', 'error', 'info'] as const).map(status => (
-          <div key={status}>
-            <p className="ds-text-small-2" style={{ color: 'var(--ds-color-text-secondary)', margin: '0 0 10px', textTransform: 'capitalize' }}>{status}</p>
-            <div style={{ display: 'flex', gap: 12 }}>
-              {(['default', 'subtle', 'text', 'border'] as const).map(variant => (
-                <div key={variant} style={{ display: 'flex', flexDirection: 'column', gap: 6, width: 80 }}>
-                  <div style={{
-                    height: 40,
-                    borderRadius: 'var(--ds-radius-6)',
-                    background: `var(--ds-color-status-${status}-${variant})`,
-                    border: variant === 'subtle' || variant === 'text' ? '1px solid var(--ds-color-border-default)' : undefined,
-                  }} />
-                  <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>{variant}</p>
+          <div key={status} style={{ display: 'flex', gap: 8 }}>
+            {(['default', 'subtle', 'text', 'border'] as const).map(variant => (
+              <div key={variant} style={{ display: 'flex', flexDirection: 'column', gap: 6, width: 96 }}>
+                <div style={{
+                  height: 56,
+                  borderRadius: 'var(--ds-radius-8)',
+                  background: `var(--ds-color-status-${status}-${variant})`,
+                  border: variant === 'subtle' || variant === 'text' ? '1px solid var(--ds-color-border-default)' : undefined,
+                }} />
+                <div>
+                  <p className="ds-text-small-2" style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 2px' }}>{status} / {variant}</p>
+                  <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>--ds-color-status-{status}-{variant}</p>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         ))}
       </div>
@@ -157,15 +157,23 @@ export const All: Story = {
       <Divider />
 
       <SectionLabel>Extended Palette</SectionLabel>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, marginBottom: 40 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>
         {['lime','mint','cyan','blue','indigo','purple','pink','rose','yellow'].map(color => (
-          <div key={color} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <div style={{ display: 'flex', gap: 3 }}>
-              <div style={{ width: 32, height: 48, borderRadius: 'var(--ds-radius-6)', background: `var(--ds-color-extended-${color}-default)` }} />
-              <div style={{ width: 32, height: 48, borderRadius: 'var(--ds-radius-6)', background: `var(--ds-color-extended-${color}-subtle)`, border: '1px solid var(--ds-color-border-default)' }} />
-              <div style={{ width: 32, height: 48, borderRadius: 'var(--ds-radius-6)', background: `var(--ds-color-extended-${color}-text)` }} />
-            </div>
-            <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-secondary)', margin: 0, textAlign: 'center' }}>{color}</p>
+          <div key={color} style={{ display: 'flex', gap: 8 }}>
+            {(['default', 'subtle', 'text'] as const).map(variant => (
+              <div key={variant} style={{ display: 'flex', flexDirection: 'column', gap: 6, width: 96 }}>
+                <div style={{
+                  height: 56,
+                  borderRadius: 'var(--ds-radius-8)',
+                  background: `var(--ds-color-extended-${color}-${variant})`,
+                  border: variant === 'subtle' ? '1px solid var(--ds-color-border-default)' : undefined,
+                }} />
+                <div>
+                  <p className="ds-text-small-2" style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 2px' }}>{color} / {variant}</p>
+                  <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>--ds-color-extended-{color}-{variant}</p>
+                </div>
+              </div>
+            ))}
           </div>
         ))}
       </div>
