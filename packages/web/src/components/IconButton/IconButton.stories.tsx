@@ -22,7 +22,7 @@ type Story = StoryObj<typeof IconButton>;
 // ── Default ────────────────────────────────────────────────
 
 export const Default: Story = {
-  args: { icon: 'settings', variant: 'primary', size: 'md', 'aria-label': 'Settings' },
+  args: { icon: 'settings', variant: 'primary', size: 'md', 'aria-label': 'Home' },
 };
 
 // ── All Variants ───────────────────────────────────────────
@@ -42,10 +42,10 @@ export const Variants: Story = {
       {(['primary','secondary','tertiary','link','ghost'] as const).map(variant => (
         <Col key={variant}>
           <Label>{variant}</Label>
-          <IconButton icon="settings" variant={variant} size="md" aria-label={variant} />
-          <IconButton icon="settings" variant={variant} size="md" danger aria-label={`${variant} danger`} />
-          <IconButton icon="settings" variant={variant} size="md" disabled aria-label={`${variant} disabled`} />
-          <IconButton icon="settings" variant={variant} size="md" loading aria-label={`${variant} loading`} />
+          <IconButton icon="home" variant={variant} size="md" aria-label={variant} />
+          <IconButton icon="home" variant={variant} size="md" danger aria-label={`${variant} danger`} />
+          <IconButton icon="home" variant={variant} size="md" disabled aria-label={`${variant} disabled`} />
+          <IconButton icon="home" variant={variant} size="md" loading aria-label={`${variant} loading`} />
         </Col>
       ))}
     </div>
@@ -57,9 +57,9 @@ export const Variants: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-      <IconButton icon="settings" variant="primary" size="sm" aria-label="Settings small" />
-      <IconButton icon="settings" variant="primary" size="md" aria-label="Settings medium" />
-      <IconButton icon="settings" variant="primary" size="lg" aria-label="Settings large" />
+      <IconButton icon="home" variant="primary" size="sm" aria-label="Home small" />
+      <IconButton icon="home" variant="primary" size="md" aria-label="Home medium" />
+      <IconButton icon="home" variant="primary" size="lg" aria-label="Home large" />
     </div>
   ),
 };
