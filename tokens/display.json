@@ -36,10 +36,10 @@
     }
   },
   "sizing": {
-    "xs": { "$alias": "dimensions.24", "$value": 24, "$comment": "e.g. compact chip, icon button" },
-    "sm": { "$alias": "dimensions.32", "$value": 32, "$comment": "e.g. small button, input sm" },
-    "md": { "$alias": "dimensions.40", "$value": 40, "$comment": "e.g. default button, input" },
-    "lg": { "$alias": "dimensions.48", "$value": 48, "$comment": "e.g. large button, input lg" },
-    "xl": { "$alias": "dimensions.56", "$value": 56, "$comment": "e.g. hero input, FAB" }
+    "24": { "$alias": "dimensions.24", "$value": 24, "$comment": "e.g. compact chip, icon button" },
+    "32": { "$alias": "dimensions.32", "$value": 32, "$comment": "e.g. small button, input sm" },
+    "40": { "$alias": "dimensions.40", "$value": 40, "$comment": "e.g. default button, input" },
+    "48": { "$alias": "dimensions.48", "$value": 48, "$comment": "e.g. large button, input lg" },
+    "56": { "$alias": "dimensions.56", "$value": 56, "$comment": "e.g. hero input, FAB" }
   }
 }

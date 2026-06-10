@@ -127,23 +127,17 @@ export const All: Story = {
         Touch targets and component heights
       </p>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 24, marginBottom: 40 }}>
-        {[
-          { name: 'xs', px: '24px' },
-          { name: 'sm', px: '32px' },
-          { name: 'md', px: '40px' },
-          { name: 'lg', px: '48px' },
-          { name: 'xl', px: '56px' },
-        ].map(s => (
-          <div key={s.name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+        {[24, 32, 40, 48, 56].map(n => (
+          <div key={n} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
             <div style={{
-              width: `var(--ds-sizing-${s.name})`,
-              height: `var(--ds-sizing-${s.name})`,
+              width: `var(--ds-sizing-${n})`,
+              height: `var(--ds-sizing-${n})`,
               background: 'var(--ds-color-brand-subtle)',
               border: '1.5px solid var(--ds-color-brand-default)',
               borderRadius: 'var(--ds-radius-8)',
             }} />
-            <p className="ds-text-xsmall-2" style={{ color: 'var(--ds-color-text-secondary)', margin: 0 }}>{s.name}</p>
-            <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>{s.px}</p>
+            <p className="ds-text-xsmall-2" style={{ color: 'var(--ds-color-text-secondary)', margin: 0 }}>sizing-{n}</p>
+            <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>{n}px</p>
           </div>
         ))}
       </div>
