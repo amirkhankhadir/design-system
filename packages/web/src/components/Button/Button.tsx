@@ -21,7 +21,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   iconRight?: string;
 }
 
-const LOADER_SIZE: Record<ButtonSize, number> = { sm: 14, md: 16, lg: 18 };
+const LOADER_SIZE: Record<ButtonSize, number> = { sm: 16, md: 18, lg: 20 };
 
 // Maps to valid LoaderColor values from our design system
 const LOADER_COLOR: Record<ButtonVariant, 'on-brand' | 'inverse' | 'brand'> = {
@@ -45,7 +45,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   children,
   ...rest
 }, ref) => {
-  const isDisabled = disabled || loading;
+  // HTML disabled only for explicit disabled prop — loading keeps button styles
+  // intact (blue for primary, etc.) and is blocked via CSS pointer-events: none
+  const isDisabled = disabled;
 
   // danger doesn't change loader color — on-brand stays white on red bg,
   // inverse stays theme-adaptive on secondary/tertiary/link
