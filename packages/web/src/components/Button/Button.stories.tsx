@@ -80,7 +80,7 @@ export const Variants: Story = {
         <Button variant="primary" iconLeft="add">Button</Button>
         <Button variant="secondary" iconLeft="add">Button</Button>
         <Button variant="tertiary" iconLeft="add">Button</Button>
-        <Button variant="link" iconLeft="arrow_forward" iconRight="arrow_forward">Button</Button>
+        <Button variant="link" iconLeft="add">Button</Button>
       </Row>
     </div>
   ),
