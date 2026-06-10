@@ -45,67 +45,55 @@ function ColorTable({
   getVariable: (row: string, variant: string) => string;
   showBorderFor?: (row: string, variant: string) => boolean;
 }) {
-  // Single variant = no variant column header, just token name
   const multiVariant = variants.length > 1 && variants[0] !== 'value';
+  const cols = '1fr 160px 160px';
 
   return (
     <div style={{ marginBottom: 40 }}>
       {/* Header */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: multiVariant ? '200px 1fr 120px 120px' : '200px 120px 120px',
-        gap: 12,
-        paddingBottom: 8,
-        borderBottom: '1px solid var(--ds-color-border-subtle)',
-        marginBottom: 0,
-      }}>
+      <div style={{ display: 'grid', gridTemplateColumns: cols, gap: 16, paddingBottom: 8, borderBottom: '1px solid var(--ds-color-border-subtle)' }}>
         <p className="ds-text-xsmall-2" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Token</p>
-        {multiVariant && <div />}
         <p className="ds-text-xsmall-2" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Light</p>
         <p className="ds-text-xsmall-2" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Dark</p>
       </div>
 
-      {/* Rows */}
       {rows.map(row =>
         variants.map(variant => {
           const variable = getVariable(row, variant);
           const hasBorder = showBorderFor ? showBorderFor(row, variant) : false;
-          const label = multiVariant ? variant : row;
-          const subLabel = multiVariant ? row : undefined;
 
           return (
             <div key={`${row}-${variant}`} style={{
               display: 'grid',
-              gridTemplateColumns: multiVariant ? '200px 1fr 120px 120px' : '200px 120px 120px',
-              gap: 12,
+              gridTemplateColumns: cols,
+              gap: 16,
               alignItems: 'center',
               padding: '10px 0',
               borderBottom: '1px solid var(--ds-color-border-subtle)',
             }}>
-              {/* Token name */}
+              {/* Token name + variable */}
               <div>
-                {subLabel && <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: '0 0 2px', textTransform: 'capitalize' }}>{subLabel}</p>}
-                <p className="ds-text-small-1" style={{ color: 'var(--ds-color-text-secondary)', margin: 0, textTransform: 'capitalize' }}>{label}</p>
+                {multiVariant && (
+                  <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: '0 0 2px', textTransform: 'capitalize' }}>{row}</p>
+                )}
+                <p className="ds-text-small-2" style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 2px', textTransform: 'capitalize' }}>
+                  {multiVariant ? variant : row}
+                </p>
+                <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>{variable}</p>
               </div>
 
-              {/* Variable name (only in multi-variant) */}
-              {multiVariant && (
-                <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0, wordBreak: 'break-all' }}>{variable}</p>
-              )}
-
               {/* Light swatch */}
-              <div data-theme="light" style={{ background: 'transparent' }}>
+              <div data-theme="light">
                 <div style={{
                   height: 36,
                   borderRadius: 'var(--ds-radius-6)',
                   background: `var(${variable})`,
                   border: hasBorder ? '1px solid var(--ds-color-border-default)' : undefined,
                 }} />
-                {!multiVariant && <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: '4px 0 0', wordBreak: 'break-all' }}>{variable}</p>}
               </div>
 
               {/* Dark swatch */}
-              <div data-theme="dark" style={{ background: 'transparent' }}>
+              <div data-theme="dark">
                 <div style={{
                   height: 36,
                   borderRadius: 'var(--ds-radius-6)',
