@@ -20,6 +20,24 @@ const DARK_OVERRIDE = `
     border-color: var(--ds-color-border-subtle) !important;
     color: var(--ds-color-text-primary) !important;
   }
+  /* Force ALL text inside argstable to be readable */
+  .docblock-argstable td *,
+  .docblock-argstable th *,
+  .docblock-argstable td span,
+  .docblock-argstable td p,
+  .docblock-argstable td div,
+  [class*="ArgValue"],
+  [class*="ArgDescription"],
+  [class*="ArgName"],
+  [class*="StyledPre"],
+  [class*="ResetWrapper"] td,
+  [class*="ResetWrapper"] th {
+    color: var(--ds-color-text-primary) !important;
+  }
+  /* Secondary text like type hints */
+  [class*="Secondary"], [class*="secondary"] {
+    color: var(--ds-color-text-secondary) !important;
+  }
   .docblock-argstable input, .docblock-argstable select,
   .docblock-argstable button {
     background: var(--ds-color-background-muted) !important;
@@ -27,6 +45,19 @@ const DARK_OVERRIDE = `
     border-color: var(--ds-color-border-default) !important;
   }
   .docs-story { background: var(--ds-color-background-default) !important; }
+  /* Stories section heading + story name links in docs */
+  [class*="StoriesHeader"], [class*="storiesHeader"],
+  [class*="DocsStory"] h3, [class*="DocsStory"] h2,
+  [class*="Heading"], [class*="heading"],
+  .sbdocs h1, .sbdocs h2, .sbdocs h3, .sbdocs h4,
+  .sbdocs a, .sbdocs-a {
+    color: var(--ds-color-text-primary) !important;
+  }
+  /* Muted labels like "STORIES" */
+  [class*="Label"], [class*="label"],
+  [class*="StoriesTitle"], [class*="storiesTitle"] {
+    color: var(--ds-color-text-secondary) !important;
+  }
   [role="toolbar"], [class*="ToolbarWrapper"], [class*="PreviewWrapper"] > div:first-child {
     background: var(--ds-color-background-subtle) !important;
     border-color: var(--ds-color-border-subtle) !important;

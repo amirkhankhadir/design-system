@@ -32,9 +32,16 @@
 
 /* ── Colors ─────────────────────────────────────────────── */
 
-.loader--brand   { color: var(--ds-color-brand-default); }
-.loader--white   { color: var(--ds-color-text-inverse); }
-.loader--current { color: currentColor; }
+/* Always brand blue */
+.loader--brand    { color: var(--ds-color-brand-default); }
+/* Adapts to theme: dark on light, light on dark */
+.loader--inverse  { color: var(--ds-color-text-primary); }
+/* For use on brand-colored backgrounds */
+.loader--on-brand { color: var(--ds-color-text-on-brand); }
+/* For use on dark backgrounds — always white */
+.loader--on-dark  { color: var(--ds-color-base-white, #ffffff); }
+/* For use on light backgrounds — always black */
+.loader--on-light { color: var(--ds-color-base-black, #000000); }
 
 /* ── Animation ──────────────────────────────────────────── */
 
