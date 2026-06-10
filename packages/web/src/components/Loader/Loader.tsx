@@ -19,20 +19,22 @@ const PRESET_SIZES: Record<string, number> = {
   lg: 24,
 };
 
-const STROKE_WIDTH = 2;
+// Stroke scales proportionally: ~1/10 of diameter, clamped 1.5–8px
+function getStrokeWidth(px: number) {
+  return Math.min(6, Math.max(1.5, px / 14));
+}
 
 function getGeometry(size: LoaderSize) {
-  const px     = typeof size === 'number' ? size : PRESET_SIZES[size];
-  const cx     = px / 2;
-  const cy     = px / 2;
-  // radius leaves room for stroke so it doesn't clip
-  const r      = (px - STROKE_WIDTH * 2) / 2;
-  // arc covers 75% of the circumference
-  const circum = 2 * Math.PI * r;
-  const dash   = circum * 0.75;
-  const gap    = circum * 0.25;
+  const px          = typeof size === 'number' ? size : PRESET_SIZES[size];
+  const strokeWidth = getStrokeWidth(px);
+  const cx          = px / 2;
+  const cy          = px / 2;
+  const r           = (px - strokeWidth * 2) / 2;
+  const circum      = 2 * Math.PI * r;
+  const dash        = circum * 0.75;
+  const gap         = circum * 0.25;
 
-  return { px, cx, cy, r, dash, gap };
+  return { px, cx, cy, r, strokeWidth, dash, gap };
 }
 
 export function Loader({
@@ -41,7 +43,7 @@ export function Loader({
   label = 'Loading…',
   className,
 }: LoaderProps) {
-  const { px, cx, cy, r, dash, gap } = getGeometry(size);
+  const { px, cx, cy, r, strokeWidth, dash, gap } = getGeometry(size);
   const isPreset = typeof size === 'string';
 
   return (
@@ -72,7 +74,7 @@ export function Loader({
           cx={cx}
           cy={cy}
           r={r}
-          strokeWidth={STROKE_WIDTH}
+          strokeWidth={strokeWidth}
         />
         {/* Animated arc — dasharray calculated from actual radius */}
         <circle
@@ -80,7 +82,7 @@ export function Loader({
           cx={cx}
           cy={cy}
           r={r}
-          strokeWidth={STROKE_WIDTH}
+          strokeWidth={strokeWidth}
           strokeDasharray={`${dash} ${gap}`}
         />
       </svg>

@@ -14,10 +14,10 @@ const preview: Preview = {
     backgrounds: {
       default: 'light',
       values: [
-        { name: 'light', value: 'var(--ds-color-background-default, #ffffff)' },
-        { name: 'subtle', value: 'var(--ds-color-background-subtle, #f8f8f8)' },
-        { name: 'dark',  value: '#161616' },
-        { name: 'brand', value: 'var(--ds-color-brand-default, #039be6)' },
+        { name: 'light',  value: '#ffffff' },
+        { name: 'subtle', value: '#f5f5f5' },
+        { name: 'dark',   value: '#161616' },
+        { name: 'brand',  value: '#039be6' },
       ],
     },
   },

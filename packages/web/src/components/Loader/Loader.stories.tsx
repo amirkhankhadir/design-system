@@ -10,9 +10,8 @@ const meta: Meta<typeof Loader> = {
   },
   argTypes: {
     size: {
-      control: { type: 'select' },
-      options: ['sm', 'md', 'lg'],
-      description: 'Preset size or any number (px)',
+      control: { type: 'number' },
+      description: 'Size in px',
     },
     color: {
       control: { type: 'select' },
@@ -32,21 +31,9 @@ type Story = StoryObj<typeof Loader>;
 
 export const Default: Story = {
   args: {
-    size: 'md',
+    size: 20,
     color: 'brand',
   },
-};
-
-// ── Sizes ──────────────────────────────────────────────────
-
-export const Sizes: Story = {
-  render: () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-      <Loader size="sm" />
-      <Loader size="md" />
-      <Loader size="lg" />
-    </div>
-  ),
 };
 
 // ── Custom size ────────────────────────────────────────────
@@ -74,11 +61,19 @@ export const OnLight: Story = {
 };
 
 export const OnBrand: Story = {
-  parameters: { backgrounds: { default: 'brand' } },
+  decorators: [(Story) => (
+    <div style={{ background: '#039be6', padding: 32, borderRadius: 8 }}>
+      <Story />
+    </div>
+  )],
   render: () => <Loader color="white" />,
 };
 
 export const OnDark: Story = {
-  parameters: { backgrounds: { default: 'dark' } },
+  decorators: [(Story) => (
+    <div style={{ background: '#161616', padding: 32, borderRadius: 8 }}>
+      <Story />
+    </div>
+  )],
   render: () => <Loader color="white" />,
 };
