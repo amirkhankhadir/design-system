@@ -30,10 +30,31 @@ const preview: Preview = {
       React.useEffect(() => {
         const html = document.documentElement;
         html.setAttribute('data-theme', theme);
-        document.body.style.background = 'var(--ds-color-background-default)';
+
+        const styleId = 'ds-theme-override';
+        let style = document.getElementById(styleId) as HTMLStyleElement | null;
+        if (!style) {
+          style = document.createElement('style');
+          style.id = styleId;
+          document.head.appendChild(style);
+        }
+
+        if (theme === 'dark') {
+          style.textContent = `
+            body, .sb-show-main, #storybook-root,
+            .docs-story, .sbdocs-wrapper, #storybook-docs,
+            .sb-bar, .os-content {
+              background: var(--ds-color-background-default) !important;
+              color: var(--ds-color-text-primary) !important;
+            }
+          `;
+        } else {
+          style.textContent = '';
+        }
+
         return () => {
           html.removeAttribute('data-theme');
-          document.body.style.background = '';
+          if (style) style.textContent = '';
         };
       }, [theme]);
 
