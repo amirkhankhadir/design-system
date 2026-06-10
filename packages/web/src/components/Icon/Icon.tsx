@@ -30,18 +30,6 @@ export interface IconProps {
 
 const FALLBACK_SVG = `<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>`;
 
-// Vite statically analyses these globs and makes all matched files available as lazy modules
-const ICON_MODULES: Record<string, Record<string, () => Promise<{ default: string }>>> = {
-  outlined: import.meta.glob(
-    '/node_modules/@material-symbols/svg-400/outlined/*.svg',
-    { query: '?raw', import: 'default', eager: false }
-  ) as Record<string, () => Promise<{ default: string }>>,
-  rounded: import.meta.glob(
-    '/node_modules/@material-symbols/svg-400/rounded/*.svg',
-    { query: '?raw', import: 'default', eager: false }
-  ) as Record<string, () => Promise<{ default: string }>>,
-};
-
 // Module-level SVG cache — persists across renders
 const svgCache = new Map<string, string>();
 
@@ -58,14 +46,11 @@ async function loadSvg(name: string, variant: IconVariant, filled: boolean): Pro
   if (svgCache.has(key)) return svgCache.get(key)!;
 
   const suffix = filled ? '-fill' : '';
-  const globKey = `/node_modules/@material-symbols/svg-400/${variant}/${name}${suffix}.svg`;
-  const loader = ICON_MODULES[variant]?.[globKey];
-
   try {
-    if (!loader) throw new Error(`Icon not found: ${globKey}`);
-    const raw = await loader() as unknown as string;
-    // loader returns the raw string directly (import: 'default' with ?raw)
-    const svg = injectCurrentColor(typeof raw === 'string' ? raw : (raw as any).default ?? FALLBACK_SVG);
+    // Virtual module resolved by materialIconsPlugin in vite.config.ts
+    const mod = await import(/* @vite-ignore */ `virtual:icon/${variant}/${name}${suffix}`);
+    if (!mod.default) throw new Error('not found');
+    const svg = injectCurrentColor(mod.default as string);
     svgCache.set(key, svg);
     return svg;
   } catch {
