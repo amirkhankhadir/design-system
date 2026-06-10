@@ -22,7 +22,7 @@ type Story = StoryObj<typeof IconButton>;
 // ── Default ────────────────────────────────────────────────
 
 export const Default: Story = {
-  args: { icon: 'settings', variant: 'primary', size: 'md', 'aria-label': 'Home' },
+  args: { icon: 'home', variant: 'primary', size: 'md', 'aria-label': 'Home' },
 };
 
 // ── All Variants ───────────────────────────────────────────
