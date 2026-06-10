@@ -1,0 +1,143 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Icon } from './Icon';
+
+const meta: Meta<typeof Icon> = {
+  title: 'Components/Icon',
+  component: Icon,
+  tags: ['autodocs'],
+  parameters: { layout: 'centered' },
+  argTypes: {
+    name:    { control: 'text', description: 'Material Symbol name, e.g. "home"' },
+    variant: { control: 'select', options: ['outlined', 'rounded'] },
+    filled:  { control: 'boolean' },
+    size:    { control: { type: 'number' }, description: 'Size in px' },
+    color:   {
+      control: 'select',
+      options: ['default','secondary','disabled','inverse','on-brand','static-white','static-black','brand'],
+    },
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof Icon>;
+
+// ── Default ────────────────────────────────────────────────
+
+export const Default: Story = {
+  args: { name: 'home', size: 24, color: 'default', variant: 'outlined', filled: false },
+};
+
+// ── Outlined vs Rounded ────────────────────────────────────
+
+export const Variants: Story = {
+  name: 'Outlined vs Rounded',
+  render: () => (
+    <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+        <Icon name="home" variant="outlined" size={32} />
+        <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>outlined</p>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+        <Icon name="home" variant="rounded" size={32} />
+        <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>rounded</p>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+        <Icon name="home" variant="outlined" filled size={32} />
+        <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>outlined filled</p>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+        <Icon name="home" variant="rounded" filled size={32} />
+        <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>rounded filled</p>
+      </div>
+    </div>
+  ),
+};
+
+// ── Sizes ──────────────────────────────────────────────────
+
+export const Sizes: Story = {
+  render: () => (
+    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 24 }}>
+      {[16, 20, 24, 32, 40, 48].map(size => (
+        <div key={size} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+          <Icon name="star" size={size} />
+          <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>{size}px</p>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+// ── Colors ─────────────────────────────────────────────────
+
+export const Colors: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 0, width: 420 }}>
+      {[
+        { color: 'default',      bg: 'var(--ds-color-background-default)',  label: 'default',      token: '--ds-color-icon-default' },
+        { color: 'secondary',    bg: 'var(--ds-color-background-default)',  label: 'secondary',    token: '--ds-color-icon-secondary' },
+        { color: 'disabled',     bg: 'var(--ds-color-background-default)',  label: 'disabled',     token: '--ds-color-icon-disabled' },
+        { color: 'brand',        bg: 'var(--ds-color-background-default)',  label: 'brand',        token: '--ds-color-brand-default' },
+        { color: 'inverse',      bg: 'var(--ds-color-background-default)',  label: 'inverse',      token: '--ds-color-icon-inverse' },
+        { color: 'on-brand',     bg: 'var(--ds-color-brand-default)',       label: 'on-brand',     token: '--ds-color-icon-on-brand' },
+        { color: 'static-white', bg: '#0a0a0a',                             label: 'static-white', token: '--ds-color-icon-static-white' },
+        { color: 'static-black', bg: '#ffffff',                             label: 'static-black', token: '--ds-color-icon-static-black' },
+      ].map(({ color, bg, label, token }, i, arr) => (
+        <div key={color} style={{
+          display: 'flex', alignItems: 'center', gap: 16,
+          padding: '12px 16px',
+          background: bg,
+          border: '1px solid var(--ds-color-border-subtle)',
+          borderTop: i === 0 ? '1px solid var(--ds-color-border-subtle)' : 'none',
+          borderRadius: i === 0 ? '8px 8px 0 0' : i === arr.length - 1 ? '0 0 8px 8px' : 0,
+        }}>
+          <Icon name="favorite" size={24} color={color as any} />
+          <div>
+            <p className="ds-text-small-2" style={{ color: bg === '#0a0a0a' ? '#fff' : bg === '#ffffff' ? '#000' : 'var(--ds-color-text-primary)', margin: '0 0 2px' }}>{label}</p>
+            <p className="ds-text-xsmall-1" style={{ color: bg === '#0a0a0a' ? 'rgba(255,255,255,0.5)' : bg === '#ffffff' ? 'rgba(0,0,0,0.4)' : 'var(--ds-color-text-tertiary)', margin: 0 }}>{token}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+// ── Icon grid ──────────────────────────────────────────────
+
+const SAMPLE_ICONS = [
+  'home', 'search', 'settings', 'person', 'notifications',
+  'arrow_back', 'arrow_forward', 'close', 'check', 'add',
+  'delete', 'edit', 'share', 'favorite', 'star',
+  'visibility', 'visibility_off', 'lock', 'mail', 'phone',
+  'calendar_today', 'schedule', 'location_on', 'attach_file', 'download',
+  'upload', 'refresh', 'filter_list', 'sort', 'more_vert',
+];
+
+export const IconGrid: Story = {
+  name: 'Icon Grid',
+  render: () => (
+    <div style={{ maxWidth: 600 }}>
+      <p className="ds-text-small-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: '0 0 20px' }}>
+        Sample from Material Symbols — thousands more available at{' '}
+        <a href="https://fonts.google.com/icons" target="_blank" rel="noreferrer" style={{ color: 'var(--ds-color-brand-default)' }}>
+          fonts.google.com/icons
+        </a>
+      </p>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+        {SAMPLE_ICONS.map(name => (
+          <div key={name} style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+            padding: '12px 8px',
+            border: '1px solid var(--ds-color-border-subtle)',
+            borderRadius: 'var(--ds-radius-8)',
+            width: 80,
+            background: 'var(--ds-color-background-default)',
+          }}>
+            <Icon name={name} size={24} color="default" />
+            <p style={{ fontSize: 9, color: 'var(--ds-color-text-tertiary)', margin: 0, textAlign: 'center', wordBreak: 'break-all' }}>{name}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  ),
+};
