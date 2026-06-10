@@ -73,8 +73,21 @@ const preview: Preview = {
 
             /* Story canvas container */
             .docs-story {
+              background: var(--ds-color-background-default) !important;
+              border-color: var(--ds-color-border-subtle) !important;
+            }
+
+            /* Toolbar above story preview (zoom/refresh bar) */
+            [class*="Toolbar"], [class*="toolbar"],
+            .os-scrollbar, [class*="StoryCanvas"],
+            div[aria-label="Story canvas"] > div:first-child {
               background: var(--ds-color-background-subtle) !important;
               border-color: var(--ds-color-border-subtle) !important;
+              color: var(--ds-color-text-secondary) !important;
+            }
+            div[aria-label="Story canvas"] button,
+            div[aria-label="Story canvas"] svg {
+              color: var(--ds-color-icon-default) !important;
             }
 
             /* Section headers like STORIES */
