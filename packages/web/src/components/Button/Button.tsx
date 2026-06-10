@@ -23,12 +23,14 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 const LOADER_SIZE: Record<ButtonSize, number> = { sm: 16, md: 18, lg: 20 };
 
-// Maps to valid LoaderColor values from our design system
-const LOADER_COLOR: Record<ButtonVariant, 'on-brand' | 'inverse' | 'brand'> = {
-  primary:   'on-brand',  // white on brand background
-  secondary: 'inverse',   // text-primary — adapts to theme
-  tertiary:  'inverse',   // text-primary — adapts to theme
-  link:      'brand',     // brand-colored, matches link text
+// Maps to valid LoaderColor values from our design system.
+// All variants show disabled styling (background-muted = light gray) when loading,
+// so 'inverse' (text-primary, dark) is visible on that background for all of them.
+const LOADER_COLOR: Record<ButtonVariant, 'inverse' | 'brand'> = {
+  primary:   'inverse',  // dark on disabled gray — visible
+  secondary: 'inverse',  // dark on disabled gray — visible
+  tertiary:  'inverse',  // dark on disabled gray — visible
+  link:      'brand',    // brand-colored, matches link text
 };
 
 const ICON_SIZE: Record<ButtonSize, number> = { sm: 16, md: 20, lg: 20 };
@@ -45,9 +47,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   children,
   ...rest
 }, ref) => {
-  // HTML disabled only for explicit disabled prop — loading keeps button styles
-  // intact (blue for primary, etc.) and is blocked via CSS pointer-events: none
-  const isDisabled = disabled;
+  const isDisabled = disabled || loading;
 
   // danger doesn't change loader color — on-brand stays white on red bg,
   // inverse stays theme-adaptive on secondary/tertiary/link

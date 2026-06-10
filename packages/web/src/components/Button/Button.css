@@ -53,10 +53,6 @@
   z-index: 1;
 }
 
-.btn--loading {
-  pointer-events: none; /* block interaction without HTML disabled (preserves button styles) */
-}
-
 .btn--loading .btn__content {
   visibility: hidden;
 }
