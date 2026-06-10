@@ -28,6 +28,8 @@ export interface IconProps {
   'aria-hidden'?: boolean;
 }
 
+const FALLBACK_SVG = `<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>`;
+
 // Module-level SVG cache — persists across renders
 const svgCache = new Map<string, string>();
 
@@ -35,25 +37,33 @@ function buildKey(name: string, variant: IconVariant, filled: boolean) {
   return `${variant}/${name}${filled ? '-fill' : ''}`;
 }
 
+function injectCurrentColor(raw: string): string {
+  // Remove any hardcoded fill attributes on paths, set fill="currentColor" on root svg
+  return raw
+    .replace('<svg ', '<svg fill="currentColor" ')
+    .replace(/(<path[^>]*)\sfill="(?!none)[^"]*"/g, '$1');
+}
+
 async function loadSvg(name: string, variant: IconVariant, filled: boolean): Promise<string> {
   const key = buildKey(name, variant, filled);
   if (svgCache.has(key)) return svgCache.get(key)!;
 
+  const suffix = filled ? '-fill' : '';
+  const url = new URL(
+    `../../../../node_modules/@material-symbols/svg-400/${variant}/${name}${suffix}.svg`,
+    import.meta.url,
+  ).href;
+
   try {
-    // Dynamic import of the raw SVG string
-    const mod = await import(
-      /* @vite-ignore */
-      `@material-symbols/svg-400/${variant}/${name}${filled ? '-fill' : ''}.svg?raw`
-    );
-    // Inject fill="currentColor" so CSS color applies
-    const svg = (mod.default as string).replace('<svg ', '<svg fill="currentColor" ');
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`${res.status}`);
+    const text = await res.text();
+    const svg = injectCurrentColor(text);
     svgCache.set(key, svg);
     return svg;
   } catch {
-    // Fallback: empty square to indicate missing icon
-    const fallback = `<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>`;
-    svgCache.set(key, fallback);
-    return fallback;
+    svgCache.set(key, FALLBACK_SVG);
+    return FALLBACK_SVG;
   }
 }
 
