@@ -23,19 +23,13 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 const LOADER_SIZE: Record<ButtonSize, number> = { sm: 14, md: 16, lg: 18 };
 
-const LOADER_COLOR = {
-  primary:   'static-white',
-  secondary: 'default',
-  tertiary:  'default',
-  link:      'brand',
-} as const;
-
-const LOADER_COLOR_DANGER = {
-  primary:   'static-white',
-  secondary: 'brand',
-  tertiary:  'brand',
-  link:      'brand',
-} as const;
+// Maps to valid LoaderColor values from our design system
+const LOADER_COLOR: Record<ButtonVariant, 'on-brand' | 'inverse' | 'brand'> = {
+  primary:   'on-brand',  // white on brand background
+  secondary: 'inverse',   // text-primary — adapts to theme
+  tertiary:  'inverse',   // text-primary — adapts to theme
+  link:      'brand',     // brand-colored, matches link text
+};
 
 const ICON_SIZE: Record<ButtonSize, number> = { sm: 16, md: 20, lg: 20 };
 
@@ -53,9 +47,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
 }, ref) => {
   const isDisabled = disabled || loading;
 
-  const loaderColor = danger
-    ? LOADER_COLOR_DANGER[variant]
-    : LOADER_COLOR[variant];
+  // danger doesn't change loader color — on-brand stays white on red bg,
+  // inverse stays theme-adaptive on secondary/tertiary/link
+  const loaderColor = LOADER_COLOR[variant];
 
   // Text style class from our design system
   const textClass = size === 'sm' ? 'ds-text-small-2' : 'ds-text-medium-2';
@@ -104,7 +98,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
       {/* Loader overlay — absolutely positioned, preserves button dimensions */}
       {loading && (
         <span className="btn__loader" aria-hidden="true">
-          <Loader size={LOADER_SIZE[size]} color={loaderColor as any} />
+          <Loader size={LOADER_SIZE[size]} color={loaderColor} />
         </span>
       )}
     </button>
