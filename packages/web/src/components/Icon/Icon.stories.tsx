@@ -67,7 +67,12 @@ export const Colors: Story = {
         { color: 'on-brand',     bg: 'var(--ds-color-brand-default)',       label: 'on-brand',     token: '--ds-color-icon-on-brand' },
         { color: 'static-white', bg: '#0a0a0a',                             label: 'static-white', token: '--ds-color-icon-static-white' },
         { color: 'static-black', bg: '#ffffff',                             label: 'static-black', token: '--ds-color-icon-static-black' },
-      ].map(({ color, bg, label, token }, i, arr) => (
+      ].map(({ color, bg, label, token }, i, arr) => {
+        const isDark = bg.startsWith('#') && parseInt(bg.slice(1, 3), 16) < 100;
+        const isBrand = bg.includes('brand');
+        const textPrimary = isDark || isBrand ? '#ffffff' : 'var(--ds-color-text-primary)';
+        const textSecondary = isDark || isBrand ? 'rgba(255,255,255,0.5)' : 'var(--ds-color-text-tertiary)';
+        return (
         <div key={color} style={{
           display: 'flex', alignItems: 'center', gap: 16,
           padding: '12px 16px',
@@ -78,11 +83,12 @@ export const Colors: Story = {
         }}>
           <Icon name="favorite" size={24} color={color as any} />
           <div>
-            <p className="ds-text-small-2" style={{ color: bg === '#0a0a0a' ? '#fff' : bg === '#ffffff' ? '#000' : 'var(--ds-color-text-primary)', margin: '0 0 2px' }}>{label}</p>
-            <p className="ds-text-xsmall-1" style={{ color: bg === '#0a0a0a' ? 'rgba(255,255,255,0.5)' : bg === '#ffffff' ? 'rgba(0,0,0,0.4)' : 'var(--ds-color-text-tertiary)', margin: 0 }}>{token}</p>
+            <p className="ds-text-small-2" style={{ color: textPrimary, margin: '0 0 2px' }}>{label}</p>
+            <p className="ds-text-xsmall-1" style={{ color: textSecondary, margin: 0 }}>{token}</p>
           </div>
         </div>
-      ))}
+        );
+      })}
     </div>
   ),
 };
