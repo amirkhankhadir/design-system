@@ -63,7 +63,7 @@ export const Colors: Story = {
         { color: 'secondary',    bg: 'var(--ds-color-background-default)',  label: 'secondary',    token: '--ds-color-icon-secondary' },
         { color: 'disabled',     bg: 'var(--ds-color-background-default)',  label: 'disabled',     token: '--ds-color-icon-disabled' },
         { color: 'brand',        bg: 'var(--ds-color-background-default)',  label: 'brand',        token: '--ds-color-brand-default' },
-        { color: 'inverse',      bg: 'var(--ds-color-background-default)',  label: 'inverse',      token: '--ds-color-icon-inverse' },
+        { color: 'inverse',      bg: '#161616',                             label: 'inverse',      token: '--ds-color-icon-inverse' },
         { color: 'on-brand',     bg: 'var(--ds-color-brand-default)',       label: 'on-brand',     token: '--ds-color-icon-on-brand' },
         { color: 'static-white', bg: '#0a0a0a',                             label: 'static-white', token: '--ds-color-icon-static-white' },
         { color: 'static-black', bg: '#ffffff',                             label: 'static-black', token: '--ds-color-icon-static-black' },
