@@ -41,8 +41,6 @@
     },
     "brand": {
       "default": { "Light": "{color.primary.40}", "Dark": "{color.primary.50}" },
-      "hover":   { "Light": "{color.primary.30}", "Dark": "{color.primary.60}" },
-      "active":  { "Light": "{color.primary.20}", "Dark": "{color.primary.70}" },
       "subtle":  { "Light": "{color.primary.90}", "Dark": "{color.primary.10}" },
       "text":    { "Light": "{color.primary.40}", "Dark": "{color.primary.50}" }
     },

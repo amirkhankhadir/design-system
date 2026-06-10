@@ -1,12 +1,11 @@
 /* ─────────────────────────────────────────────────────────────
    Button
-   All values reference design system tokens exclusively:
-   - Colors  → var(--ds-color-*)
-   - Spacing  → var(--ds-spacing-*)
-   - Radius   → var(--ds-radius-*)
-   - Sizing   → var(--ds-sizing-*)
-   - Typography → applied via .ds-text-small-2 / .ds-text-medium-2
-     classes from Button.tsx (font-family, size, line-height, weight)
+   All values reference design system tokens exclusively.
+
+   Hover / active states use surface overlay tokens applied via
+   ::after pseudo-element so they work uniformly on top of any
+   button background (brand, transparent, surface-1, etc.).
+   surface-1 = hover · surface-2 = pressed/active
    ───────────────────────────────────────────────────────────── */
 
 .btn {
@@ -25,6 +24,24 @@
               border-color 120ms ease;
 }
 
+/* ── Surface overlay (hover / active) ───────────────────────── */
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: transparent;
+  transition: background 120ms ease;
+}
+
+.btn:hover:not(:disabled)::after  { background: var(--ds-color-surface-1); }
+.btn:active:not(:disabled)::after { background: var(--ds-color-surface-2); }
+
+/* No overlay when disabled or loading */
+.btn:disabled::after { display: none; }
+
 /* ── Content / loader layout ────────────────────────────────── */
 
 .btn__content {
@@ -32,6 +49,8 @@
   align-items: center;
   justify-content: center;
   gap: inherit;
+  position: relative; /* stay above ::after overlay */
+  z-index: 1;
 }
 
 .btn--loading .btn__content {
@@ -45,6 +64,7 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
+  z-index: 1;
 }
 
 /* ── Sizes ──────────────────────────────────────────────────── */
@@ -81,7 +101,7 @@
 /*
   Material Symbols SVGs have ~3.5–4px safe zone per side.
   Reduce padding on the icon side so visual gap = text side gap.
-  sm: 8 - 4 = 4px · md/lg: 12 - 4 = 8px
+  sm: 8 − 4 = 4px · md/lg: 12 − 4 = 8px
 */
 
 .btn--sm.btn--has-icon-left  { padding-left:  var(--ds-spacing-4); }
@@ -94,7 +114,6 @@
 .btn--lg.btn--has-icon-right { padding-right: var(--ds-spacing-8); }
 
 /* ── Focus ring ─────────────────────────────────────────────── */
-/* Double box-shadow: gap ring (background-default) + focus ring */
 
 .btn:focus-visible {
   box-shadow:
@@ -104,19 +123,14 @@
 
 /* ─────────────────────────────────────────────────────────────
    PRIMARY
-   bg: brand-default · hover: brand-hover · active: brand-active
-   text/icon: on-brand · disabled: background-muted + text-disabled
+   bg: brand-default · text/icon: on-brand
    ───────────────────────────────────────────────────────────── */
 
 .btn--primary {
   background: var(--ds-color-brand-default);
   color: var(--ds-color-text-on-brand);
-  border-color: transparent;
 }
 .btn--primary .icon { color: var(--ds-color-icon-on-brand); }
-
-.btn--primary:hover:not(:disabled)  { background: var(--ds-color-brand-hover); }
-.btn--primary:active:not(:disabled) { background: var(--ds-color-brand-active); }
 
 .btn--primary:disabled {
   background: var(--ds-color-background-muted);
@@ -125,15 +139,11 @@
 }
 .btn--primary:disabled .icon { color: var(--ds-color-icon-disabled); }
 
-/* danger uses error color — same hover/active pattern via filter */
 .btn--primary.btn--danger { background: var(--ds-color-status-error-default); }
-.btn--primary.btn--danger:hover:not(:disabled)  { background: var(--ds-color-status-error-default); filter: brightness(0.9); }
-.btn--primary.btn--danger:active:not(:disabled) { background: var(--ds-color-status-error-default); filter: brightness(0.8); }
-.btn--primary.btn--danger:not(:hover):not(:active) { filter: none; }
 
 /* ─────────────────────────────────────────────────────────────
    SECONDARY
-   bg: transparent + border-default · hover/active: surface-1/2
+   bg: transparent + border-default · text/icon: primary/default
    ───────────────────────────────────────────────────────────── */
 
 .btn--secondary {
@@ -142,9 +152,6 @@
   border-color: var(--ds-color-border-default);
 }
 .btn--secondary .icon { color: var(--ds-color-icon-default); }
-
-.btn--secondary:hover:not(:disabled)  { background: var(--ds-color-surface-1); }
-.btn--secondary:active:not(:disabled) { background: var(--ds-color-surface-2); }
 
 .btn--secondary:disabled {
   color: var(--ds-color-text-disabled);
@@ -158,52 +165,39 @@
   border-color: var(--ds-color-status-error-border);
 }
 .btn--secondary.btn--danger .icon { color: var(--ds-color-status-error-text); }
-.btn--secondary.btn--danger:hover:not(:disabled)  { background: var(--ds-color-status-error-subtle); }
-.btn--secondary.btn--danger:active:not(:disabled) { background: var(--ds-color-status-error-subtle); filter: brightness(0.95); }
 
 /* ─────────────────────────────────────────────────────────────
    TERTIARY
-   bg: surface-1 · hover: surface-2 · active: surface-3
+   bg: surface-1 (surface-2/3 on hover/active via ::after stack)
    ───────────────────────────────────────────────────────────── */
 
 .btn--tertiary {
   background: var(--ds-color-surface-1);
   color: var(--ds-color-text-primary);
-  border-color: transparent;
 }
 .btn--tertiary .icon { color: var(--ds-color-icon-default); }
 
-.btn--tertiary:hover:not(:disabled)  { background: var(--ds-color-surface-2); }
-.btn--tertiary:active:not(:disabled) { background: var(--ds-color-surface-3); }
-
 .btn--tertiary:disabled {
-  color: var(--ds-color-text-disabled);
   background: var(--ds-color-background-muted);
+  color: var(--ds-color-text-disabled);
   cursor: not-allowed;
 }
 .btn--tertiary:disabled .icon { color: var(--ds-color-icon-disabled); }
 
 .btn--tertiary.btn--danger { color: var(--ds-color-status-error-text); }
 .btn--tertiary.btn--danger .icon { color: var(--ds-color-status-error-text); }
-.btn--tertiary.btn--danger:hover:not(:disabled)  { background: var(--ds-color-status-error-subtle); }
-.btn--tertiary.btn--danger:active:not(:disabled) { background: var(--ds-color-status-error-subtle); filter: brightness(0.95); }
 
 /* ─────────────────────────────────────────────────────────────
    LINK
-   bg: transparent · hover: brand-subtle · active: brand-subtle+
-   text: brand-text · icon: brand-default
+   bg: transparent · text: brand-text · icon: brand-default
    Full-height button — same dimensions as other variants
    ───────────────────────────────────────────────────────────── */
 
 .btn--link {
   background: transparent;
   color: var(--ds-color-brand-text);
-  border-color: transparent;
 }
 .btn--link .icon { color: var(--ds-color-brand-default); }
-
-.btn--link:hover:not(:disabled)  { background: var(--ds-color-brand-subtle); }
-.btn--link:active:not(:disabled) { background: var(--ds-color-brand-subtle); filter: brightness(0.94); }
 
 .btn--link:disabled {
   color: var(--ds-color-text-disabled);
@@ -213,5 +207,3 @@
 
 .btn--link.btn--danger { color: var(--ds-color-status-error-text); }
 .btn--link.btn--danger .icon { color: var(--ds-color-status-error-text); }
-.btn--link.btn--danger:hover:not(:disabled)  { background: var(--ds-color-status-error-subtle); }
-.btn--link.btn--danger:active:not(:disabled) { background: var(--ds-color-status-error-subtle); filter: brightness(0.95); }
