@@ -57,10 +57,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     ? LOADER_COLOR_DANGER[variant]
     : LOADER_COLOR[variant];
 
+  // Text style class from our design system
+  const textClass = size === 'sm' ? 'ds-text-small-2' : 'ds-text-medium-2';
+
   const classes = [
     'btn',
     `btn--${variant}`,
     `btn--${size}`,
+    textClass,
     danger    && 'btn--danger',
     loading   && 'btn--loading',
     iconLeft  && 'btn--has-icon-left',

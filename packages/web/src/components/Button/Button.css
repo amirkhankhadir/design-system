@@ -1,5 +1,12 @@
 /* ─────────────────────────────────────────────────────────────
    Button
+   All values reference design system tokens exclusively:
+   - Colors  → var(--ds-color-*)
+   - Spacing  → var(--ds-spacing-*)
+   - Radius   → var(--ds-radius-*)
+   - Sizing   → var(--ds-sizing-*)
+   - Typography → applied via .ds-text-small-2 / .ds-text-medium-2
+     classes from Button.tsx (font-family, size, line-height, weight)
    ───────────────────────────────────────────────────────────── */
 
 .btn {
@@ -7,17 +14,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid transparent;
+  border: var(--ds-border-width-1) solid transparent;
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
   box-sizing: border-box;
-  font-family: var(--ds-font-family-primary, 'Source Sans 3', sans-serif);
-  font-weight: 600;
   -webkit-font-smoothing: antialiased;
   outline: none;
   transition: background 120ms ease, color 120ms ease, box-shadow 120ms ease,
-              border-color 120ms ease, opacity 120ms ease;
+              border-color 120ms ease;
 }
 
 /* ── Content / loader layout ────────────────────────────────── */
@@ -30,7 +35,7 @@
 }
 
 .btn--loading .btn__content {
-  visibility: hidden; /* hidden but keeps layout / dimensions */
+  visibility: hidden;
 }
 
 .btn__loader {
@@ -44,67 +49,63 @@
 
 /* ── Sizes ──────────────────────────────────────────────────── */
 /*
-  Heights from Figma reference: sm=24 md=32 lg=40
-  Padding: sm px=8/py=4 · md px=12/py=6 · lg px=12/py=10
-  Gap:     sm/md = 4 · lg = 8
-  Radius (bumped +2 per user request): sm=8 · md=10 · lg=12
-  Font:    sm 12/16 · md/lg 14/18
+  Heights: sm → --ds-sizing-24 · md → --ds-sizing-32 · lg → --ds-sizing-40
+  Padding: sm px=--spacing-8 · md/lg px=--spacing-12
+  Gap:     sm/md → --spacing-4 · lg → --spacing-8
+  Radius:  sm → --radius-8 · md → --radius-10 · lg → --radius-12
+  Typography: applied via .ds-text-small-2 / .ds-text-medium-2 (in TSX)
 */
 
 .btn--sm {
-  height: 24px;
-  padding: 0 8px;
-  gap: 4px;
-  border-radius: 8px;
-  font-size: 12px;
-  line-height: 16px;
+  height: var(--ds-sizing-24);
+  padding: 0 var(--ds-spacing-8);
+  gap: var(--ds-spacing-4);
+  border-radius: var(--ds-radius-8);
 }
 
 .btn--md {
-  height: 32px;
-  padding: 0 12px;
-  gap: 4px;
-  border-radius: 10px;
-  font-size: 14px;
-  line-height: 18px;
+  height: var(--ds-sizing-32);
+  padding: 0 var(--ds-spacing-12);
+  gap: var(--ds-spacing-4);
+  border-radius: var(--ds-radius-10);
 }
 
 .btn--lg {
-  height: 40px;
-  padding: 0 12px;
-  gap: 8px;
-  border-radius: 12px;
-  font-size: 14px;
-  line-height: 18px;
+  height: var(--ds-sizing-40);
+  padding: 0 var(--ds-spacing-12);
+  gap: var(--ds-spacing-8);
+  border-radius: var(--ds-radius-12);
 }
 
 /* ── Icon safe-zone compensation ────────────────────────────── */
 /*
-  Material Symbols icons have a built-in safe zone (~3.5–4px per side).
-  Without compensation the icon side visually looks wider than the text side.
-  We reduce padding on the icon side by 4px to equalise visual weight.
+  Material Symbols SVGs have ~3.5–4px safe zone per side.
+  Reduce padding on the icon side so visual gap = text side gap.
+  sm: 8 - 4 = 4px · md/lg: 12 - 4 = 8px
 */
 
-.btn--sm.btn--has-icon-left  { padding-left:  4px; }
-.btn--sm.btn--has-icon-right { padding-right: 4px; }
+.btn--sm.btn--has-icon-left  { padding-left:  var(--ds-spacing-4); }
+.btn--sm.btn--has-icon-right { padding-right: var(--ds-spacing-4); }
 
 .btn--md.btn--has-icon-left,
-.btn--lg.btn--has-icon-left  { padding-left:  8px; }
+.btn--lg.btn--has-icon-left  { padding-left:  var(--ds-spacing-8); }
 
 .btn--md.btn--has-icon-right,
-.btn--lg.btn--has-icon-right { padding-right: 8px; }
+.btn--lg.btn--has-icon-right { padding-right: var(--ds-spacing-8); }
 
-/* ── Focus ring (visible on any background) ─────────────────── */
-/* Inner gap ring creates contrast against the button surface    */
+/* ── Focus ring ─────────────────────────────────────────────── */
+/* Double box-shadow: gap ring (background-default) + focus ring */
 
 .btn:focus-visible {
   box-shadow:
-    0 0 0 2px var(--ds-color-background-default),
-    0 0 0 4px var(--ds-color-border-focus);
+    0 0 0 var(--ds-border-width-2) var(--ds-color-background-default),
+    0 0 0 var(--ds-spacing-4) var(--ds-color-border-focus);
 }
 
 /* ─────────────────────────────────────────────────────────────
    PRIMARY
+   bg: brand-default · hover: brand-hover · active: brand-active
+   text/icon: on-brand · disabled: background-muted + text-disabled
    ───────────────────────────────────────────────────────────── */
 
 .btn--primary {
@@ -114,8 +115,8 @@
 }
 .btn--primary .icon { color: var(--ds-color-icon-on-brand); }
 
-.btn--primary:hover:not(:disabled) { filter: brightness(0.92); }
-.btn--primary:active:not(:disabled) { filter: brightness(0.84); }
+.btn--primary:hover:not(:disabled)  { background: var(--ds-color-brand-hover); }
+.btn--primary:active:not(:disabled) { background: var(--ds-color-brand-active); }
 
 .btn--primary:disabled {
   background: var(--ds-color-background-muted);
@@ -124,10 +125,15 @@
 }
 .btn--primary:disabled .icon { color: var(--ds-color-icon-disabled); }
 
+/* danger uses error color — same hover/active pattern via filter */
 .btn--primary.btn--danger { background: var(--ds-color-status-error-default); }
+.btn--primary.btn--danger:hover:not(:disabled)  { background: var(--ds-color-status-error-default); filter: brightness(0.9); }
+.btn--primary.btn--danger:active:not(:disabled) { background: var(--ds-color-status-error-default); filter: brightness(0.8); }
+.btn--primary.btn--danger:not(:hover):not(:active) { filter: none; }
 
 /* ─────────────────────────────────────────────────────────────
    SECONDARY
+   bg: transparent + border-default · hover/active: surface-1/2
    ───────────────────────────────────────────────────────────── */
 
 .btn--secondary {
@@ -157,6 +163,7 @@
 
 /* ─────────────────────────────────────────────────────────────
    TERTIARY
+   bg: surface-1 · hover: surface-2 · active: surface-3
    ───────────────────────────────────────────────────────────── */
 
 .btn--tertiary {
@@ -183,8 +190,9 @@
 
 /* ─────────────────────────────────────────────────────────────
    LINK
-   Full-height button with transparent bg — shows subtle brand
-   fill on hover (same pattern as tertiary but brand-tinted).
+   bg: transparent · hover: brand-subtle · active: brand-subtle+
+   text: brand-text · icon: brand-default
+   Full-height button — same dimensions as other variants
    ───────────────────────────────────────────────────────────── */
 
 .btn--link {
@@ -195,7 +203,7 @@
 .btn--link .icon { color: var(--ds-color-brand-default); }
 
 .btn--link:hover:not(:disabled)  { background: var(--ds-color-brand-subtle); }
-.btn--link:active:not(:disabled) { background: var(--ds-color-brand-subtle); filter: brightness(0.93); }
+.btn--link:active:not(:disabled) { background: var(--ds-color-brand-subtle); filter: brightness(0.94); }
 
 .btn--link:disabled {
   color: var(--ds-color-text-disabled);
@@ -206,3 +214,4 @@
 .btn--link.btn--danger { color: var(--ds-color-status-error-text); }
 .btn--link.btn--danger .icon { color: var(--ds-color-status-error-text); }
 .btn--link.btn--danger:hover:not(:disabled)  { background: var(--ds-color-status-error-subtle); }
+.btn--link.btn--danger:active:not(:disabled) { background: var(--ds-color-status-error-subtle); filter: brightness(0.95); }
