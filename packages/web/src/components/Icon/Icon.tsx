@@ -30,6 +30,18 @@ export interface IconProps {
 
 const FALLBACK_SVG = `<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>`;
 
+// Vite statically analyses these globs and makes all matched files available as lazy modules
+const ICON_MODULES: Record<string, Record<string, () => Promise<{ default: string }>>> = {
+  outlined: import.meta.glob(
+    '/node_modules/@material-symbols/svg-400/outlined/*.svg',
+    { query: '?raw', import: 'default', eager: false }
+  ) as Record<string, () => Promise<{ default: string }>>,
+  rounded: import.meta.glob(
+    '/node_modules/@material-symbols/svg-400/rounded/*.svg',
+    { query: '?raw', import: 'default', eager: false }
+  ) as Record<string, () => Promise<{ default: string }>>,
+};
+
 // Module-level SVG cache — persists across renders
 const svgCache = new Map<string, string>();
 
@@ -38,10 +50,7 @@ function buildKey(name: string, variant: IconVariant, filled: boolean) {
 }
 
 function injectCurrentColor(raw: string): string {
-  // Remove any hardcoded fill attributes on paths, set fill="currentColor" on root svg
-  return raw
-    .replace('<svg ', '<svg fill="currentColor" ')
-    .replace(/(<path[^>]*)\sfill="(?!none)[^"]*"/g, '$1');
+  return raw.replace('<svg ', '<svg fill="currentColor" ');
 }
 
 async function loadSvg(name: string, variant: IconVariant, filled: boolean): Promise<string> {
@@ -49,16 +58,14 @@ async function loadSvg(name: string, variant: IconVariant, filled: boolean): Pro
   if (svgCache.has(key)) return svgCache.get(key)!;
 
   const suffix = filled ? '-fill' : '';
-  const url = new URL(
-    `../../../../node_modules/@material-symbols/svg-400/${variant}/${name}${suffix}.svg`,
-    import.meta.url,
-  ).href;
+  const globKey = `/node_modules/@material-symbols/svg-400/${variant}/${name}${suffix}.svg`;
+  const loader = ICON_MODULES[variant]?.[globKey];
 
   try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`${res.status}`);
-    const text = await res.text();
-    const svg = injectCurrentColor(text);
+    if (!loader) throw new Error(`Icon not found: ${globKey}`);
+    const raw = await loader() as unknown as string;
+    // loader returns the raw string directly (import: 'default' with ?raw)
+    const svg = injectCurrentColor(typeof raw === 'string' ? raw : (raw as any).default ?? FALLBACK_SVG);
     svgCache.set(key, svg);
     return svg;
   } catch {
