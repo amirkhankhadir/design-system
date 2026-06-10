@@ -2,10 +2,45 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta = {
   title: 'Foundations/Colors',
-  parameters: { layout: 'padded', controls: { disable: true } },
+  parameters: { layout: 'fullscreen', controls: { disable: true } },
 };
 export default meta;
 type Story = StoryObj;
+
+// ── Side-by-side theme wrapper ─────────────────────────────
+
+function DualTheme({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '100vh' }}>
+      {/* Light */}
+      <div data-theme="light" style={{ background: 'var(--ds-color-background-default)', padding: 32 }}>
+        <p style={{
+          fontFamily: 'var(--ds-font-family-primary, sans-serif)',
+          fontSize: 11,
+          fontWeight: 600,
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          color: 'var(--ds-color-text-tertiary)',
+          margin: '0 0 24px',
+        }}>Light</p>
+        {children}
+      </div>
+      {/* Dark */}
+      <div data-theme="dark" style={{ background: 'var(--ds-color-background-default)', padding: 32, borderLeft: '1px solid #333' }}>
+        <p style={{
+          fontFamily: 'var(--ds-font-family-primary, sans-serif)',
+          fontSize: 11,
+          fontWeight: 600,
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          color: 'var(--ds-color-text-tertiary)',
+          margin: '0 0 24px',
+        }}>Dark</p>
+        {children}
+      </div>
+    </div>
+  );
+}
 
 // ── Shared components ──────────────────────────────────────
 
@@ -107,13 +142,9 @@ function ColorTable({
 
 // ── Story ──────────────────────────────────────────────────
 
-export const All: Story = {
-  name: 'All Colors',
-  render: () => (
-    <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)', maxWidth: 900 }}>
-      <PageTitle>Colors</PageTitle>
-      <PageSubtitle>Semantic color tokens — use these in all components. Never reference primitives directly.</PageSubtitle>
-
+function ColorContent() {
+  return (
+    <div>
       {/* Background */}
       <SectionLabel>Background</SectionLabel>
       <ColorTable
@@ -245,6 +276,21 @@ export const All: Story = {
         })}
       </div>
 
+    </div>
+  );
+}
+
+export const All: Story = {
+  name: 'All Colors',
+  render: () => (
+    <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)' }}>
+      <div data-theme="light" style={{ background: 'var(--ds-color-background-default)', padding: '32px 32px 0' }}>
+        <PageTitle>Colors</PageTitle>
+        <PageSubtitle>Semantic color tokens — use these in all components. Never reference primitives directly.</PageSubtitle>
+      </div>
+      <DualTheme>
+        <ColorContent />
+      </DualTheme>
     </div>
   ),
 };

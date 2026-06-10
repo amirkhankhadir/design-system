@@ -1,9 +1,45 @@
 import type { Preview } from '@storybook/react-vite';
+import React from 'react';
 
-// Design tokens — light mode by default
+// Both themes loaded — light via :root, dark via [data-theme="dark"]
 import '../../../dist/web/tokens.light.css';
+import '../../../dist/web/tokens.dark.css';
 
 const preview: Preview = {
+  globalTypes: {
+    theme: {
+      description: 'Color theme',
+      toolbar: {
+        title: 'Theme',
+        icon: 'circlehollow',
+        items: [
+          { value: 'light', title: 'Light', icon: 'sun' },
+          { value: 'dark',  title: 'Dark',  icon: 'moon' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
+  initialGlobals: {
+    theme: 'light',
+  },
+  decorators: [
+    (Story, context) => {
+      const theme = (context.globals.theme as string) || 'light';
+      return (
+        <div
+          data-theme={theme}
+          style={{
+            background: 'var(--ds-color-background-default)',
+            minHeight: '100vh',
+            padding: '0',
+          }}
+        >
+          <Story />
+        </div>
+      );
+    },
+  ],
   parameters: {
     controls: {
       matchers: {
@@ -11,15 +47,7 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
-    backgrounds: {
-      default: 'light',
-      values: [
-        { name: 'light',  value: '#ffffff' },
-        { name: 'subtle', value: '#f5f5f5' },
-        { name: 'dark',   value: '#161616' },
-        { name: 'brand',  value: '#039be6' },
-      ],
-    },
+    backgrounds: { disable: true }, // replaced by our theme switcher
   },
 };
 
