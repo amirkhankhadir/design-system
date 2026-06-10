@@ -1,0 +1,16 @@
+{
+  "name": "@design-system/tokens",
+  "version": "0.1.0",
+  "description": "Cross-platform design system — tokens, icons, and component references for Web, iOS, and Android.",
+  "private": true,
+  "scripts": {
+    "build:tokens": "style-dictionary build --config style-dictionary.config.js",
+    "build": "npm run build:tokens"
+  },
+  "devDependencies": {
+    "style-dictionary": "^4.3.0"
+  },
+  "dependencies": {
+    "@material-symbols/svg-400": "^0.23.0"
+  }
+}
