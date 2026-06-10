@@ -7,179 +7,177 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-// ── Helpers ────────────────────────────────────────────────
+// ── Shared layout primitives ───────────────────────────────
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function PageTitle({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ marginBottom: 40 }}>
-      <p style={{
-        fontFamily: 'var(--ds-font-family-primary, sans-serif)',
-        fontSize: 11,
-        fontWeight: 600,
-        letterSpacing: '0.08em',
-        textTransform: 'uppercase',
-        color: 'var(--ds-color-text-tertiary)',
-        margin: '0 0 12px',
-      }}>{title}</p>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>{children}</div>
-    </div>
+    <h1 className="ds-headline-large-2" style={{
+      color: 'var(--ds-color-text-primary)',
+      margin: '0 0 8px',
+    }}>{children}</h1>
   );
 }
 
-function Swatch({ name, variable, border }: { name: string; variable: string; border?: boolean }) {
+function PageSubtitle({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ width: 80 }}>
+    <p className="ds-text-large-1" style={{
+      color: 'var(--ds-color-text-secondary)',
+      margin: '0 0 48px',
+    }}>{children}</p>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="ds-text-small-2" style={{
+      color: 'var(--ds-color-text-tertiary)',
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase',
+      margin: '0 0 12px',
+    }}>{children}</p>
+  );
+}
+
+function Swatch({
+  name,
+  variable,
+  showBorder,
+}: {
+  name: string;
+  variable: string;
+  showBorder?: boolean;
+}) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: 96 }}>
       <div style={{
-        width: 80,
-        height: 48,
-        borderRadius: 8,
+        height: 56,
+        borderRadius: 'var(--ds-radius-8)',
         background: `var(${variable})`,
-        border: border ? '1px solid var(--ds-color-border-default)' : undefined,
-        marginBottom: 6,
+        border: showBorder ? '1px solid var(--ds-color-border-default)' : undefined,
+        flexShrink: 0,
       }} />
-      <p style={{
-        fontFamily: 'var(--ds-font-family-primary, sans-serif)',
-        fontSize: 11,
-        color: 'var(--ds-color-text-secondary)',
-        margin: 0,
-        lineHeight: 1.4,
-        wordBreak: 'break-all',
-      }}>{name}</p>
-    </div>
-  );
-}
-
-function StatusGroup({ name, vars }: { name: string; vars: string[] }) {
-  const labels = ['default', 'subtle', 'text', 'border'];
-  return (
-    <div style={{ marginRight: 24, marginBottom: 16 }}>
-      <p style={{
-        fontFamily: 'var(--ds-font-family-primary, sans-serif)',
-        fontSize: 12,
-        fontWeight: 600,
-        color: 'var(--ds-color-text-primary)',
-        margin: '0 0 8px',
-      }}>{name}</p>
-      <div style={{ display: 'flex', gap: 4 }}>
-        {vars.map((v, i) => (
-          <div key={v} style={{ width: 56 }}>
-            <div style={{
-              width: 56,
-              height: 40,
-              borderRadius: 6,
-              background: `var(${v})`,
-              border: labels[i] === 'subtle' || labels[i] === 'text'
-                ? '1px solid var(--ds-color-border-default)' : undefined,
-              marginBottom: 4,
-            }} />
-            <p style={{
-              fontFamily: 'var(--ds-font-family-primary, sans-serif)',
-              fontSize: 10,
-              color: 'var(--ds-color-text-tertiary)',
-              margin: 0,
-            }}>{labels[i]}</p>
-          </div>
-        ))}
+      <div>
+        <p className="ds-text-small-2" style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 2px' }}>{name}</p>
+        <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>{variable}</p>
       </div>
     </div>
   );
 }
 
-// ── Stories ────────────────────────────────────────────────
+function SwatchRow({ children }: { children: React.ReactNode }) {
+  return <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginBottom: 40 }}>{children}</div>;
+}
+
+function Divider() {
+  return <div style={{ borderTop: '1px solid var(--ds-color-border-subtle)', margin: '8px 0 40px' }} />;
+}
+
+// ── Story ──────────────────────────────────────────────────
 
 export const All: Story = {
   name: 'All Colors',
   render: () => (
-    <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)' }}>
+    <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)', maxWidth: 960 }}>
+      <PageTitle>Colors</PageTitle>
+      <PageSubtitle>Semantic color tokens — use these in all components. Never reference primitives directly.</PageSubtitle>
 
-      <Section title="Background">
-        <Swatch name="default"  variable="--ds-color-background-default" border />
-        <Swatch name="subtle"   variable="--ds-color-background-subtle" border />
-        <Swatch name="muted"    variable="--ds-color-background-muted" border />
-      </Section>
+      <SectionLabel>Background</SectionLabel>
+      <SwatchRow>
+        <Swatch name="default" variable="--ds-color-background-default" showBorder />
+        <Swatch name="subtle"  variable="--ds-color-background-subtle"  showBorder />
+        <Swatch name="muted"   variable="--ds-color-background-muted"   showBorder />
+      </SwatchRow>
 
-      <Section title="Surface">
-        <Swatch name="surface-1" variable="--ds-color-surface-1" border />
-        <Swatch name="surface-2" variable="--ds-color-surface-2" border />
-        <Swatch name="surface-3" variable="--ds-color-surface-3" border />
-        <Swatch name="surface-4" variable="--ds-color-surface-4" border />
-      </Section>
+      <SectionLabel>Surface</SectionLabel>
+      <SwatchRow>
+        <Swatch name="surface-1" variable="--ds-color-surface-1" showBorder />
+        <Swatch name="surface-2" variable="--ds-color-surface-2" showBorder />
+        <Swatch name="surface-3" variable="--ds-color-surface-3" showBorder />
+        <Swatch name="surface-4" variable="--ds-color-surface-4" showBorder />
+      </SwatchRow>
 
-      <Section title="Text">
+      <SectionLabel>Text</SectionLabel>
+      <SwatchRow>
         <Swatch name="primary"   variable="--ds-color-text-primary" />
         <Swatch name="secondary" variable="--ds-color-text-secondary" />
         <Swatch name="tertiary"  variable="--ds-color-text-tertiary" />
         <Swatch name="disabled"  variable="--ds-color-text-disabled" />
-        <Swatch name="inverse"   variable="--ds-color-text-inverse" border />
-        <Swatch name="on-brand"  variable="--ds-color-text-on-brand" border />
-      </Section>
+        <Swatch name="inverse"   variable="--ds-color-text-inverse"  showBorder />
+        <Swatch name="on-brand"  variable="--ds-color-text-on-brand" showBorder />
+      </SwatchRow>
 
-      <Section title="Icon">
+      <SectionLabel>Icon</SectionLabel>
+      <SwatchRow>
         <Swatch name="default"   variable="--ds-color-icon-default" />
         <Swatch name="secondary" variable="--ds-color-icon-secondary" />
         <Swatch name="disabled"  variable="--ds-color-icon-disabled" />
-        <Swatch name="inverse"   variable="--ds-color-icon-inverse" border />
-        <Swatch name="on-brand"  variable="--ds-color-icon-on-brand" border />
-      </Section>
+        <Swatch name="inverse"   variable="--ds-color-icon-inverse"  showBorder />
+        <Swatch name="on-brand"  variable="--ds-color-icon-on-brand" showBorder />
+      </SwatchRow>
 
-      <Section title="Border">
-        <Swatch name="subtle"  variable="--ds-color-border-subtle" border />
-        <Swatch name="default" variable="--ds-color-border-default" border />
-        <Swatch name="strong"  variable="--ds-color-border-strong" border />
+      <SectionLabel>Border</SectionLabel>
+      <SwatchRow>
+        <Swatch name="subtle"  variable="--ds-color-border-subtle"  showBorder />
+        <Swatch name="default" variable="--ds-color-border-default" showBorder />
+        <Swatch name="strong"  variable="--ds-color-border-strong" />
         <Swatch name="focus"   variable="--ds-color-border-focus" />
-      </Section>
+      </SwatchRow>
 
-      <Section title="Brand">
+      <SectionLabel>Brand</SectionLabel>
+      <SwatchRow>
         <Swatch name="default" variable="--ds-color-brand-default" />
-        <Swatch name="subtle"  variable="--ds-color-brand-subtle" border />
+        <Swatch name="subtle"  variable="--ds-color-brand-subtle"  showBorder />
         <Swatch name="text"    variable="--ds-color-brand-text" />
-      </Section>
+      </SwatchRow>
 
-      <div style={{ marginBottom: 40 }}>
-        <p style={{
-          fontSize: 11,
-          fontWeight: 600,
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          color: 'var(--ds-color-text-tertiary)',
-          margin: '0 0 12px',
-        }}>Status</p>
-        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-          <StatusGroup name="Success" vars={['--ds-color-status-success-default','--ds-color-status-success-subtle','--ds-color-status-success-text','--ds-color-status-success-border']} />
-          <StatusGroup name="Warning" vars={['--ds-color-status-warning-default','--ds-color-status-warning-subtle','--ds-color-status-warning-text','--ds-color-status-warning-border']} />
-          <StatusGroup name="Error"   vars={['--ds-color-status-error-default','--ds-color-status-error-subtle','--ds-color-status-error-text','--ds-color-status-error-border']} />
-          <StatusGroup name="Info"    vars={['--ds-color-status-info-default','--ds-color-status-info-subtle','--ds-color-status-info-text','--ds-color-status-info-border']} />
-        </div>
-      </div>
+      <Divider />
 
-      <div style={{ marginBottom: 40 }}>
-        <p style={{
-          fontSize: 11,
-          fontWeight: 600,
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          color: 'var(--ds-color-text-tertiary)',
-          margin: '0 0 12px',
-        }}>Extended Palette</p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {['lime','mint','cyan','blue','indigo','purple','pink','rose','yellow'].map(color => (
-            <div key={color} style={{ width: 64 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                <div style={{ width: 64, height: 32, borderRadius: 6, background: `var(--ds-color-extended-${color}-default)` }} />
-                <div style={{ width: 64, height: 32, borderRadius: 6, background: `var(--ds-color-extended-${color}-subtle)`, border: '1px solid var(--ds-color-border-default)' }} />
-                <div style={{ width: 64, height: 32, borderRadius: 6, background: `var(--ds-color-extended-${color}-text)` }} />
-              </div>
-              <p style={{ fontSize: 11, color: 'var(--ds-color-text-secondary)', margin: '6px 0 0', textAlign: 'center' }}>{color}</p>
+      <SectionLabel>Status</SectionLabel>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginBottom: 40 }}>
+        {(['success', 'warning', 'error', 'info'] as const).map(status => (
+          <div key={status}>
+            <p className="ds-text-small-2" style={{ color: 'var(--ds-color-text-secondary)', margin: '0 0 10px', textTransform: 'capitalize' }}>{status}</p>
+            <div style={{ display: 'flex', gap: 12 }}>
+              {(['default', 'subtle', 'text', 'border'] as const).map(variant => (
+                <div key={variant} style={{ display: 'flex', flexDirection: 'column', gap: 6, width: 80 }}>
+                  <div style={{
+                    height: 40,
+                    borderRadius: 'var(--ds-radius-6)',
+                    background: `var(--ds-color-status-${status}-${variant})`,
+                    border: variant === 'subtle' || variant === 'text' ? '1px solid var(--ds-color-border-default)' : undefined,
+                  }} />
+                  <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>{variant}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
 
-      <Section title="Shadow">
-        <Swatch name="sm" variable="--ds-color-shadow-sm" border />
-        <Swatch name="md" variable="--ds-color-shadow-md" border />
-        <Swatch name="lg" variable="--ds-color-shadow-lg" border />
-      </Section>
+      <Divider />
+
+      <SectionLabel>Extended Palette</SectionLabel>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, marginBottom: 40 }}>
+        {['lime','mint','cyan','blue','indigo','purple','pink','rose','yellow'].map(color => (
+          <div key={color} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <div style={{ display: 'flex', gap: 3 }}>
+              <div style={{ width: 32, height: 48, borderRadius: 'var(--ds-radius-6)', background: `var(--ds-color-extended-${color}-default)` }} />
+              <div style={{ width: 32, height: 48, borderRadius: 'var(--ds-radius-6)', background: `var(--ds-color-extended-${color}-subtle)`, border: '1px solid var(--ds-color-border-default)' }} />
+              <div style={{ width: 32, height: 48, borderRadius: 'var(--ds-radius-6)', background: `var(--ds-color-extended-${color}-text)` }} />
+            </div>
+            <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-secondary)', margin: 0, textAlign: 'center' }}>{color}</p>
+          </div>
+        ))}
+      </div>
+
+      <Divider />
+
+      <SectionLabel>Shadow</SectionLabel>
+      <SwatchRow>
+        <Swatch name="sm" variable="--ds-color-shadow-sm" showBorder />
+        <Swatch name="md" variable="--ds-color-shadow-md" showBorder />
+        <Swatch name="lg" variable="--ds-color-shadow-lg" showBorder />
+      </SwatchRow>
 
     </div>
   ),

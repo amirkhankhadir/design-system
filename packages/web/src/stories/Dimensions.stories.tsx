@@ -7,129 +7,145 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
+function PageTitle({ children }: { children: React.ReactNode }) {
   return (
-    <p style={{
-      fontFamily: 'var(--ds-font-family-primary, sans-serif)',
-      fontSize: 11,
-      fontWeight: 600,
-      letterSpacing: '0.08em',
-      textTransform: 'uppercase',
+    <h1 className="ds-headline-large-2" style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 8px' }}>
+      {children}
+    </h1>
+  );
+}
+
+function PageSubtitle({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="ds-text-large-1" style={{ color: 'var(--ds-color-text-secondary)', margin: '0 0 48px' }}>
+      {children}
+    </p>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="ds-text-small-2" style={{
       color: 'var(--ds-color-text-tertiary)',
-      margin: '0 0 12px',
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase',
+      margin: '0 0 16px',
     }}>{children}</p>
   );
 }
 
-function Label({ children }: { children: React.ReactNode }) {
-  return (
-    <span style={{
-      fontFamily: 'var(--ds-font-family-primary, sans-serif)',
-      fontSize: 11,
-      color: 'var(--ds-color-text-tertiary)',
-      minWidth: 80,
-    }}>{children}</span>
-  );
+function Divider() {
+  return <div style={{ borderTop: '1px solid var(--ds-color-border-subtle)', margin: '8px 0 40px' }} />;
 }
 
 export const All: Story = {
   name: 'All Dimensions',
   render: () => (
-    <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)', maxWidth: 600 }}>
+    <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)', maxWidth: 640 }}>
+      <PageTitle>Dimensions</PageTitle>
+      <PageSubtitle>Spacing, radius, border width and sizing — theme-independent tokens.</PageSubtitle>
 
       {/* Spacing */}
-      <div style={{ marginBottom: 48 }}>
-        <SectionTitle>Spacing</SectionTitle>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {[0,2,4,6,8,12,16,20,24,32,40,48,64].map(n => (
-            <div key={n} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <Label>spacing-{n}</Label>
-              <div style={{
-                height: 8,
-                width: `var(--ds-spacing-${n})`,
-                minWidth: n === 0 ? 2 : undefined,
-                background: 'var(--ds-color-brand-default)',
-                borderRadius: 2,
-              }} />
-              <span style={{ fontSize: 11, color: 'var(--ds-color-text-secondary)' }}>{n}px</span>
-            </div>
-          ))}
-        </div>
+      <SectionLabel>Spacing</SectionLabel>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 40 }}>
+        {[0,2,4,6,8,12,16,20,24,32,40,48,64].map(n => (
+          <div key={n} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <p className="ds-text-small-1" style={{
+              color: 'var(--ds-color-text-tertiary)',
+              margin: 0,
+              width: 100,
+              flexShrink: 0,
+            }}>spacing-{n}</p>
+            <div style={{
+              height: 6,
+              width: `max(${n}px, 2px)`,
+              background: 'var(--ds-color-brand-default)',
+              borderRadius: 'var(--ds-radius-full)',
+              flexShrink: 0,
+            }} />
+            <p className="ds-text-small-1" style={{ color: 'var(--ds-color-text-secondary)', margin: 0 }}>{n}px</p>
+          </div>
+        ))}
       </div>
+
+      <Divider />
 
       {/* Radius */}
-      <div style={{ marginBottom: 48 }}>
-        <SectionTitle>Radius</SectionTitle>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
-          {[
-            { name: 'radius-0',    val: '0px',     var: '--ds-radius-0' },
-            { name: 'radius-4',    val: '4px',     var: '--ds-radius-4' },
-            { name: 'radius-6',    val: '6px',     var: '--ds-radius-6' },
-            { name: 'radius-8',    val: '8px',     var: '--ds-radius-8' },
-            { name: 'radius-10',   val: '10px',    var: '--ds-radius-10' },
-            { name: 'radius-12',   val: '12px',    var: '--ds-radius-12' },
-            { name: 'radius-16',   val: '16px',    var: '--ds-radius-16' },
-            { name: 'radius-24',   val: '24px',    var: '--ds-radius-24' },
-            { name: 'radius-40',   val: '40px',    var: '--ds-radius-40' },
-            { name: 'radius-full', val: '9999px',  var: '--ds-radius-full' },
-          ].map(r => (
-            <div key={r.name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-              <div style={{
-                width: 56,
-                height: 56,
-                background: 'var(--ds-color-brand-subtle)',
-                border: '1.5px solid var(--ds-color-brand-default)',
-                borderRadius: `var(${r.var})`,
-              }} />
-              <span style={{ fontSize: 11, color: 'var(--ds-color-text-secondary)', textAlign: 'center' }}>{r.name.replace('radius-','')}</span>
-              <span style={{ fontSize: 10, color: 'var(--ds-color-text-tertiary)' }}>{r.val}</span>
-            </div>
-          ))}
-        </div>
+      <SectionLabel>Radius</SectionLabel>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, marginBottom: 40 }}>
+        {[
+          { name: '0',    px: '0px' },
+          { name: '4',    px: '4px' },
+          { name: '6',    px: '6px' },
+          { name: '8',    px: '8px' },
+          { name: '10',   px: '10px' },
+          { name: '12',   px: '12px' },
+          { name: '16',   px: '16px' },
+          { name: '24',   px: '24px' },
+          { name: '40',   px: '40px' },
+          { name: 'full', px: '∞' },
+        ].map(r => (
+          <div key={r.name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+            <div style={{
+              width: 64,
+              height: 64,
+              background: 'var(--ds-color-brand-subtle)',
+              border: '1.5px solid var(--ds-color-brand-default)',
+              borderRadius: `var(--ds-radius-${r.name})`,
+            }} />
+            <p className="ds-text-xsmall-2" style={{ color: 'var(--ds-color-text-secondary)', margin: 0 }}>{r.name}</p>
+            <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>{r.px}</p>
+          </div>
+        ))}
       </div>
+
+      <Divider />
 
       {/* Border width */}
-      <div style={{ marginBottom: 48 }}>
-        <SectionTitle>Border Width</SectionTitle>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {[1,2,4].map(n => (
-            <div key={n} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <Label>border-width-{n}</Label>
-              <div style={{
-                width: 120,
-                height: 0,
-                borderTop: `var(--ds-border-width-${n}) solid var(--ds-color-text-primary)`,
-              }} />
-              <span style={{ fontSize: 11, color: 'var(--ds-color-text-secondary)' }}>{n}px</span>
-            </div>
-          ))}
-        </div>
+      <SectionLabel>Border Width</SectionLabel>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 40 }}>
+        {[1, 2, 4].map(n => (
+          <div key={n} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <p className="ds-text-small-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0, width: 120, flexShrink: 0 }}>
+              border-width-{n}
+            </p>
+            <div style={{
+              flex: 1,
+              maxWidth: 200,
+              borderTop: `var(--ds-border-width-${n}) solid var(--ds-color-text-primary)`,
+            }} />
+            <p className="ds-text-small-1" style={{ color: 'var(--ds-color-text-secondary)', margin: 0 }}>{n}px</p>
+          </div>
+        ))}
       </div>
 
+      <Divider />
+
       {/* Sizing */}
-      <div style={{ marginBottom: 48 }}>
-        <SectionTitle>Sizing (touch targets / buttons)</SectionTitle>
-        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16 }}>
-          {[
-            { name: 'xs', val: '24px', var: '--ds-sizing-xs' },
-            { name: 'sm', val: '32px', var: '--ds-sizing-sm' },
-            { name: 'md', val: '40px', var: '--ds-sizing-md' },
-            { name: 'lg', val: '48px', var: '--ds-sizing-lg' },
-            { name: 'xl', val: '56px', var: '--ds-sizing-xl' },
-          ].map(s => (
-            <div key={s.name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-              <div style={{
-                width: `var(${s.var})`,
-                height: `var(${s.var})`,
-                background: 'var(--ds-color-brand-subtle)',
-                border: '1.5px solid var(--ds-color-brand-default)',
-                borderRadius: 'var(--ds-radius-8)',
-              }} />
-              <span style={{ fontSize: 11, color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
-              <span style={{ fontSize: 10, color: 'var(--ds-color-text-tertiary)' }}>{s.val}</span>
-            </div>
-          ))}
-        </div>
+      <SectionLabel>Sizing</SectionLabel>
+      <p className="ds-text-small-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: '0 0 20px' }}>
+        Touch targets and component heights
+      </p>
+      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 24, marginBottom: 40 }}>
+        {[
+          { name: 'xs', px: '24px' },
+          { name: 'sm', px: '32px' },
+          { name: 'md', px: '40px' },
+          { name: 'lg', px: '48px' },
+          { name: 'xl', px: '56px' },
+        ].map(s => (
+          <div key={s.name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+            <div style={{
+              width: `var(--ds-sizing-${s.name})`,
+              height: `var(--ds-sizing-${s.name})`,
+              background: 'var(--ds-color-brand-subtle)',
+              border: '1.5px solid var(--ds-color-brand-default)',
+              borderRadius: 'var(--ds-radius-8)',
+            }} />
+            <p className="ds-text-xsmall-2" style={{ color: 'var(--ds-color-text-secondary)', margin: 0 }}>{s.name}</p>
+            <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>{s.px}</p>
+          </div>
+        ))}
       </div>
 
     </div>
