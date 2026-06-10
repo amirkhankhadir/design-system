@@ -1,8 +1,9 @@
 import type { Preview } from '@storybook/react-vite';
 import React from 'react';
 
-// Font — Source Sans 3 (weights used: 400 Regular, 600 SemiBold, 700 Bold)
+// Font — Source Sans 3 (weights: 400 Regular · 500 Medium · 600 SemiBold · 700 Bold)
 import '@fontsource/source-sans-3/400.css';
+import '@fontsource/source-sans-3/500.css';
 import '@fontsource/source-sans-3/600.css';
 import '@fontsource/source-sans-3/700.css';
 
