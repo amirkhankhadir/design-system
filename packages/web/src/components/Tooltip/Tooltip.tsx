@@ -30,6 +30,10 @@ export interface TooltipProps {
   children: ReactElement;
 }
 
+// FloatingArrow is ~7px tall. Offset = arrowHeight + visual gap.
+const ARROW_HEIGHT = 7;
+const GAP = 4;
+
 export function Tooltip({
   content,
   title,
@@ -41,14 +45,9 @@ export function Tooltip({
   const arrowRef = useRef<SVGSVGElement>(null);
   const tooltipId = useId();
 
-  // Floating UI reads arrowRef.current only during positioning (layout effect),
-  // not during render — safe to pass the ref object here.
-  // FloatingArrow is ~7px tall — offset must exceed arrow height so the tip
-  // doesn't overlap the trigger. 7 (arrow) + 4 (gap) = 11px total.
-  const ARROW_HEIGHT = 7;
   const middleware = useMemo(
     () => [
-      offset(ARROW_HEIGHT + 4),
+      offset(ARROW_HEIGHT + GAP),
       flip({ padding: 8 }),
       shift({ padding: 8 }),
       arrow({ element: arrowRef }), // eslint-disable-line react-hooks/refs
@@ -60,11 +59,10 @@ export function Tooltip({
     open,
     onOpenChange: setOpen,
     placement,
-    // 'fixed' uses viewport coords from getBoundingClientRect() directly —
-    // no scroll offset correction needed, works inside iframes and any scroll container.
-    // No FloatingPortal: portal can render into the wrong document when the
-    // component lives inside a Storybook iframe or a nested browsing context.
-    strategy: 'fixed',
+    // strategy:'absolute' + position:relative on the wrapper span means
+    // Floating UI positions the tooltip relative to the wrapper itself —
+    // no viewport/scroll/iframe coordinate issues.
+    strategy: 'absolute',
     whileElementsMounted: autoUpdate,
     middleware,
   });
@@ -80,18 +78,15 @@ export function Tooltip({
   });
 
   return (
-    <>
-      {/* Wrapper span gives Floating UI a reliable DOM node regardless of
-          whether children uses forwardRef. display:inline-block preserves
-          button layout and ensures correct hover/focus event handling. */}
-      <span
-        ref={refs.setReference}
-        style={{ display: 'inline-block' }}
-        aria-describedby={open ? tooltipId : undefined}
-        {...getReferenceProps()}
-      >
-        {children}
-      </span>
+    // position:relative makes this span the offset-parent for the absolute tooltip.
+    // display:inline-block makes it hug the trigger tightly — no extra space.
+    <span
+      ref={refs.setReference} // eslint-disable-line react-hooks/refs
+      style={{ position: 'relative', display: 'inline-block' }}
+      aria-describedby={open ? tooltipId : undefined}
+      {...getReferenceProps()}
+    >
+      {children}
       {isMounted && (
         <div
           ref={refs.setFloating} // eslint-disable-line react-hooks/refs
@@ -106,6 +101,6 @@ export function Tooltip({
           <FloatingArrow ref={arrowRef} context={context} className="tooltip__arrow" />
         </div>
       )}
-    </>
+    </span>
   );
 }
