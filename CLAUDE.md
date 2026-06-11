@@ -111,6 +111,7 @@ Before considering a new component done, verify:
 
 **Figma:**
 - [ ] Page name, component name, and all property names are kebab-case
+- [ ] **Page order** — before creating a new page: read all existing pages, sort component pages alphabetically, insert the new page in the correct alphabetical position (see rule below)
 - [ ] All states present, hover/pressed overlays exist, loading shows `ds-loader`
 - [ ] All visual properties bound to variables (fill, stroke, strokeWeight, radius, padding, gap, height)
 - [ ] HUG width verified by screenshot (not just set in code)
@@ -413,6 +414,42 @@ bubble.layoutSizingVertical   = 'HUG';
 - CSS `min-height` → `bubble.minHeight`
 
 Bind the value to the design variable when the token exists, not just set the raw number.
+
+---
+
+### 19. Added Figma pages in wrong order instead of alphabetical
+
+**What happened:** New component pages (e.g. `tooltip`) were appended at the end of the page list without checking where they belong alphabetically.
+
+**Rule:** Before creating any new component page in Figma:
+1. Read all existing pages: `figma.root.children.map(p => p.name)`
+2. Identify the component pages (exclude separators like `---`)
+3. Determine where the new page fits alphabetically
+4. Create the page and move it to the correct index with `figma.root.insertChild(index, page)`
+
+**Current page order** (as of last update):
+```
+0  buttons
+1  icon-button
+2  loader
+3  tooltip
+4  ---
+5  icons
+```
+
+**Script pattern:**
+```js
+const newPage = figma.createPage();
+newPage.name = 'checkbox'; // example
+
+// Find correct insertion index (alphabetical, before ---)
+const pages = figma.root.children;
+const separatorIdx = pages.findIndex(p => p.name === '---');
+const componentPages = pages.slice(0, separatorIdx);
+const insertAt = componentPages.findIndex(p => p.name > newPage.name);
+const finalIdx = insertAt === -1 ? separatorIdx : insertAt;
+figma.root.insertChild(finalIdx, newPage);
+```
 
 ---
 
