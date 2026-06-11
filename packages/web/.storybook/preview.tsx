@@ -17,31 +17,23 @@ const DARK_OVERRIDE = `
     background: var(--ds-color-background-default) !important;
     color: var(--ds-color-text-primary) !important;
   }
-  h1, h2, h3, h4, h5, p, span, div, label, td, th, button {
-    color: inherit;
-  }
+
+  /* ── Controls table (argstable) ────────────────────────────── */
   .docblock-argstable, .docblock-argstable-head th,
   .docblock-argstable-body td, .docblock-argstable-body tr {
     background: var(--ds-color-background-subtle) !important;
     border-color: var(--ds-color-border-subtle) !important;
     color: var(--ds-color-text-primary) !important;
   }
-  /* Force ALL text inside argstable to be readable */
-  .docblock-argstable td *,
-  .docblock-argstable th *,
-  .docblock-argstable td span,
-  .docblock-argstable td p,
-  .docblock-argstable td div,
-  [class*="ArgValue"],
-  [class*="ArgDescription"],
-  [class*="ArgName"],
-  [class*="StyledPre"],
-  [class*="ResetWrapper"] td,
-  [class*="ResetWrapper"] th {
+  /* All text inside argstable cells */
+  .docblock-argstable td *, .docblock-argstable th *,
+  [class*="ArgValue"], [class*="ArgDescription"],
+  [class*="ArgName"], [class*="StyledPre"],
+  [class*="ResetWrapper"] td, [class*="ResetWrapper"] th {
     color: var(--ds-color-text-primary) !important;
   }
-  /* Secondary text like type hints */
-  [class*="Secondary"], [class*="secondary"] {
+  /* Type hints / secondary text — scoped to argstable to avoid matching btn--secondary etc. */
+  .docblock-argstable [class*="Secondary"] {
     color: var(--ds-color-text-secondary) !important;
   }
   .docblock-argstable input, .docblock-argstable select,
@@ -50,21 +42,23 @@ const DARK_OVERRIDE = `
     color: var(--ds-color-text-primary) !important;
     border-color: var(--ds-color-border-default) !important;
   }
+
+  /* ── Docs page ─────────────────────────────────────────────── */
   .docs-story { background: var(--ds-color-background-default) !important; }
-  /* Stories section heading + story name links in docs */
-  [class*="StoriesHeader"], [class*="storiesHeader"],
-  [class*="DocsStory"] h3, [class*="DocsStory"] h2,
-  [class*="Heading"], [class*="heading"],
   .sbdocs h1, .sbdocs h2, .sbdocs h3, .sbdocs h4,
-  .sbdocs a, .sbdocs-a {
+  .sbdocs a, .sbdocs-a,
+  [class*="DocsStory"] h3, [class*="DocsStory"] h2,
+  [class*="StoriesHeader"], [class*="StoriesTitle"] {
     color: var(--ds-color-text-primary) !important;
   }
-  /* Muted labels like "STORIES" */
-  [class*="Label"], [class*="label"],
-  [class*="StoriesTitle"], [class*="storiesTitle"] {
+  /* "STORIES" section label — PascalCase only (CSS modules), won't match component kebab-case */
+  [class*="GroupTitle"] {
     color: var(--ds-color-text-secondary) !important;
   }
-  [role="toolbar"], [class*="ToolbarWrapper"], [class*="PreviewWrapper"] > div:first-child {
+
+  /* ── Toolbar ───────────────────────────────────────────────── */
+  [role="toolbar"], [class*="ToolbarWrapper"],
+  [class*="PreviewWrapper"] > div:first-child {
     background: var(--ds-color-background-subtle) !important;
     border-color: var(--ds-color-border-subtle) !important;
   }
