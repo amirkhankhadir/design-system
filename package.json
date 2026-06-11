@@ -6,13 +6,16 @@
   "type": "module",
   "scripts": {
     "build:tokens": "node build-tokens.js",
-    "build": "npm run build:tokens"
-  },
-  "devDependencies": {
-    "style-dictionary": "^4.3.0"
+    "build": "npm run build:tokens",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "changeset publish"
   },
   "dependencies": {
     "@fontsource/source-sans-3": "^5.2.9",
     "@material-symbols/svg-400": "^0.23.0"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.31.0"
   }
 }

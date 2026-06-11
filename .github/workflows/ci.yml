@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    name: Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── Root (tokens) ───────────────────────────────────────
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: packages/web/package-lock.json
+
+      - name: Install root deps
+        run: npm ci
+
+      - name: Build tokens
+        run: node build-tokens.js
+
+      # ── Web package ─────────────────────────────────────────
+      - name: Install web deps
+        working-directory: packages/web
+        run: npm ci
+
+      - name: Type-check
+        working-directory: packages/web
+        run: npx tsc --noEmit
+
+      - name: Lint
+        working-directory: packages/web
+        run: npm run lint
+
+      - name: Lint CSS
+        working-directory: packages/web
+        run: npm run lint:css
+
+      - name: Format check
+        working-directory: packages/web
+        run: npm run format:check
+
+      - name: Build Storybook
+        working-directory: packages/web
+        run: npm run build-storybook
