@@ -9,3 +9,6 @@ export type { IconProps, IconVariant, IconColor } from './components/Icon';
 
 export { Loader } from './components/Loader';
 export type { LoaderProps, LoaderSize, LoaderColor } from './components/Loader';
+
+export { Tooltip } from './components/Tooltip';
+export type { TooltipProps, TooltipPlacement } from './components/Tooltip';

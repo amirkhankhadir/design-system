@@ -1,0 +1,46 @@
+.tooltip {
+  /* Positioning */
+  z-index: 9999;
+
+  /* prevent tooltip itself from triggering hover */
+  pointer-events: none;
+
+  /* Layout */
+  max-width: 240px;
+  padding: var(--ds-spacing-6) var(--ds-spacing-8);
+  border-radius: var(--ds-radius-6);
+
+  /* Appearance — inverse surface: dark in light mode, light in dark mode */
+  background: var(--ds-color-text-primary);
+  box-shadow:
+    0 4px 8px var(--ds-color-shadow-md),
+    0 2px 4px var(--ds-color-shadow-sm);
+
+  /* Typography */
+  font-family: var(--ds-font-family-primary, sans-serif);
+  font-size: var(--ds-font-size-12);
+  line-height: var(--ds-line-height-16);
+  overflow-wrap: break-word;
+}
+
+.tooltip__title {
+  margin: 0 0 var(--ds-spacing-2);
+  color: var(--ds-color-text-inverse);
+  font-weight: 600;
+}
+
+.tooltip__content {
+  margin: 0;
+  color: var(--ds-color-text-inverse);
+  font-weight: 400;
+}
+
+/* Slightly mute content text when a title is present */
+.tooltip--has-title .tooltip__content {
+  opacity: 0.8;
+}
+
+/* Arrow inherits the tooltip background */
+.tooltip__arrow {
+  fill: var(--ds-color-text-primary);
+}
