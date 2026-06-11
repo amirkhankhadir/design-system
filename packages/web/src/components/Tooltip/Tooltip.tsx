@@ -58,6 +58,7 @@ export function Tooltip({
     open,
     onOpenChange: setOpen,
     placement,
+    strategy: 'fixed', // 'fixed' uses viewport coords directly — works correctly inside iframes/scroll containers
     whileElementsMounted: autoUpdate,
     middleware,
   });
