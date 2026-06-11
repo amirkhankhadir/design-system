@@ -293,6 +293,29 @@ const allExisting = new Set([...existingKeys, ...variantKeys]);
 
 ---
 
+### 17. Created Figma frames with fixed size instead of HUG + maxWidth
+
+**What happened:** Built Tooltip `bubble` frames with a hardcoded fixed width (e.g. `92px`). When the designer changes the `content` text property to a longer string, the bubble stays at `92px` and the text overflows — the frame doesn't resize. Also forgot to set `maxWidth` matching the CSS `max-width` constraint.
+
+**Why:** Used `figma.createFrame()` + `resize(w, h)` instead of auto-layout with HUG. `resize()` sets a fixed size that doesn't respond to content changes. Also did not think to carry over the CSS `max-width` constraint into Figma.
+
+**Rule:** Any Figma frame whose size should follow its text content **must** use auto-layout with HUG:
+```js
+bubble.layoutMode = 'VERTICAL';          // or HORIZONTAL
+bubble.primaryAxisSizingMode = 'AUTO';   // HUG
+bubble.counterAxisSizingMode = 'AUTO';   // HUG
+bubble.layoutSizingHorizontal = 'HUG';
+bubble.layoutSizingVertical   = 'HUG';
+```
+**Always mirror CSS constraints in Figma:**
+- CSS `max-width: var(--ds-sizing-240)` → `bubble.maxWidth = 240` + `bubble.setBoundVariable('maxWidth', sizingVar)`
+- CSS `min-width` → `bubble.minWidth`
+- CSS `min-height` → `bubble.minHeight`
+
+Bind the value to the design variable when the token exists, not just set the raw number.
+
+---
+
 ### 8. Removed package without removing it from Storybook addons
 **What happened:** Uninstalled `@chromatic-com/storybook` from `package.json` but left it in `.storybook/main.ts` addons list. This would break `storybook build` with "Cannot find module" error.
 **Rule:** When removing a Storybook addon package, always update `.storybook/main.ts` at the same time. The two files must stay in sync.
