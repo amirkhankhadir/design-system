@@ -293,6 +293,57 @@ const allExisting = new Set([...existingKeys, ...variantKeys]);
 
 ---
 
+### 18. Wrong structure for "bubble + arrow" Figma components
+
+**What happened:** Built the Tooltip component with a fixed-size outer wrapper and the arrow as a regular in-flow child. When text content changed:
+- The wrapper didn't grow (fixed size)
+- The arrow stayed at a hardcoded y position instead of tracking the bubble edge
+- The content text expanded the bubble *sideways* instead of wrapping
+
+**Root cause:** Did not understand the correct Figma pattern for components that contain a floating element (arrow/caret) anchored to a resizable container.
+
+**Rule — correct "bubble + arrow" architecture:**
+
+```
+Component wrapper  (auto-layout: VERTICAL or HORIZONTAL depending on placement)
+  layoutSizingH / V = HUG
+  padding on the arrow side = arrow thickness (e.g. paddingBottom=6 for top placement)
+  → This reserves space for the arrow without adding it to the layout flow
+
+  bubble  (first in-flow child, auto-layout VERTICAL)
+    layoutSizingH = HUG, layoutSizingV = HUG
+    maxWidth bound to sizing token
+
+    content TEXT  (FILL × HUG, textAutoResize = 'HEIGHT')
+      → FILL: fills bubble width, causing text to wrap
+      → textAutoResize HEIGHT: width is fixed, height grows with wrapped text
+
+  arrow VECTOR  (layoutPositioning = 'ABSOLUTE')
+    → Sits in the padding zone — NOT in the auto-layout flow
+    constraints.vertical/horizontal = MAX on the arrow side
+      → Stays pinned to the edge as bubble grows
+```
+
+**Placement → layout direction + padding side:**
+| Placement group | comp.layoutMode | padding side | arrow constraints |
+|---|---|---|---|
+| `top` | VERTICAL | paddingBottom | vertical=MAX |
+| `bottom` | VERTICAL | paddingTop | vertical=MIN |
+| `left` | HORIZONTAL | paddingRight | horizontal=MAX |
+| `right` | HORIZONTAL | paddingLeft | horizontal=MIN |
+
+**Arrow horizontal position within the padding zone (top/bottom):**
+- `center`: ax = (bubbleW - arrowW) / 2, constraints.horizontal = CENTER
+- `start`: ax = 12 (ds-spacing-12), constraints.horizontal = MIN
+- `end`: ax = bubbleW - 12 - arrowW, constraints.horizontal = MAX
+
+**Arrow vertical position (left/right):**
+- `center`: ay = (bubbleH - arrowH) / 2, constraints.vertical = CENTER
+- `start`: ay = 8 (ds-spacing-8), constraints.vertical = MIN
+- `end`: ay = bubbleH - 8 - arrowH, constraints.vertical = MAX
+
+---
+
 ### 17. Created Figma frames with fixed size instead of HUG + maxWidth
 
 **What happened:** Built Tooltip `bubble` frames with a hardcoded fixed width (e.g. `92px`). When the designer changes the `content` text property to a longer string, the bubble stays at `92px` and the text overflows — the frame doesn't resize. Also forgot to set `maxWidth` matching the CSS `max-width` constraint.
