@@ -6,6 +6,7 @@
   pointer-events: none;
 
   /* Layout */
+  width: max-content;
   max-width: 240px;
   padding: var(--ds-spacing-6) var(--ds-spacing-8);
   border-radius: var(--ds-radius-6);
