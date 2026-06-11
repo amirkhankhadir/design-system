@@ -20,12 +20,12 @@
   max-width: var(--ds-sizing-240);
   padding: var(--ds-spacing-6) var(--ds-spacing-8);
   border-radius: var(--ds-radius-6);
-  background: var(--ds-color-text-primary);
+  background: var(--ds-color-background-inverse);
   overflow-wrap: break-word;
 
   /* Arrow dimensions via spacing token */
   --arrow-size: var(--ds-spacing-6);
-  --arrow-color: var(--ds-color-text-primary);
+  --arrow-color: var(--ds-color-background-inverse);
 }
 
 /* ── Arrow (::after triangle) ───────────────────────────────── */

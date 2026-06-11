@@ -6,7 +6,8 @@
     "background": {
       "default": { "Light": "{color.base.white}",   "Dark": "{color.neutral.0}" },
       "subtle":   { "Light": "{color.neutral.90}",  "Dark": "{color.neutral.5}" },
-      "muted":    { "Light": "{color.neutral.80}",  "Dark": "{color.neutral.10}" }
+      "muted":    { "Light": "{color.neutral.80}",  "Dark": "{color.neutral.10}" },
+      "inverse":  { "Light": "{color.neutral.5}",   "Dark": "{color.neutral.90}", "$comment": "Dark surface on light bg (tooltips, toasts, snackbars)" }
     },
     "surface": {
       "1": { "Light": "{color.overlay.black.4}",  "Dark": "{color.overlay.white.8}" },

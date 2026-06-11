@@ -97,6 +97,7 @@ Before considering a new component done, verify:
 
 **Code:**
 - [ ] **Before writing any CSS number** — checked `dist/web/tokens.light.css` for an existing token. If missing, added it via `tokens/display.json` + `node build-tokens.js` first
+- [ ] **Token semantic check** — every token used makes sense for its role (e.g. `color/text/*` → text fill only, `color/background/*` → surface fill only). If no fitting token exists → **discuss with user before creating** — do not silently reuse a wrong-category token
 - [ ] **Typography** — used `ds-text-*` utility class in TSX (not manual `font-size`/`line-height`/`font-weight` in CSS)
 - [ ] **Shadows** — used `ds-elevation-*` utility class in TSX (not manual `box-shadow` in CSS)
 - [ ] All CSS values use semantic tokens — no hardcoded colors, sizes, radii, spacing, or font values
