@@ -5,7 +5,15 @@ const meta: Meta<typeof Button> = {
   title: 'Components/Buttons/Button',
   component: Button,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'The primary action component. Use `primary` for the main CTA, `secondary` for supporting actions, `tertiary` for low-emphasis inline actions, and `link` for navigation-like actions within content.',
+      },
+    },
+  },
   argTypes: {
     variant: { control: 'select', options: ['primary', 'secondary', 'tertiary', 'link'] },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },

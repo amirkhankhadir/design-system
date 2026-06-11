@@ -5,7 +5,15 @@ const meta: Meta<typeof IconButton> = {
   title: 'Components/Buttons/IconButton',
   component: IconButton,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'An icon-only button. `aria-label` is **required** for accessibility. Add a `tooltip` prop so mouse users can discover the action on hover. When space allows, prefer `Button` with a visible label.',
+      },
+    },
+  },
   decorators: [
     Story => (
       <div style={{ padding: '72px 80px' }}>

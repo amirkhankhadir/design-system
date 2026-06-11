@@ -10,6 +10,12 @@ const meta: Meta<typeof Tooltip> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'A non-interactive label appearing on hover or keyboard focus. Use for supplementary context — truncated text, icon button labels, keyboard shortcuts. **Do not use** for critical information the user must act on, or for rich/interactive content (use a Popover instead).',
+      },
+    },
   },
   decorators: [
     Story => (

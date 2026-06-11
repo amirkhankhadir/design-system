@@ -13,18 +13,37 @@ export type IconColor =
   | 'brand';
 
 export interface IconProps {
-  /** Icon name from Material Symbols, e.g. "home", "arrow_back" */
+  /**
+   * Icon name from the Material Symbols library.
+   * Use snake_case as listed on [fonts.google.com/icons](https://fonts.google.com/icons),
+   * e.g. `"home"`, `"arrow_back"`, `"check_circle"`.
+   */
   name: string;
-  /** Outlined or rounded style */
+  /** Shape style. `outlined` (default) for standard UI; `rounded` for softer aesthetics. */
   variant?: IconVariant;
-  /** Filled version of the icon */
+  /** Filled variant of the icon — higher visual weight, useful for active/selected states. */
   filled?: boolean;
-  /** Size in px (default 24) */
+  /** Size in px. Default is `24`. Common values: `16`, `20`, `24`, `32`. */
   size?: number;
-  /** Color — maps to ds-color-icon-* tokens */
+  /**
+   * Color — maps to `ds-color-icon-*` tokens.
+   * - `default` — primary icon color, use in most cases.
+   * - `secondary` — lower emphasis.
+   * - `disabled` — non-interactive state.
+   * - `inverse` — on dark backgrounds.
+   * - `on-brand` — on brand-colored backgrounds.
+   * - `brand` — brand accent color.
+   * - `static-white` / `static-black` — fixed color regardless of theme.
+   */
   color?: IconColor;
   className?: string;
+  /**
+   * Accessible label. Provide when the icon conveys meaning not available
+   * from surrounding context (e.g. standalone icon buttons, status icons).
+   * Omit and set `aria-hidden` when the icon is purely decorative.
+   */
   'aria-label'?: string;
+  /** Hides the icon from assistive technologies. Set to `true` for decorative icons. */
   'aria-hidden'?: boolean;
 }
 
@@ -60,6 +79,20 @@ async function loadSvg(name: string, variant: IconVariant, filled: boolean): Pro
   }
 }
 
+/**
+ * Renders a single icon from the Material Symbols library.
+ * Icons are loaded as inline SVG from a local cache served by the Vite dev plugin.
+ *
+ * **When to use:** anywhere a visual symbol helps communicate meaning — navigation,
+ * actions, status indicators, labels.
+ *
+ * **When NOT to use:** as the only label on an interactive element without
+ * `aria-label` — use `IconButton` instead, which enforces `aria-label`.
+ *
+ * **Accessibility:**
+ * - Decorative icons (next to visible text): `aria-hidden` is `true` by default.
+ * - Meaningful standalone icons: pass `aria-label` describing what the icon represents.
+ */
 export function Icon({
   name,
   variant = 'outlined',

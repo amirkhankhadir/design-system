@@ -4,11 +4,28 @@ export type LoaderSize = 'sm' | 'md' | 'lg' | number;
 export type LoaderColor = 'brand' | 'inverse' | 'on-brand' | 'static-white' | 'static-black';
 
 export interface LoaderProps {
-  /** Predefined size or explicit px value, e.g. size={32} */
+  /**
+   * Size of the spinner. Accepts a preset string or an explicit pixel value.
+   * - `sm` — 16px, inline with small text or dense UIs.
+   * - `md` — 20px (default), general use.
+   * - `lg` — 24px, standalone loaders.
+   * - `number` — any px value for custom sizes, e.g. `size={40}`.
+   */
   size?: LoaderSize;
-  /** Color variant */
+  /**
+   * Color of the spinner arc — choose based on the background it sits on.
+   * - `brand` — on white/light backgrounds (default).
+   * - `inverse` — on dark backgrounds.
+   * - `on-brand` — on brand-colored backgrounds.
+   * - `static-white` — always white, regardless of theme.
+   * - `static-black` — always black, regardless of theme.
+   */
   color?: LoaderColor;
-  /** Accessible label — announced by screen readers */
+  /**
+   * Text announced to screen readers via `aria-label` on the `role="status"` element.
+   * Defaults to `"Loading…"`. Override when context requires more detail,
+   * e.g. `"Saving changes…"`.
+   */
   label?: string;
   className?: string;
 }
@@ -37,6 +54,20 @@ function getGeometry(size: LoaderSize) {
   return { px, cx, cy, r, strokeWidth, dash, gap };
 }
 
+/**
+ * A circular spinner indicating an indeterminate loading state.
+ *
+ * **When to use:** async operations with unknown duration — data fetching,
+ * file upload, background processing.
+ *
+ * **When NOT to use:**
+ * - Inside a `Button` — use the `loading` prop on `Button` instead.
+ * - For progress with a known percentage → use a progress bar.
+ * - For skeleton loading of content areas → use skeleton components.
+ *
+ * **Accessibility:** renders a `role="status"` element with `aria-label`.
+ * Screen readers announce the label when the spinner appears.
+ */
 export function Loader({
   size = 'md',
   color = 'brand',

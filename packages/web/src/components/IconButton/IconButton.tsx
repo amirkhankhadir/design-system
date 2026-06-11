@@ -9,25 +9,36 @@ export type IconButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'link' | 
 export type IconButtonSize = 'sm' | 'md' | 'lg';
 
 export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /** Material Symbol name — required */
+  /** Material Symbol name, e.g. `"add"`, `"settings"`, `"delete"`. */
   icon: string;
-  /** Visual style */
+  /**
+   * Visual style — same hierarchy as `Button`.
+   * - `primary` — high emphasis, use sparingly.
+   * - `ghost` — no background, lowest visual weight. Most common for toolbars.
+   */
   variant?: IconButtonVariant;
-  /** Size tier */
+  /**
+   * Size tier (square button).
+   * - `sm` — 32px
+   * - `md` — 40px (default)
+   * - `lg` — 48px
+   */
   size?: IconButtonSize;
-  /** Destructive/danger mode */
+  /** Destructive mode — turns the button red. Use for Delete / Remove actions. */
   danger?: boolean;
-  /** Shows loader, disables interaction, preserves layout */
+  /** Shows a spinner and disables interaction while preserving button dimensions. */
   loading?: boolean;
-  /** Accessible label — required for screen readers */
+  /**
+   * Accessible label announced by screen readers — **required**.
+   * Describe the action, not the icon: `"Delete item"`, not `"Trash icon"`.
+   */
   'aria-label': string;
   /**
-   * Tooltip text shown on hover. Recommended for all icon buttons so mouse
-   * users can discover what the button does. Does not replace aria-label —
-   * aria-label is still required for screen readers.
+   * Tooltip shown on hover, helping mouse users discover the button's purpose.
+   * Recommended for all icon buttons. Does not replace `aria-label`.
    */
   tooltip?: string;
-  /** Tooltip placement (default: top) */
+  /** Placement of the tooltip relative to the button (default: `top`). */
   tooltipPlacement?: TooltipPlacement;
 }
 
@@ -44,6 +55,20 @@ const LOADER_COLOR: Record<IconButtonVariant, 'inverse' | 'brand'> = {
   ghost: 'brand',
 };
 
+/**
+ * An icon-only button. Same variants and states as `Button`, but renders
+ * a single icon with no label visible on screen.
+ *
+ * **When to use:** toolbars, action menus, compact UIs where a label would
+ * take too much space (e.g. edit, delete, settings in a table row).
+ *
+ * **When NOT to use:**
+ * - If space allows, prefer `Button` with a label — it's more discoverable.
+ * - Never omit `aria-label` — without it the button is inaccessible.
+ *
+ * **Accessibility:** `aria-label` is **required**. Add a `tooltip` prop so
+ * mouse users can also discover the action on hover.
+ */
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
   (
     {

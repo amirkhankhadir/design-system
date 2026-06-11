@@ -7,17 +7,34 @@ export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'link';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /** Visual style */
+  /**
+   * Visual style of the button.
+   * - `primary` — high emphasis, main CTA. Use once per section.
+   * - `secondary` — medium emphasis, secondary actions.
+   * - `tertiary` — low emphasis, inline or grouped actions.
+   * - `link` — minimal, for navigation-like actions inside content.
+   */
   variant?: ButtonVariant;
-  /** Height tier */
+  /**
+   * Height and font-size tier.
+   * - `sm` — 32px, use in dense UIs (tables, toolbars).
+   * - `md` — 40px (default), use in forms and dialogs.
+   * - `lg` — 48px, use in onboarding or hero sections.
+   */
   size?: ButtonSize;
-  /** Destructive/danger mode */
+  /**
+   * Destructive mode — turns the button red. Use for irreversible actions
+   * such as Delete, Remove, Revoke. Applies to all variants.
+   */
   danger?: boolean;
-  /** Shows loader, disables interaction, preserves layout */
+  /**
+   * Shows a spinner and disables interaction while preserving button dimensions.
+   * The button automatically announces "Loading…" to screen readers via `aria-busy`.
+   */
   loading?: boolean;
-  /** Material Symbol name for left icon */
+  /** Material Symbol name for an icon placed before the label, e.g. `"add"`, `"check"`. */
   iconLeft?: string;
-  /** Material Symbol name for right icon */
+  /** Material Symbol name for an icon placed after the label, e.g. `"arrow_forward"`. */
   iconRight?: string;
 }
 
@@ -46,6 +63,21 @@ function extractTextLabel(children: React.ReactNode): string | undefined {
   return undefined;
 }
 
+/**
+ * The primary action component. Supports 4 variants, 3 sizes, optional
+ * leading/trailing icons, a loading state, and a destructive danger mode.
+ *
+ * **When to use:** triggering an action — form submit, confirm dialog, start process.
+ *
+ * **When NOT to use:**
+ * - Navigation between pages → use an `<a>` or router `<Link>`
+ * - Binary on/off state → use a Toggle
+ * - Icon-only action → use `IconButton`
+ *
+ * **Accessibility:** the native `<button>` element is used, so keyboard focus,
+ * Enter/Space activation, and `disabled` are handled automatically.
+ * During loading, `aria-busy` is set and the visible label is preserved as `aria-label`.
+ */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {

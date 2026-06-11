@@ -7,6 +7,12 @@ const meta: Meta<typeof Loader> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'A circular spinner for indeterminate loading states. **Do not use inside a Button** — use the `loading` prop on `Button` instead. Use `label` to give screen readers meaningful context beyond the default "Loading…".',
+      },
+    },
   },
   argTypes: {
     size: {

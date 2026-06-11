@@ -6,7 +6,15 @@ const meta: Meta<typeof Icon> = {
   title: 'Utilities/Icon',
   component: Icon,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'Renders a single icon from the [Material Symbols](https://fonts.google.com/icons) library as an inline SVG. Decorative icons (next to visible text) should have `aria-hidden`. Standalone meaningful icons require an `aria-label`.',
+      },
+    },
+  },
   argTypes: {
     name: { control: 'text', description: 'Material Symbol name, e.g. "home"' },
     variant: { control: 'select', options: ['outlined', 'rounded'] },

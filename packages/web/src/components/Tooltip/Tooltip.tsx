@@ -16,18 +16,48 @@ export type TooltipPlacement =
   | 'right-end';
 
 export interface TooltipProps {
-  /** Main tooltip text */
+  /** Main tooltip text — keep it short (1–2 sentences max). */
   content: string;
-  /** Optional bold title shown above the content */
+  /**
+   * Optional bold title shown above the content.
+   * Use when the tooltip needs a heading, e.g. keyboard shortcut name + description.
+   */
   title?: string;
-  /** Placement relative to the trigger (default: top) */
+  /**
+   * Position of the tooltip relative to its trigger element.
+   * Includes center (`top`, `bottom`, `left`, `right`) and
+   * edge-aligned variants (`top-start`, `top-end`, etc.) — 12 options total.
+   * Default: `top`.
+   */
   placement?: TooltipPlacement;
-  /** Delay before opening, in ms (default: 400) */
+  /**
+   * Delay in milliseconds before the tooltip opens after hover/focus.
+   * A short delay (default `400ms`) prevents accidental triggers while
+   * moving the cursor across the page.
+   */
   delay?: number;
-  /** The element that triggers the tooltip */
+  /** The element that triggers the tooltip on hover/focus. Must be a single React element. */
   children: ReactElement;
 }
 
+/**
+ * A non-interactive label that appears on hover or keyboard focus, providing
+ * supplementary context for an element.
+ *
+ * **When to use:**
+ * - Clarifying an icon button's purpose (prefer the `tooltip` prop on `IconButton`).
+ * - Showing a full value that is truncated in the UI.
+ * - Providing a keyboard shortcut hint.
+ *
+ * **When NOT to use:**
+ * - Critical information the user must read to proceed → always visible text.
+ * - Rich content with links or interactive elements → use a Popover.
+ * - Error messages → use inline validation feedback.
+ *
+ * **Accessibility:** uses `role="tooltip"` and links to the trigger via
+ * `aria-describedby`. Triggered by both mouse hover and keyboard focus.
+ * The tooltip content is supplementary — do not put essential information here only.
+ */
 export function Tooltip({
   content,
   title,
