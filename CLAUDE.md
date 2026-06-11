@@ -91,6 +91,16 @@ Triggers: push to `main` + all PRs.
 
 ---
 
+### Finalization gate — always ask before closing a component
+
+**Before running the finalization checklist, ask the user:**
+> "Компонент готов — финализируем?"
+
+Only proceed with the checklist and documentation after the user confirms.
+This prevents premature finalization and gives the user a chance to request changes.
+
+---
+
 ### Consistency checklist — run before shipping any new component
 
 Before considering a new component done, verify:
@@ -108,6 +118,7 @@ Before considering a new component done, verify:
 - [ ] New component exported from `src/index.ts`
 - [ ] Storybook: correct `title` grouping, Sizes story shows primary variant only, no standalone Danger/Loading/Focus stories
 - [ ] Storybook stories have `decorators` with padding so tooltips/popovers have room to render
+- [ ] **Storybook documentation** (see template below) — JSDoc on component + prop descriptions + `docs.description.component` in meta
 
 **Figma:**
 - [ ] Page name, component name, and all property names are kebab-case
@@ -119,6 +130,54 @@ Before considering a new component done, verify:
 - [ ] **Structural check on absolute children**: overlay at x=0,y=0 fills component; loader/centered elements at `(compW-childW)/2`. Always verify programmatically — screenshot alone is not enough
 - [ ] **Overlay layer locked** — every `overlay` node must have `locked = true` so it doesn't block mouse selection of content layers beneath it
 - [ ] **Pre-build behaviour analysis done** (see section below) — no structural decisions before answering all behaviour questions
+
+---
+
+### Storybook documentation template
+
+Every finalized component must have all three layers:
+
+**1. JSDoc on the component function** (appears at top of autodocs page):
+```tsx
+/**
+ * One-line summary of what the component is.
+ *
+ * **When to use:** [specific scenarios]
+ *
+ * **When NOT to use:**
+ * - [alternative to use instead]
+ * - [edge case to avoid]
+ *
+ * **Accessibility:** [what's handled automatically + what the consumer must do]
+ */
+export const MyComponent = ...
+```
+
+**2. Prop descriptions in the TypeScript interface** (appear in the Props table):
+```tsx
+export interface MyComponentProps {
+  /**
+   * Full description with:
+   * - what each value means in plain language
+   * - when to use each value
+   * - any caveats
+   */
+  variant?: MyVariant;
+}
+```
+
+**3. `parameters.docs.description.component` in the stories meta** (shown below the title):
+```tsx
+const meta: Meta<typeof MyComponent> = {
+  parameters: {
+    docs: {
+      description: {
+        component: 'One–two sentences. When to use. Key constraint or accessibility note.',
+      },
+    },
+  },
+};
+```
 
 ---
 
