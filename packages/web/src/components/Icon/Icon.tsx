@@ -81,16 +81,14 @@ export function Icon({
     loadSvg(name, variant, filled).then(result => {
       if (!cancelled) setSvg(result);
     });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [name, variant, filled]);
 
   return (
     <span
-      className={[
-        'icon',
-        `icon--${color}`,
-        className,
-      ].filter(Boolean).join(' ')}
+      className={['icon', `icon--${color}`, className].filter(Boolean).join(' ')}
       style={{ width: size, height: size, fontSize: size }}
       role={ariaLabel ? 'img' : undefined}
       aria-label={ariaLabel}

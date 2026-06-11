@@ -1,6 +1,6 @@
 import './Loader.css';
 
-export type LoaderSize  = 'sm' | 'md' | 'lg' | number;
+export type LoaderSize = 'sm' | 'md' | 'lg' | number;
 export type LoaderColor = 'brand' | 'inverse' | 'on-brand' | 'static-white' | 'static-black';
 
 export interface LoaderProps {
@@ -25,20 +25,20 @@ function getStrokeWidth(px: number) {
 }
 
 function getGeometry(size: LoaderSize) {
-  const px          = typeof size === 'number' ? size : PRESET_SIZES[size];
+  const px = typeof size === 'number' ? size : PRESET_SIZES[size];
   const strokeWidth = getStrokeWidth(px);
-  const cx          = px / 2;
-  const cy          = px / 2;
-  const r           = (px - strokeWidth * 2) / 2;
-  const circum      = 2 * Math.PI * r;
-  const dash        = circum * 0.75;
-  const gap         = circum * 0.25;
+  const cx = px / 2;
+  const cy = px / 2;
+  const r = (px - strokeWidth * 2) / 2;
+  const circum = 2 * Math.PI * r;
+  const dash = circum * 0.75;
+  const gap = circum * 0.25;
 
   return { px, cx, cy, r, strokeWidth, dash, gap };
 }
 
 export function Loader({
-  size  = 'md',
+  size = 'md',
   color = 'brand',
   label = 'Loading…',
   className,
@@ -48,12 +48,7 @@ export function Loader({
 
   return (
     <span
-      className={[
-        'loader',
-        isPreset && `loader--${size}`,
-        `loader--${color}`,
-        className,
-      ]
+      className={['loader', isPreset && `loader--${size}`, `loader--${color}`, className]
         .filter(Boolean)
         .join(' ')}
       style={!isPreset ? { width: px, height: px } : undefined}
@@ -69,13 +64,7 @@ export function Loader({
         aria-hidden="true"
       >
         {/* Background track */}
-        <circle
-          className="loader__track"
-          cx={cx}
-          cy={cy}
-          r={r}
-          strokeWidth={strokeWidth}
-        />
+        <circle className="loader__track" cx={cx} cy={cy} r={r} strokeWidth={strokeWidth} />
         {/* Animated arc — dasharray calculated from actual radius */}
         <circle
           className="loader__fill"

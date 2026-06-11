@@ -4,7 +4,7 @@ import { Icon } from '../Icon/Icon';
 import './IconButton.css';
 
 export type IconButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'link' | 'ghost';
-export type IconButtonSize    = 'sm' | 'md' | 'lg';
+export type IconButtonSize = 'sm' | 'md' | 'lg';
 
 export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Material Symbol name — required */
@@ -27,53 +27,60 @@ const LOADER_SIZE: Record<IconButtonSize, number> = { sm: 14, md: 16, lg: 18 };
 // Loading shows disabled bg (background-muted) → inverse (dark) is visible on it.
 // link uses brand color to match its icon color.
 const LOADER_COLOR: Record<IconButtonVariant, 'inverse' | 'brand'> = {
-  primary:   'inverse',
+  primary: 'inverse',
   secondary: 'inverse',
-  tertiary:  'inverse',
-  link:      'brand',
-  ghost:     'brand',
+  tertiary: 'inverse',
+  link: 'brand',
+  ghost: 'brand',
 };
 
-export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(({
-  icon,
-  variant  = 'primary',
-  size     = 'md',
-  danger   = false,
-  loading  = false,
-  disabled,
-  className,
-  ...rest
-}, ref) => {
-  const isDisabled = disabled || loading;
+export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
+  (
+    {
+      icon,
+      variant = 'primary',
+      size = 'md',
+      danger = false,
+      loading = false,
+      disabled,
+      className,
+      ...rest
+    },
+    ref
+  ) => {
+    const isDisabled = disabled || loading;
 
-  const classes = [
-    'icon-btn',
-    `icon-btn--${variant}`,
-    `icon-btn--${size}`,
-    danger  && 'icon-btn--danger',
-    loading && 'icon-btn--loading',
-    className,
-  ].filter(Boolean).join(' ');
+    const classes = [
+      'icon-btn',
+      `icon-btn--${variant}`,
+      `icon-btn--${size}`,
+      danger && 'icon-btn--danger',
+      loading && 'icon-btn--loading',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
-  return (
-    <button
-      ref={ref}
-      className={classes}
-      disabled={isDisabled}
-      aria-busy={loading || undefined}
-      {...rest}
-    >
-      <span className="icon-btn__content" aria-hidden={loading || undefined}>
-        <Icon name={icon} size={ICON_SIZE[size]} aria-hidden />
-      </span>
-
-      {loading && (
-        <span className="icon-btn__loader" aria-hidden="true">
-          <Loader size={LOADER_SIZE[size]} color={LOADER_COLOR[variant]} />
+    return (
+      <button
+        ref={ref}
+        className={classes}
+        disabled={isDisabled}
+        aria-busy={loading || undefined}
+        {...rest}
+      >
+        <span className="icon-btn__content" aria-hidden={loading || undefined}>
+          <Icon name={icon} size={ICON_SIZE[size]} aria-hidden />
         </span>
-      )}
-    </button>
-  );
-});
+
+        {loading && (
+          <span className="icon-btn__loader" aria-hidden="true">
+            <Loader size={LOADER_SIZE[size]} color={LOADER_COLOR[variant]} />
+          </span>
+        )}
+      </button>
+    );
+  }
+);
 
 IconButton.displayName = 'IconButton';

@@ -26,30 +26,62 @@
 
 /* ── Preset sizes ───────────────────────────────────────── */
 
-.loader--sm { width: 16px; height: 16px; }
-.loader--md { width: 20px; height: 20px; }
-.loader--lg { width: 24px; height: 24px; }
+.loader--sm {
+  width: 16px;
+  height: 16px;
+}
+
+.loader--md {
+  width: 20px;
+  height: 20px;
+}
+
+.loader--lg {
+  width: 24px;
+  height: 24px;
+}
 
 /* ── Colors ─────────────────────────────────────────────── */
 
 /* Always brand blue */
-.loader--brand    { color: var(--ds-color-brand-default); }
+.loader--brand {
+  color: var(--ds-color-brand-default);
+}
+
 /* Adapts to theme: dark on light, light on dark */
-.loader--inverse  { color: var(--ds-color-text-primary); }
+.loader--inverse {
+  color: var(--ds-color-text-primary);
+}
+
 /* For use on brand-colored backgrounds */
-.loader--on-brand { color: var(--ds-color-text-on-brand); }
+.loader--on-brand {
+  color: var(--ds-color-text-on-brand);
+}
+
 /* For use on dark backgrounds — always white */
-.loader--static-white { color: var(--ds-color-icon-static-white); }
+.loader--static-white {
+  color: var(--ds-color-icon-static-white);
+}
+
 /* For use on light backgrounds — always black */
-.loader--static-black { color: var(--ds-color-icon-static-black); }
+.loader--static-black {
+  color: var(--ds-color-icon-static-black);
+}
 
 /* ── Animation ──────────────────────────────────────────── */
 
 @keyframes loader-rotate {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .loader__svg { animation-duration: 2s; }
+  .loader__svg {
+    animation-duration: 2s;
+  }
 }

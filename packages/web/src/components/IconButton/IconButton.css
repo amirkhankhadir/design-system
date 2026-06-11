@@ -18,8 +18,11 @@
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   outline: none;
-  transition: background 120ms ease, color 120ms ease,
-              box-shadow 120ms ease, border-color 120ms ease;
+  transition:
+    background 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease,
+    border-color 120ms ease;
 }
 
 /* ── Surface overlay (hover / active) ───────────────────────── */
@@ -34,9 +37,17 @@
   transition: background 120ms ease;
 }
 
-.icon-btn:hover:not(:disabled)::after  { background: var(--ds-color-surface-1); }
-.icon-btn:active:not(:disabled)::after { background: var(--ds-color-surface-2); }
-.icon-btn:disabled::after              { display: none; }
+.icon-btn:hover:not(:disabled)::after {
+  background: var(--ds-color-surface-1);
+}
+
+.icon-btn:active:not(:disabled)::after {
+  background: var(--ds-color-surface-2);
+}
+
+.icon-btn:disabled::after {
+  display: none;
+}
 
 /* ── Content / loader layout ────────────────────────────────── */
 
@@ -48,7 +59,9 @@
   z-index: 1;
 }
 
-.icon-btn--loading .icon-btn__content { visibility: hidden; }
+.icon-btn--loading .icon-btn__content {
+  visibility: hidden;
+}
 
 .icon-btn__loader {
   position: absolute;
@@ -61,6 +74,7 @@
 }
 
 /* ── Sizes ──────────────────────────────────────────────────── */
+
 /*
   sm: 24×24  padding=spacing-4  radius=radius-8
   md: 32×32  padding=spacing-6  radius=radius-10
@@ -103,15 +117,23 @@
 .icon-btn--primary {
   background: var(--ds-color-brand-default);
 }
-.icon-btn--primary .icon { color: var(--ds-color-icon-on-brand); }
+
+.icon-btn--primary .icon {
+  color: var(--ds-color-icon-on-brand);
+}
 
 .icon-btn--primary:disabled {
   background: var(--ds-color-background-muted);
   cursor: not-allowed;
 }
-.icon-btn--primary:disabled .icon { color: var(--ds-color-icon-disabled); }
 
-.icon-btn--primary.icon-btn--danger { background: var(--ds-color-status-error-default); }
+.icon-btn--primary:disabled .icon {
+  color: var(--ds-color-icon-disabled);
+}
+
+.icon-btn--primary.icon-btn--danger {
+  background: var(--ds-color-status-error-default);
+}
 
 /* ─────────────────────────────────────────────────────────────
    SECONDARY — transparent + border, default icon
@@ -121,16 +143,27 @@
   background: transparent;
   border-color: var(--ds-color-border-default);
 }
-.icon-btn--secondary .icon { color: var(--ds-color-icon-default); }
+
+.icon-btn--secondary .icon {
+  color: var(--ds-color-icon-default);
+}
 
 .icon-btn--secondary:disabled {
   border-color: var(--ds-color-border-subtle);
   cursor: not-allowed;
 }
-.icon-btn--secondary:disabled .icon { color: var(--ds-color-icon-disabled); }
 
-.icon-btn--secondary.icon-btn--danger { border-color: var(--ds-color-status-error-border); }
-.icon-btn--secondary.icon-btn--danger .icon { color: var(--ds-color-status-error-text); }
+.icon-btn--secondary:disabled .icon {
+  color: var(--ds-color-icon-disabled);
+}
+
+.icon-btn--secondary.icon-btn--danger {
+  border-color: var(--ds-color-status-error-border);
+}
+
+.icon-btn--secondary.icon-btn--danger .icon {
+  color: var(--ds-color-status-error-text);
+}
 
 /* ─────────────────────────────────────────────────────────────
    TERTIARY — transparent, default icon
@@ -139,15 +172,23 @@
 .icon-btn--tertiary {
   background: transparent;
 }
-.icon-btn--tertiary .icon { color: var(--ds-color-icon-default); }
+
+.icon-btn--tertiary .icon {
+  color: var(--ds-color-icon-default);
+}
 
 .icon-btn--tertiary:disabled {
   background: var(--ds-color-background-muted);
   cursor: not-allowed;
 }
-.icon-btn--tertiary:disabled .icon { color: var(--ds-color-icon-disabled); }
 
-.icon-btn--tertiary.icon-btn--danger .icon { color: var(--ds-color-status-error-text); }
+.icon-btn--tertiary:disabled .icon {
+  color: var(--ds-color-icon-disabled);
+}
+
+.icon-btn--tertiary.icon-btn--danger .icon {
+  color: var(--ds-color-status-error-text);
+}
 
 /* ─────────────────────────────────────────────────────────────
    LINK — transparent, brand icon
@@ -156,14 +197,22 @@
 .icon-btn--link {
   background: transparent;
 }
-.icon-btn--link .icon { color: var(--ds-color-brand-default); }
+
+.icon-btn--link .icon {
+  color: var(--ds-color-brand-default);
+}
 
 .icon-btn--link:disabled {
   cursor: not-allowed;
 }
-.icon-btn--link:disabled .icon { color: var(--ds-color-icon-disabled); }
 
-.icon-btn--link.icon-btn--danger .icon { color: var(--ds-color-status-error-text); }
+.icon-btn--link:disabled .icon {
+  color: var(--ds-color-icon-disabled);
+}
+
+.icon-btn--link.icon-btn--danger .icon {
+  color: var(--ds-color-status-error-text);
+}
 
 /* ─────────────────────────────────────────────────────────────
    GHOST — transparent, muted icon (icon-secondary)
@@ -173,24 +222,52 @@
 .icon-btn--ghost {
   background: transparent;
 }
-.icon-btn--ghost .icon { color: var(--ds-color-icon-secondary); }
+
+.icon-btn--ghost .icon {
+  color: var(--ds-color-icon-secondary);
+}
 
 .icon-btn--ghost:disabled {
   cursor: not-allowed;
 }
-.icon-btn--ghost:disabled .icon { color: var(--ds-color-icon-disabled); }
 
-.icon-btn--ghost.icon-btn--danger .icon { color: var(--ds-color-status-error-text); }
+.icon-btn--ghost:disabled .icon {
+  color: var(--ds-color-icon-disabled);
+}
+
+.icon-btn--ghost.icon-btn--danger .icon {
+  color: var(--ds-color-status-error-text);
+}
 
 /* ─────────────────────────────────────────────────────────────
    DANGER + DISABLED — reset to standard disabled (all variants)
    ───────────────────────────────────────────────────────────── */
 
-.icon-btn--danger:disabled .icon { color: var(--ds-color-icon-disabled); }
-.icon-btn--danger:disabled::after { display: none; }
+.icon-btn--danger:disabled .icon {
+  color: var(--ds-color-icon-disabled);
+}
 
-.icon-btn--primary.icon-btn--danger:disabled   { background: var(--ds-color-background-muted); }
-.icon-btn--secondary.icon-btn--danger:disabled { background: transparent; border-color: var(--ds-color-border-subtle); }
-.icon-btn--tertiary.icon-btn--danger:disabled  { background: var(--ds-color-background-muted); }
-.icon-btn--link.icon-btn--danger:disabled      { background: transparent; }
-.icon-btn--ghost.icon-btn--danger:disabled     { background: transparent; }
+.icon-btn--danger:disabled::after {
+  display: none;
+}
+
+.icon-btn--primary.icon-btn--danger:disabled {
+  background: var(--ds-color-background-muted);
+}
+
+.icon-btn--secondary.icon-btn--danger:disabled {
+  background: transparent;
+  border-color: var(--ds-color-border-subtle);
+}
+
+.icon-btn--tertiary.icon-btn--danger:disabled {
+  background: var(--ds-color-background-muted);
+}
+
+.icon-btn--link.icon-btn--danger:disabled {
+  background: transparent;
+}
+
+.icon-btn--ghost.icon-btn--danger:disabled {
+  background: transparent;
+}

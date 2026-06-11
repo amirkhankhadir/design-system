@@ -16,11 +16,34 @@
 
 /* ── Colors ─────────────────────────────────────────────── */
 
-.icon--default      { color: var(--ds-color-icon-default); }
-.icon--secondary    { color: var(--ds-color-icon-secondary); }
-.icon--disabled     { color: var(--ds-color-icon-disabled); }
-.icon--inverse      { color: var(--ds-color-icon-inverse); }
-.icon--on-brand     { color: var(--ds-color-icon-on-brand); }
-.icon--static-white { color: var(--ds-color-icon-static-white); }
-.icon--static-black { color: var(--ds-color-icon-static-black); }
-.icon--brand        { color: var(--ds-color-brand-default); }
+.icon--default {
+  color: var(--ds-color-icon-default);
+}
+
+.icon--secondary {
+  color: var(--ds-color-icon-secondary);
+}
+
+.icon--disabled {
+  color: var(--ds-color-icon-disabled);
+}
+
+.icon--inverse {
+  color: var(--ds-color-icon-inverse);
+}
+
+.icon--on-brand {
+  color: var(--ds-color-icon-on-brand);
+}
+
+.icon--static-white {
+  color: var(--ds-color-icon-static-white);
+}
+
+.icon--static-black {
+  color: var(--ds-color-icon-static-black);
+}
+
+.icon--brand {
+  color: var(--ds-color-brand-default);
+}

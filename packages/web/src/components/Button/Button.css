@@ -20,8 +20,11 @@
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   outline: none;
-  transition: background 120ms ease, color 120ms ease, box-shadow 120ms ease,
-              border-color 120ms ease;
+  transition:
+    background 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease,
+    border-color 120ms ease;
 }
 
 /* ── Surface overlay (hover / active) ───────────────────────── */
@@ -36,11 +39,18 @@
   transition: background 120ms ease;
 }
 
-.btn:hover:not(:disabled)::after  { background: var(--ds-color-surface-1); }
-.btn:active:not(:disabled)::after { background: var(--ds-color-surface-2); }
+.btn:hover:not(:disabled)::after {
+  background: var(--ds-color-surface-1);
+}
+
+.btn:active:not(:disabled)::after {
+  background: var(--ds-color-surface-2);
+}
 
 /* No overlay when disabled or loading */
-.btn:disabled::after { display: none; }
+.btn:disabled::after {
+  display: none;
+}
 
 /* ── Content / loader layout ────────────────────────────────── */
 
@@ -68,6 +78,7 @@
 }
 
 /* ── Sizes ──────────────────────────────────────────────────── */
+
 /*
   Heights: sm → --ds-sizing-24 · md → --ds-sizing-32 · lg → --ds-sizing-40
   Padding: sm px=--spacing-8 · md/lg px=--spacing-12
@@ -98,20 +109,30 @@
 }
 
 /* ── Icon safe-zone compensation ────────────────────────────── */
+
 /*
   Material Symbols SVGs have ~3.5–4px safe zone per side.
   Reduce padding on the icon side so visual gap = text side gap.
   sm: 8 − 4 = 4px · md/lg: 12 − 4 = 8px
 */
 
-.btn--sm.btn--has-icon-left  { padding-left:  var(--ds-spacing-4); }
-.btn--sm.btn--has-icon-right { padding-right: var(--ds-spacing-4); }
+.btn--sm.btn--has-icon-left {
+  padding-left: var(--ds-spacing-4);
+}
+
+.btn--sm.btn--has-icon-right {
+  padding-right: var(--ds-spacing-4);
+}
 
 .btn--md.btn--has-icon-left,
-.btn--lg.btn--has-icon-left  { padding-left:  var(--ds-spacing-8); }
+.btn--lg.btn--has-icon-left {
+  padding-left: var(--ds-spacing-8);
+}
 
 .btn--md.btn--has-icon-right,
-.btn--lg.btn--has-icon-right { padding-right: var(--ds-spacing-8); }
+.btn--lg.btn--has-icon-right {
+  padding-right: var(--ds-spacing-8);
+}
 
 /* ── Focus ring ─────────────────────────────────────────────── */
 
@@ -130,16 +151,24 @@
   background: var(--ds-color-brand-default);
   color: var(--ds-color-text-on-brand);
 }
-.btn--primary .icon { color: var(--ds-color-icon-on-brand); }
+
+.btn--primary .icon {
+  color: var(--ds-color-icon-on-brand);
+}
 
 .btn--primary:disabled {
   background: var(--ds-color-background-muted);
   color: var(--ds-color-text-disabled);
   cursor: not-allowed;
 }
-.btn--primary:disabled .icon { color: var(--ds-color-icon-disabled); }
 
-.btn--primary.btn--danger { background: var(--ds-color-status-error-default); }
+.btn--primary:disabled .icon {
+  color: var(--ds-color-icon-disabled);
+}
+
+.btn--primary.btn--danger {
+  background: var(--ds-color-status-error-default);
+}
 
 /* ─────────────────────────────────────────────────────────────
    SECONDARY
@@ -151,20 +180,29 @@
   color: var(--ds-color-text-primary);
   border-color: var(--ds-color-border-default);
 }
-.btn--secondary .icon { color: var(--ds-color-icon-default); }
+
+.btn--secondary .icon {
+  color: var(--ds-color-icon-default);
+}
 
 .btn--secondary:disabled {
   color: var(--ds-color-text-disabled);
   border-color: var(--ds-color-border-subtle);
   cursor: not-allowed;
 }
-.btn--secondary:disabled .icon { color: var(--ds-color-icon-disabled); }
+
+.btn--secondary:disabled .icon {
+  color: var(--ds-color-icon-disabled);
+}
 
 .btn--secondary.btn--danger {
   color: var(--ds-color-status-error-text);
   border-color: var(--ds-color-status-error-border);
 }
-.btn--secondary.btn--danger .icon { color: var(--ds-color-status-error-text); }
+
+.btn--secondary.btn--danger .icon {
+  color: var(--ds-color-status-error-text);
+}
 
 /* ─────────────────────────────────────────────────────────────
    TERTIARY
@@ -177,17 +215,28 @@
   background: transparent;
   color: var(--ds-color-text-primary);
 }
-.btn--tertiary .icon { color: var(--ds-color-icon-default); }
+
+.btn--tertiary .icon {
+  color: var(--ds-color-icon-default);
+}
 
 .btn--tertiary:disabled {
   background: var(--ds-color-background-muted);
   color: var(--ds-color-text-disabled);
   cursor: not-allowed;
 }
-.btn--tertiary:disabled .icon { color: var(--ds-color-icon-disabled); }
 
-.btn--tertiary.btn--danger { color: var(--ds-color-status-error-text); }
-.btn--tertiary.btn--danger .icon { color: var(--ds-color-status-error-text); }
+.btn--tertiary:disabled .icon {
+  color: var(--ds-color-icon-disabled);
+}
+
+.btn--tertiary.btn--danger {
+  color: var(--ds-color-status-error-text);
+}
+
+.btn--tertiary.btn--danger .icon {
+  color: var(--ds-color-status-error-text);
+}
 
 /* ─────────────────────────────────────────────────────────────
    LINK
@@ -199,16 +248,27 @@
   background: transparent;
   color: var(--ds-color-brand-text);
 }
-.btn--link .icon { color: var(--ds-color-brand-default); }
+
+.btn--link .icon {
+  color: var(--ds-color-brand-default);
+}
 
 .btn--link:disabled {
   color: var(--ds-color-text-disabled);
   cursor: not-allowed;
 }
-.btn--link:disabled .icon { color: var(--ds-color-icon-disabled); }
 
-.btn--link.btn--danger { color: var(--ds-color-status-error-text); }
-.btn--link.btn--danger .icon { color: var(--ds-color-status-error-text); }
+.btn--link:disabled .icon {
+  color: var(--ds-color-icon-disabled);
+}
+
+.btn--link.btn--danger {
+  color: var(--ds-color-status-error-text);
+}
+
+.btn--link.btn--danger .icon {
+  color: var(--ds-color-status-error-text);
+}
 
 /* ─────────────────────────────────────────────────────────────
    DANGER + DISABLED — reset to standard disabled appearance
@@ -220,8 +280,14 @@
   border-color: transparent;
   cursor: not-allowed;
 }
-.btn--danger:disabled .icon { color: var(--ds-color-icon-disabled); }
-.btn--danger:disabled::after { display: none; }
+
+.btn--danger:disabled .icon {
+  color: var(--ds-color-icon-disabled);
+}
+
+.btn--danger:disabled::after {
+  display: none;
+}
 
 /* primary danger disabled: same gray bg as primary disabled */
 .btn--primary.btn--danger:disabled {

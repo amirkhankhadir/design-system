@@ -6,14 +6,25 @@ import { Loader } from './components/Loader';
 import '../../../dist/web/tokens.light.css';
 
 const bg = {
-  white:   '#ffffff',
-  brand:   'var(--ds-color-brand-default)',
-  dark:    '#161616',
+  white: '#ffffff',
+  brand: 'var(--ds-color-brand-default)',
+  dark: '#161616',
 };
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <div style={{ fontFamily: 'system-ui', padding: 40, display: 'flex', flexDirection: 'column', gap: 48, background: 'var(--ds-color-background-default)', minHeight: '100vh', color: 'var(--ds-color-text-primary)' }}>
+    <div
+      style={{
+        fontFamily: 'system-ui',
+        padding: 40,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 48,
+        background: 'var(--ds-color-background-default)',
+        minHeight: '100vh',
+        color: 'var(--ds-color-text-primary)',
+      }}
+    >
       <h2 style={{ margin: 0, fontSize: 20, fontWeight: 600 }}>Loader</h2>
 
       {/* Sizes */}
@@ -41,17 +52,24 @@ createRoot(document.getElementById('root')!).render(
       <section>
         <p style={{ margin: '0 0 16px', fontSize: 13, color: '#737373' }}>Colors</p>
         <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-          <div style={{ background: bg.white, padding: 16, borderRadius: 8, border: '1px solid #e5e5e5' }}>
+          <div
+            style={{
+              background: bg.white,
+              padding: 16,
+              borderRadius: 8,
+              border: '1px solid #e5e5e5',
+            }}
+          >
             <Loader color="brand" />
           </div>
           <div style={{ background: bg.brand, padding: 16, borderRadius: 8 }}>
-            <Loader color="white" />
+            <Loader color="on-brand" />
           </div>
           <div style={{ background: bg.dark, padding: 16, borderRadius: 8 }}>
-            <Loader color="white" />
+            <Loader color="static-white" />
           </div>
         </div>
       </section>
     </div>
-  </StrictMode>,
+  </StrictMode>
 );
