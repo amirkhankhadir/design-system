@@ -121,6 +121,38 @@ Before considering a new component done, verify:
 
 ---
 
+### Post-component audit — run after every completed component
+
+After finishing any component (code + Figma), run this full audit before moving on. Run steps 1-3 in parallel.
+
+**1. Git**
+```bash
+git status          # must be clean (nothing uncommitted)
+git log --oneline -5  # verify all expected commits are present
+```
+
+**2. Quality checks** (run from `packages/web/`)
+```bash
+npm run lint          # ESLint — must pass with 0 errors
+npm run lint:css      # Stylelint — must pass with 0 errors
+npm run format:check  # Prettier — must pass (fix with npm run format if not)
+npx tsc --noEmit      # TypeScript — must pass with 0 errors
+```
+
+**3. Storybook build**
+```bash
+npm run build-storybook   # must complete with "build completed successfully"
+```
+The chunk size warning is acceptable — it is not an error.
+
+**4. Figma visual check** (screenshot of the component set)
+- All variants visible, no overflow, no missing arrows
+- Resizing test: change `content` property to a long string — bubble must grow, arrow must stay pinned
+
+**If any step fails → fix before starting the next component.**
+
+---
+
 ### Pre-build behaviour analysis — required before writing any Figma component script
 
 Before writing a single line of `use_figma` code for a component, answer these questions:
