@@ -43,9 +43,12 @@ export function Tooltip({
 
   // Floating UI reads arrowRef.current only during positioning (layout effect),
   // not during render — safe to pass the ref object here.
+  // FloatingArrow is ~7px tall — offset must exceed arrow height so the tip
+  // doesn't overlap the trigger. 7 (arrow) + 4 (gap) = 11px total.
+  const ARROW_HEIGHT = 7;
   const middleware = useMemo(
     () => [
-      offset(8),
+      offset(ARROW_HEIGHT + 4),
       flip({ padding: 8 }),
       shift({ padding: 8 }),
       arrow({ element: arrowRef }), // eslint-disable-line react-hooks/refs
