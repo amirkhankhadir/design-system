@@ -96,13 +96,17 @@ Triggers: push to `main` + all PRs.
 Before considering a new component done, verify:
 
 **Code:**
-- [ ] All CSS values use semantic tokens — no hardcoded colors, sizes, radii, or spacing
+- [ ] **Before writing any CSS number** — checked `dist/web/tokens.light.css` for an existing token. If missing, added it via `tokens/display.json` + `node build-tokens.js` first
+- [ ] **Typography** — used `ds-text-*` utility class in TSX (not manual `font-size`/`line-height`/`font-weight` in CSS)
+- [ ] **Shadows** — used `ds-elevation-*` utility class in TSX (not manual `box-shadow` in CSS)
+- [ ] All CSS values use semantic tokens — no hardcoded colors, sizes, radii, spacing, or font values
 - [ ] Hover/active use the `::after` overlay pattern (not brightness or opacity tricks)
 - [ ] Loading state: `disabled={disabled || loading}`, loader color chosen per bg type, content slots `opacity=0`
 - [ ] Danger+disabled CSS block is at the bottom of the file
 - [ ] `npm run lint && npm run lint:css && npm run format:check && npx tsc --noEmit` — all pass
 - [ ] New component exported from `src/index.ts`
 - [ ] Storybook: correct `title` grouping, Sizes story shows primary variant only, no standalone Danger/Loading/Focus stories
+- [ ] Storybook stories have `decorators` with padding so tooltips/popovers have room to render
 
 **Figma:**
 - [ ] Page name, component name, and all property names are kebab-case
@@ -209,6 +213,86 @@ Screenshot alone is **insufficient** for layout precision — it is only a visua
 
 ---
 
+### 12. Hardcoded CSS values despite existing tokens and utility classes
+
+**What happened:** Built the Tooltip component with hardcoded `font-weight: 600`, `font-weight: 400`, `box-shadow: 0 4px 8px rgba(...)`, `max-width: 240px`, `--arrow-size: 6px`, `10px`, `12px` — even though:
+- `ds-text-small-1` / `ds-text-small-2` utility classes already existed and cover font-family + font-size + line-height + font-weight together
+- `ds-elevation-2` utility class already existed with the exact same box-shadow values
+- `--ds-spacing-*` tokens existed for 6px, 8px, 12px
+- A new sizing token for 240px could be added to the system
+
+**Why:** Wrote CSS from memory/habit instead of first auditing what the design system already provides. Violated the rule stated in the consistency checklist: "All CSS values use semantic tokens — no hardcoded colors, sizes, radii, or spacing."
+
+**Rules:**
+1. **Before writing any CSS value as a number**, check `dist/web/tokens.light.css` for an existing token. If the token doesn't exist, consult the user and add it via `tokens/display.json` or `tokens/semantics.json` + `node build-tokens.js`.
+2. **Before writing typography CSS** (`font-size`, `line-height`, `font-weight`, `font-family`), check `dist/web/tokens.light.css` for `ds-text-*` utility classes. Apply those classes in TSX instead of repeating the values in CSS.
+3. **Before writing `box-shadow`**, check `dist/web/tokens.light.css` for `ds-elevation-*` utility classes. Apply the matching class in TSX.
+4. The "no hardcode" rule applies to every number in CSS — spacing, sizing, radius, colors, font values, shadow offsets. There are no exceptions.
+
+---
+
+### 13. Chose a JS-positioning library without verifying Storybook iframe compatibility
+
+**What happened:** Built the Tooltip using `@floating-ui/react` with `strategy: 'absolute'` and `FloatingPortal`. The tooltip was consistently mis-positioned in Storybook — at (0,0), off-center, wrong size — requiring 6+ debugging iterations over multiple sessions before switching to pure CSS.
+
+**Why:** Chose Floating UI based on its general quality without first checking whether JavaScript coordinate calculation works inside Storybook's nested iframes. Storybook docs renders each story in an `<iframe>` with its own `document`. `FloatingPortal` portaled to the parent page's `document.body`, not the iframe's, breaking all coordinate math.
+
+**Rules:**
+1. **Before adding any JS-based positioning library**, ask: does this component's positioning need to handle viewport boundaries, scroll containers, or dynamic flipping? If the answer is "for basic placement, no" — use **pure CSS** (`position: absolute` + `left: 50%; transform: translateX(-50%)` etc.). It works in every environment with zero dependencies.
+2. **Pure CSS tooltip/popover positioning is the default.** Only reach for Floating UI when you genuinely need dynamic flip/shift (e.g., a dropdown that must avoid the viewport edge regardless of trigger position).
+3. **Storybook iframes break JavaScript coordinate systems.** Avoid `FloatingPortal`, `document.body` portals, and `getBoundingClientRect()`-based math in components that must work in Storybook docs.
+
+---
+
+### 14. Used hardcoded value instead of creating a missing token
+
+**What happened:** `max-width: 240px` was needed for the Tooltip. No `--ds-sizing-240` token existed. Instead of creating the token, wrote `240px` directly in CSS and left a comment "no token exists."
+
+**Why:** Wanted to avoid touching the token files, so took the shortcut of hardcoding.
+
+**Rule:** If a CSS value has no matching token, **create the token** — don't hardcode. All 4 steps are mandatory:
+1. Add the primitive to `tokens/primitives.json` → `dimensions` scale (if not already there)
+2. Add the semantic token to `tokens/display.json` → appropriate group (`sizing`, `spacing`, etc.) with `$comment` explaining usage
+3. Run `node build-tokens.js` at the repo root — all outputs (`tokens.light.css`, `tokens.dark.css`, iOS, Android) update automatically
+4. **Create the same variables in Figma** via `use_figma`: primitive in `global-primitives` (scopes `[]`), semantic in `display-semantics` aliased to the primitive with the correct scope (`WIDTH_HEIGHT` for sizing, `GAP` for spacing, etc.)
+5. Use the new `var(--ds-sizing-...)` in CSS
+
+Never leave a `/* no token exists */` comment and a hardcoded value — that's always a TODO that should be done immediately. And never add a token to code without adding it to Figma in the same step.
+
+---
+
+### 15. Built fewer Figma variants than exist in code without asking
+
+**What happened:** The Tooltip code has 12 placements (`top`, `top-start`, `top-end`, `bottom`, `bottom-start`, `bottom-end`, `left`, `left-start`, `left-end`, `right`, `right-start`, `right-end`). I built only 4 placement variants in Figma (top, bottom, left, right), silently dropping the `-start` / `-end` variants without asking.
+
+**Why:** Assumed a simplified set would be acceptable to avoid 24 variants. Did not verify against the code props.
+
+**Rule:** Before building a Figma component, always count and list the exact variant axes from the code props. **Build all variants that exist in code** — each `-start`/`-end` placement is visually distinct (arrow shifts position) and designers need to see and choose between them. Silently reducing variants means designers don't know those values exist. If the matrix is very large (>50), ask the user explicitly before simplifying.
+
+---
+
+### 16. Duplicate/conflicting component properties in Figma
+
+**What happened:** Added a BOOLEAN component property `show-title` to the Tooltip component set — but `show-title` already existed as a VARIANT property (diamond icon). This created two conflicting `show-title` entries in the Properties panel.
+
+**Why:** Did not check existing variant property names before calling `addComponentProperty`.
+
+**Rule:** Before calling `addComponentProperty(name, ...)`, always inspect `compSet.componentPropertyDefinitions` AND the variant property names (from child component names, e.g. `placement=top, show-title=true`). If any name from `addComponentProperty` matches an existing variant key — **do not add it**. Component properties must have names that do not conflict with variant property keys.
+
+```js
+// Always check before adding
+const existingKeys = Object.keys(compSet.componentPropertyDefinitions);
+const variantKeys = [...new Set(
+  compSet.children.flatMap(c => 
+    c.name.split(', ').map(p => p.split('=')[0].trim())
+  )
+)];
+const allExisting = new Set([...existingKeys, ...variantKeys]);
+// Only add if name not already in allExisting
+```
+
+---
+
 ### 8. Removed package without removing it from Storybook addons
 **What happened:** Uninstalled `@chromatic-com/storybook` from `package.json` but left it in `.storybook/main.ts` addons list. This would break `storybook build` with "Cannot find module" error.
 **Rule:** When removing a Storybook addon package, always update `.storybook/main.ts` at the same time. The two files must stay in sync.
@@ -220,6 +304,23 @@ Screenshot alone is **insufficient** for layout precision — it is only a visua
 - **Never add new tokens without consulting the user first.**
 - Use only semantic tokens (`--ds-color-*`, `--ds-spacing-*`, `--ds-radius-*`, `--ds-sizing-*`) — never primitives, never hardcoded values.
 - Tokens live in `tokens/semantics.json` → built via `build-tokens.js` → output `dist/web/tokens.light.css` + `tokens.dark.css`.
+
+### Token sync rule — code AND Figma, always together
+
+**Tokens must exist in both places simultaneously.** The token system has two parallel sources of truth:
+
+| Layer | File | How to add |
+|---|---|---|
+| Code | `tokens/primitives.json` + `tokens/display.json` (or `semantics.json`) | Edit JSON → `node build-tokens.js` |
+| Figma | `global-primitives` + `display-semantics` (or `brand-theme-semantics`) | `use_figma` script |
+
+**Adding a new token = 4 steps, always all 4:**
+1. Add primitive value to `tokens/primitives.json` → `dimensions` (or `colors`, etc.)
+2. Add semantic variable to `tokens/display.json` (or `semantics.json`) with `$alias`, `$value`, `$comment`
+3. Run `node build-tokens.js` — regenerates all CSS/iOS/Android outputs
+4. Create the same two variables in Figma via `use_figma`: primitive in `global-primitives` (scopes `[]`), semantic in `display-semantics` / `brand-theme-semantics` (correct scope e.g. `WIDTH_HEIGHT`, `FRAME_FILL`, etc.), aliased to the primitive
+
+**Never do step 3 without step 4.** A token that exists in code but not in Figma breaks designer–developer parity and will be missing when Figma components need to bind to it.
 
 ## Component CSS
 

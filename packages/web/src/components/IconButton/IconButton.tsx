@@ -1,6 +1,8 @@
 import { forwardRef } from 'react';
 import { Loader } from '../Loader/Loader';
 import { Icon } from '../Icon/Icon';
+import { Tooltip } from '../Tooltip/Tooltip';
+import type { TooltipPlacement } from '../Tooltip/Tooltip';
 import './IconButton.css';
 
 export type IconButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'link' | 'ghost';
@@ -19,6 +21,14 @@ export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEl
   loading?: boolean;
   /** Accessible label — required for screen readers */
   'aria-label': string;
+  /**
+   * Tooltip text shown on hover. Recommended for all icon buttons so mouse
+   * users can discover what the button does. Does not replace aria-label —
+   * aria-label is still required for screen readers.
+   */
+  tooltip?: string;
+  /** Tooltip placement (default: top) */
+  tooltipPlacement?: TooltipPlacement;
 }
 
 const ICON_SIZE: Record<IconButtonSize, number> = { sm: 16, md: 20, lg: 24 };
@@ -44,6 +54,8 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       loading = false,
       disabled,
       className,
+      tooltip,
+      tooltipPlacement = 'top',
       ...rest
     },
     ref
@@ -61,7 +73,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       .filter(Boolean)
       .join(' ');
 
-    return (
+    const button = (
       <button
         ref={ref}
         className={classes}
@@ -80,6 +92,16 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         )}
       </button>
     );
+
+    if (tooltip) {
+      return (
+        <Tooltip content={tooltip} placement={tooltipPlacement}>
+          {button}
+        </Tooltip>
+      );
+    }
+
+    return button;
   }
 );
 

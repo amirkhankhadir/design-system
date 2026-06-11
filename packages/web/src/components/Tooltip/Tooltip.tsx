@@ -1,38 +1,32 @@
-import { useRef, useState, useId, useMemo, type ReactElement } from 'react';
-import {
-  useFloating,
-  useHover,
-  useFocus,
-  useInteractions,
-  useTransitionStyles,
-  FloatingArrow,
-  arrow,
-  flip,
-  shift,
-  offset,
-  autoUpdate,
-} from '@floating-ui/react';
-import type { Placement } from '@floating-ui/react';
+import { useState, useId, useRef, useCallback, type ReactElement } from 'react';
 import './Tooltip.css';
 
-export type TooltipPlacement = Placement;
+export type TooltipPlacement =
+  | 'top'
+  | 'top-start'
+  | 'top-end'
+  | 'bottom'
+  | 'bottom-start'
+  | 'bottom-end'
+  | 'left'
+  | 'left-start'
+  | 'left-end'
+  | 'right'
+  | 'right-start'
+  | 'right-end';
 
 export interface TooltipProps {
   /** Main tooltip text */
   content: string;
   /** Optional bold title shown above the content */
   title?: string;
-  /** Preferred placement — auto-flips when there's not enough space */
+  /** Placement relative to the trigger (default: top) */
   placement?: TooltipPlacement;
-  /** Delay before the tooltip opens, in ms (default: 400) */
+  /** Delay before opening, in ms (default: 400) */
   delay?: number;
   /** The element that triggers the tooltip */
   children: ReactElement;
 }
-
-// FloatingArrow is ~7px tall. Offset = arrowHeight + visual gap.
-const ARROW_HEIGHT = 7;
-const GAP = 4;
 
 export function Tooltip({
   content,
@@ -42,63 +36,37 @@ export function Tooltip({
   children,
 }: TooltipProps) {
   const [open, setOpen] = useState(false);
-  const arrowRef = useRef<SVGSVGElement>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
   const tooltipId = useId();
 
-  const middleware = useMemo(
-    () => [
-      offset(ARROW_HEIGHT + GAP),
-      flip({ padding: 8 }),
-      shift({ padding: 8 }),
-      arrow({ element: arrowRef }), // eslint-disable-line react-hooks/refs
-    ],
-    [] // eslint-disable-line react-hooks/exhaustive-deps
-  );
+  const show = useCallback(() => {
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setOpen(true), delay);
+  }, [delay]);
 
-  const { refs, floatingStyles, context } = useFloating({
-    open,
-    onOpenChange: setOpen,
-    placement,
-    // strategy:'absolute' + position:relative on the wrapper span means
-    // Floating UI positions the tooltip relative to the wrapper itself —
-    // no viewport/scroll/iframe coordinate issues.
-    strategy: 'absolute',
-    whileElementsMounted: autoUpdate,
-    middleware,
-  });
-
-  const hover = useHover(context, { delay: { open: delay, close: 0 } });
-  const focus = useFocus(context);
-  const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus]);
-
-  const { isMounted, styles: transitionStyles } = useTransitionStyles(context, {
-    duration: 150,
-    initial: { opacity: 0, transform: 'scale(0.96)' },
-    open: { opacity: 1, transform: 'scale(1)' },
-  });
+  const hide = useCallback(() => {
+    clearTimeout(timerRef.current);
+    setOpen(false);
+  }, []);
 
   return (
-    // position:relative makes this span the offset-parent for the absolute tooltip.
-    // display:inline-block makes it hug the trigger tightly — no extra space.
     <span
-      ref={refs.setReference} // eslint-disable-line react-hooks/refs
-      style={{ position: 'relative', display: 'inline-block' }}
+      className="tooltip-trigger"
       aria-describedby={open ? tooltipId : undefined}
-      {...getReferenceProps()}
+      onMouseEnter={show}
+      onMouseLeave={hide}
+      onFocus={show}
+      onBlur={hide}
     >
       {children}
-      {isMounted && (
+      {open && (
         <div
-          ref={refs.setFloating} // eslint-disable-line react-hooks/refs
           id={tooltipId}
           role="tooltip"
-          className={`tooltip${title ? ' tooltip--has-title' : ''}`}
-          style={{ ...floatingStyles, ...transitionStyles }}
-          {...getFloatingProps()}
+          className={`tooltip tooltip--${placement} ds-elevation-2${title ? ' tooltip--has-title' : ''}`}
         >
-          {title && <p className="tooltip__title">{title}</p>}
-          <p className="tooltip__content">{content}</p>
-          <FloatingArrow ref={arrowRef} context={context} className="tooltip__arrow" />
+          {title && <p className="tooltip__title ds-text-small-2">{title}</p>}
+          <p className="tooltip__content ds-text-small-1">{content}</p>
         </div>
       )}
     </span>

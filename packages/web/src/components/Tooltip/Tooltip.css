@@ -1,47 +1,229 @@
-.tooltip {
-  /* Positioning */
-  z-index: 9999;
-
-  /* prevent tooltip itself from triggering hover */
-  pointer-events: none;
-
-  /* Layout */
-  width: max-content;
-  max-width: 240px;
-  padding: var(--ds-spacing-6) var(--ds-spacing-8);
-  border-radius: var(--ds-radius-6);
-
-  /* Appearance — inverse surface: dark in light mode, light in dark mode */
-  background: var(--ds-color-text-primary);
-  box-shadow:
-    0 4px 8px var(--ds-color-shadow-md),
-    0 2px 4px var(--ds-color-shadow-sm);
-
-  /* Typography */
-  font-family: var(--ds-font-family-primary, sans-serif);
-  font-size: var(--ds-font-size-12);
-  line-height: var(--ds-line-height-16);
-  overflow-wrap: break-word;
+/* ── Trigger wrapper ─────────────────────────────────────────────
+   The tooltip is absolutely positioned inside this wrapper.
+   display:inline-block so it hugs the trigger's dimensions.
+──────────────────────────────────────────────────────────────── */
+.tooltip-trigger {
+  position: relative;
+  display: inline-block;
 }
 
+/* ── Tooltip base ────────────────────────────────────────────────
+   Absolute child of .tooltip-trigger.
+   Typography comes from ds-text-small-1 / ds-text-small-2 utility
+   classes applied in TSX — no hardcoded font values here.
+──────────────────────────────────────────────────────────────── */
+.tooltip {
+  position: absolute;
+  z-index: 9999;
+  pointer-events: none;
+  width: max-content;
+  max-width: var(--ds-sizing-240);
+  padding: var(--ds-spacing-6) var(--ds-spacing-8);
+  border-radius: var(--ds-radius-6);
+  background: var(--ds-color-text-primary);
+  overflow-wrap: break-word;
+
+  /* Arrow dimensions via spacing token */
+  --arrow-size: var(--ds-spacing-6);
+  --arrow-color: var(--ds-color-text-primary);
+}
+
+/* ── Arrow (::after triangle) ───────────────────────────────── */
+.tooltip::after {
+  content: '';
+  position: absolute;
+  border: var(--arrow-size) solid transparent;
+}
+
+/* ── Content — typography via utility classes in TSX ─────────── */
 .tooltip__title {
   margin: 0 0 var(--ds-spacing-2);
   color: var(--ds-color-text-inverse);
-  font-weight: 600;
 }
 
 .tooltip__content {
   margin: 0;
   color: var(--ds-color-text-inverse);
-  font-weight: 400;
 }
 
-/* Slightly mute content text when a title is present */
 .tooltip--has-title .tooltip__content {
   opacity: 0.8;
 }
 
-/* Arrow inherits the tooltip background */
-.tooltip__arrow {
-  fill: var(--ds-color-text-primary);
+/* ══════════════════════════════════════════════════════════════
+   PLACEMENTS
+   Total gap = arrow (--ds-spacing-6 = 6px) + spacing-4 (4px) = 10px
+══════════════════════════════════════════════════════════════ */
+
+/* ── top ──────────────────────────────────────────────────────── */
+.tooltip--top,
+.tooltip--top-start,
+.tooltip--top-end {
+  bottom: calc(100% + var(--ds-spacing-6) + var(--ds-spacing-4));
+}
+
+.tooltip--top {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip--top-start {
+  left: 0;
+}
+
+.tooltip--top-end {
+  right: 0;
+  left: auto;
+}
+
+/* arrow points down */
+.tooltip--top::after,
+.tooltip--top-start::after,
+.tooltip--top-end::after {
+  top: 100%;
+  border-top-color: var(--arrow-color);
+}
+
+.tooltip--top::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip--top-start::after {
+  left: var(--ds-spacing-12);
+}
+
+.tooltip--top-end::after {
+  right: var(--ds-spacing-12);
+  left: auto;
+}
+
+/* ── bottom ───────────────────────────────────────────────────── */
+.tooltip--bottom,
+.tooltip--bottom-start,
+.tooltip--bottom-end {
+  top: calc(100% + var(--ds-spacing-6) + var(--ds-spacing-4));
+}
+
+.tooltip--bottom {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip--bottom-start {
+  left: 0;
+}
+
+.tooltip--bottom-end {
+  right: 0;
+  left: auto;
+}
+
+/* arrow points up */
+.tooltip--bottom::after,
+.tooltip--bottom-start::after,
+.tooltip--bottom-end::after {
+  bottom: 100%;
+  border-bottom-color: var(--arrow-color);
+}
+
+.tooltip--bottom::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip--bottom-start::after {
+  left: var(--ds-spacing-12);
+}
+
+.tooltip--bottom-end::after {
+  right: var(--ds-spacing-12);
+  left: auto;
+}
+
+/* ── left ─────────────────────────────────────────────────────── */
+.tooltip--left,
+.tooltip--left-start,
+.tooltip--left-end {
+  right: calc(100% + var(--ds-spacing-6) + var(--ds-spacing-4));
+  left: auto;
+}
+
+.tooltip--left {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tooltip--left-start {
+  top: 0;
+}
+
+.tooltip--left-end {
+  bottom: 0;
+  top: auto;
+}
+
+/* arrow points right */
+.tooltip--left::after,
+.tooltip--left-start::after,
+.tooltip--left-end::after {
+  left: 100%;
+  border-left-color: var(--arrow-color);
+}
+
+.tooltip--left::after {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tooltip--left-start::after {
+  top: var(--ds-spacing-8);
+}
+
+.tooltip--left-end::after {
+  bottom: var(--ds-spacing-8);
+  top: auto;
+}
+
+/* ── right ────────────────────────────────────────────────────── */
+.tooltip--right,
+.tooltip--right-start,
+.tooltip--right-end {
+  left: calc(100% + var(--ds-spacing-6) + var(--ds-spacing-4));
+}
+
+.tooltip--right {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tooltip--right-start {
+  top: 0;
+}
+
+.tooltip--right-end {
+  bottom: 0;
+  top: auto;
+}
+
+/* arrow points left */
+.tooltip--right::after,
+.tooltip--right-start::after,
+.tooltip--right-end::after {
+  right: 100%;
+  border-right-color: var(--arrow-color);
+}
+
+.tooltip--right::after {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tooltip--right-start::after {
+  top: var(--ds-spacing-8);
+}
+
+.tooltip--right-end::after {
+  bottom: var(--ds-spacing-8);
+  top: auto;
 }

@@ -40,6 +40,7 @@
     "32": { "$alias": "dimensions.32", "$value": 32, "$comment": "e.g. small button, input sm" },
     "40": { "$alias": "dimensions.40", "$value": 40, "$comment": "e.g. default button, input" },
     "48": { "$alias": "dimensions.48", "$value": 48, "$comment": "e.g. large button, input lg" },
-    "56": { "$alias": "dimensions.56", "$value": 56, "$comment": "e.g. hero input, FAB" }
+    "56":  { "$alias": "dimensions.56",  "$value": 56,  "$comment": "e.g. hero input, FAB" },
+    "240": { "$alias": "dimensions.240", "$value": 240, "$comment": "e.g. tooltip max-width, popover width" }
   }
 }

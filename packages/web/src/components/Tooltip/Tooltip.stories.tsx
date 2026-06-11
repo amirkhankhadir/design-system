@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tooltip } from './Tooltip';
 import { Button } from '../Button/Button';
+import { IconButton } from '../IconButton/IconButton';
 import type { TooltipPlacement } from './Tooltip';
 
 const meta: Meta<typeof Tooltip> = {
@@ -10,6 +11,13 @@ const meta: Meta<typeof Tooltip> = {
   parameters: {
     layout: 'centered',
   },
+  decorators: [
+    Story => (
+      <div style={{ padding: '72px 80px' }}>
+        <Story />
+      </div>
+    ),
+  ],
   argTypes: {
     placement: {
       control: 'select',
@@ -119,7 +127,7 @@ export const Placements: Story = {
 export const OnIconButton: Story = {
   render: () => (
     <Tooltip content="Add item" placement="bottom">
-      <Button variant="primary">+</Button>
+      <IconButton variant="primary" icon="add" aria-label="Add item" />
     </Tooltip>
   ),
 };

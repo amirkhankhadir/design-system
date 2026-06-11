@@ -6,6 +6,13 @@ const meta: Meta<typeof IconButton> = {
   component: IconButton,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
+  decorators: [
+    Story => (
+      <div style={{ padding: '72px 80px' }}>
+        <Story />
+      </div>
+    ),
+  ],
   argTypes: {
     icon: { control: 'text', description: 'Material Symbol name' },
     variant: { control: 'select', options: ['primary', 'secondary', 'tertiary', 'link', 'ghost'] },
@@ -13,6 +20,11 @@ const meta: Meta<typeof IconButton> = {
     danger: { control: 'boolean' },
     loading: { control: 'boolean' },
     disabled: { control: 'boolean' },
+    tooltip: { control: 'text', description: 'Tooltip text shown on hover' },
+    tooltipPlacement: {
+      control: 'select',
+      options: ['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end', 'right', 'right-start', 'right-end'],
+    },
   },
 };
 
@@ -22,7 +34,20 @@ type Story = StoryObj<typeof IconButton>;
 // ── Default ────────────────────────────────────────────────
 
 export const Default: Story = {
-  args: { icon: 'home', variant: 'primary', size: 'md', 'aria-label': 'Home' },
+  args: { icon: 'home', variant: 'primary', size: 'md', 'aria-label': 'Home', tooltip: 'Home' },
+};
+
+// ── With Tooltip ────────────────────────────────────────────
+export const WithTooltip: Story = {
+  name: 'With Tooltip',
+  render: () => (
+    <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+      <IconButton icon="settings" variant="ghost" size="md" aria-label="Settings" tooltip="Settings" />
+      <IconButton icon="delete" variant="ghost" size="md" aria-label="Delete" tooltip="Delete" tooltipPlacement="bottom" danger />
+      <IconButton icon="edit" variant="secondary" size="md" aria-label="Edit" tooltip="Edit item" />
+      <IconButton icon="add" variant="primary" size="md" aria-label="Add" tooltip="Add item" tooltipPlacement="right" />
+    </div>
+  ),
 };
 
 // ── All Variants ───────────────────────────────────────────
