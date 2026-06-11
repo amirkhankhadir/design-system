@@ -1,4 +1,4 @@
-import React, { useRef, useState, useId, useMemo } from 'react';
+import { useRef, useState, useId, useMemo, type ReactElement } from 'react';
 import {
   useFloating,
   useHover,
@@ -27,8 +27,8 @@ export interface TooltipProps {
   placement?: TooltipPlacement;
   /** Delay before the tooltip opens, in ms (default: 400) */
   delay?: number;
-  /** The element that triggers the tooltip. Must be a DOM element or a ref-forwarding component. */
-  children: React.ReactElement;
+  /** The element that triggers the tooltip */
+  children: ReactElement;
 }
 
 export function Tooltip({
@@ -72,22 +72,23 @@ export function Tooltip({
     open: { opacity: 1, transform: 'scale(1)' },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const trigger = React.cloneElement(
-    children as React.ReactElement<Record<string, any>>,
-    getReferenceProps({
-      ref: refs.setReference,
-      'aria-describedby': open ? tooltipId : undefined,
-    })
-  );
-
   return (
     <>
-      {trigger}
+      {/* Wrapper span gives Floating UI a reliable DOM node regardless of
+          whether children uses forwardRef. display:inline-block preserves
+          button layout and ensures correct hover/focus event handling. */}
+      <span
+        ref={refs.setReference}
+        style={{ display: 'inline-block' }}
+        aria-describedby={open ? tooltipId : undefined}
+        {...getReferenceProps()}
+      >
+        {children}
+      </span>
       {isMounted && (
         <FloatingPortal>
           <div
-            ref={refs.setFloating}
+            ref={refs.setFloating} // eslint-disable-line react-hooks/refs
             id={tooltipId}
             role="tooltip"
             className={`tooltip${title ? ' tooltip--has-title' : ''}`}
