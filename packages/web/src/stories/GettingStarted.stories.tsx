@@ -13,7 +13,10 @@ function Section({ children }: { children: React.ReactNode }) {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="ds-headline-medium-2" style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 8px' }}>
+    <h2
+      className="ds-headline-medium-2"
+      style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 8px' }}
+    >
       {children}
     </h2>
   );
@@ -21,7 +24,10 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 
 function SectionSubtitle({ children }: { children: React.ReactNode }) {
   return (
-    <p className="ds-text-large-1" style={{ color: 'var(--ds-color-text-secondary)', margin: '0 0 24px' }}>
+    <p
+      className="ds-text-large-1"
+      style={{ color: 'var(--ds-color-text-secondary)', margin: '0 0 24px' }}
+    >
       {children}
     </p>
   );
@@ -29,18 +35,20 @@ function SectionSubtitle({ children }: { children: React.ReactNode }) {
 
 function Code({ children }: { children: React.ReactNode }) {
   return (
-    <pre style={{
-      background: 'var(--ds-color-background-subtle)',
-      border: '1px solid var(--ds-color-border-subtle)',
-      borderRadius: 'var(--ds-radius-8)',
-      padding: '14px 18px',
-      margin: '0 0 16px',
-      overflowX: 'auto',
-      fontFamily: 'ui-monospace, monospace',
-      fontSize: 13,
-      lineHeight: 1.6,
-      color: 'var(--ds-color-text-primary)',
-    }}>
+    <pre
+      style={{
+        background: 'var(--ds-color-background-subtle)',
+        border: '1px solid var(--ds-color-border-subtle)',
+        borderRadius: 'var(--ds-radius-8)',
+        padding: '14px 18px',
+        margin: '0 0 16px',
+        overflowX: 'auto',
+        fontFamily: 'ui-monospace, monospace',
+        fontSize: 13,
+        lineHeight: 1.6,
+        color: 'var(--ds-color-text-primary)',
+      }}
+    >
       <code>{children}</code>
     </pre>
   );
@@ -48,38 +56,44 @@ function Code({ children }: { children: React.ReactNode }) {
 
 function InlineCode({ children }: { children: React.ReactNode }) {
   return (
-    <code style={{
-      background: 'var(--ds-color-background-subtle)',
-      border: '1px solid var(--ds-color-border-subtle)',
-      borderRadius: 'var(--ds-radius-4)',
-      padding: '2px 6px',
-      fontFamily: 'ui-monospace, monospace',
-      fontSize: '0.875em',
-      color: 'var(--ds-color-text-primary)',
-    }}>
+    <code
+      style={{
+        background: 'var(--ds-color-background-subtle)',
+        border: '1px solid var(--ds-color-border-subtle)',
+        borderRadius: 'var(--ds-radius-4)',
+        padding: '2px 6px',
+        fontFamily: 'ui-monospace, monospace',
+        fontSize: '0.875em',
+        color: 'var(--ds-color-text-primary)',
+      }}
+    >
       {children}
     </code>
   );
 }
 
 function Divider() {
-  return <div style={{ borderTop: '1px solid var(--ds-color-border-subtle)', margin: '8px 0 48px' }} />;
+  return (
+    <div style={{ borderTop: '1px solid var(--ds-color-border-subtle)', margin: '8px 0 48px' }} />
+  );
 }
 
 function Chip({ children }: { children: React.ReactNode }) {
   return (
-    <span style={{
-      display: 'inline-flex',
-      alignItems: 'center',
-      padding: '4px 10px',
-      borderRadius: 'var(--ds-radius-full)',
-      background: 'var(--ds-color-brand-subtle)',
-      color: 'var(--ds-color-brand-text)',
-      fontSize: 12,
-      fontWeight: 500,
-      marginRight: 8,
-      marginBottom: 8,
-    }}>
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        padding: '4px 10px',
+        borderRadius: 'var(--ds-radius-full)',
+        background: 'var(--ds-color-brand-subtle)',
+        color: 'var(--ds-color-brand-text)',
+        fontSize: 12,
+        fontWeight: 500,
+        marginRight: 8,
+        marginBottom: 8,
+      }}
+    >
       {children}
     </span>
   );
@@ -89,15 +103,20 @@ export const Overview: Story = {
   name: 'Getting Started',
   render: () => (
     <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)', maxWidth: 720 }}>
-
       {/* Hero */}
       <div style={{ marginBottom: 48 }}>
-        <h1 className="ds-display-large-1" style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 12px' }}>
+        <h1
+          className="ds-display-large-1"
+          style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 12px' }}
+        >
           Design System
         </h1>
-        <p className="ds-text-large-1" style={{ color: 'var(--ds-color-text-secondary)', margin: '0 0 20px' }}>
-          A cross-platform token-based design system for Web, iOS and Android.
-          Built on semantic design tokens with full light/dark theme support.
+        <p
+          className="ds-text-large-1"
+          style={{ color: 'var(--ds-color-text-secondary)', margin: '0 0 20px' }}
+        >
+          A cross-platform token-based design system for Web, iOS and Android. Built on semantic
+          design tokens with full light/dark theme support.
         </p>
         <div>
           <Chip>Tokens</Chip>
@@ -116,30 +135,61 @@ export const Overview: Story = {
         <SectionSubtitle>
           Tokens flow from a single source of truth to every platform.
         </SectionSubtitle>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr 1fr',
-          gap: 12,
-          marginBottom: 16,
-        }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr 1fr',
+            gap: 12,
+            marginBottom: 16,
+          }}
+        >
           {[
-            { title: 'Primitives', desc: 'Raw values — colors, sizes. Never used directly in components.' },
-            { title: 'Semantics', desc: 'Theme-aware aliases of primitives. These are used in components.' },
-            { title: 'Display', desc: 'Theme-independent tokens — spacing, radius, border, sizing.' },
+            {
+              title: 'Primitives',
+              desc: 'Raw values — colors, sizes. Never used directly in components.',
+            },
+            {
+              title: 'Semantics',
+              desc: 'Theme-aware aliases of primitives. These are used in components.',
+            },
+            {
+              title: 'Display',
+              desc: 'Theme-independent tokens — spacing, radius, border, sizing.',
+            },
           ].map(item => (
-            <div key={item.title} style={{
-              padding: '16px',
-              border: '1px solid var(--ds-color-border-subtle)',
-              borderRadius: 'var(--ds-radius-8)',
-              background: 'var(--ds-color-background-subtle)',
-            }}>
-              <p className="ds-text-small-2" style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 4px' }}>{item.title}</p>
-              <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-secondary)', margin: 0 }}>{item.desc}</p>
+            <div
+              key={item.title}
+              style={{
+                padding: '16px',
+                border: '1px solid var(--ds-color-border-subtle)',
+                borderRadius: 'var(--ds-radius-8)',
+                background: 'var(--ds-color-background-subtle)',
+              }}
+            >
+              <p
+                className="ds-text-small-2"
+                style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 4px' }}
+              >
+                {item.title}
+              </p>
+              <p
+                className="ds-text-xsmall-1"
+                style={{ color: 'var(--ds-color-text-secondary)', margin: 0 }}
+              >
+                {item.desc}
+              </p>
             </div>
           ))}
         </div>
-        <p className="ds-text-small-1" style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}>
-          Source: <InlineCode>tokens/</InlineCode> → build: <InlineCode>node build-tokens.js</InlineCode> → output: <InlineCode>dist/web/tokens.light.css</InlineCode>, <InlineCode>dist/ios/DesignTokens.swift</InlineCode>, <InlineCode>dist/android/</InlineCode>
+        <p
+          className="ds-text-small-1"
+          style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}
+        >
+          Source: <InlineCode>tokens/</InlineCode> → build:{' '}
+          <InlineCode>node build-tokens.js</InlineCode> → output:{' '}
+          <InlineCode>dist/web/tokens.light.css</InlineCode>,{' '}
+          <InlineCode>dist/ios/DesignTokens.swift</InlineCode>,{' '}
+          <InlineCode>dist/android/</InlineCode>
         </p>
       </Section>
 
@@ -152,8 +202,12 @@ export const Overview: Story = {
         <Code>{`// main.tsx or App.tsx
 import '@design-system/web/dist/tokens.light.css';
 import '@design-system/web/dist/tokens.dark.css';`}</Code>
-        <p className="ds-text-small-1" style={{ color: 'var(--ds-color-text-secondary)', margin: '0 0 16px' }}>
-          Switch themes by setting <InlineCode>data-theme="dark"</InlineCode> on <InlineCode>{'<html>'}</InlineCode>:
+        <p
+          className="ds-text-small-1"
+          style={{ color: 'var(--ds-color-text-secondary)', margin: '0 0 16px' }}
+        >
+          Switch themes by setting <InlineCode>{'data-theme="dark"'}</InlineCode> on{' '}
+          <InlineCode>{'<html>'}</InlineCode>:
         </p>
         <Code>{`document.documentElement.setAttribute('data-theme', 'dark');
 document.documentElement.removeAttribute('data-theme'); // back to light`}</Code>
@@ -208,24 +262,45 @@ function App() {
         <SectionSubtitle>
           Tokens are synced to Figma variables. Use semantic tokens in all components.
         </SectionSubtitle>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 12,
-        }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 12,
+          }}
+        >
           {[
-            { title: 'global-primitives', desc: 'Raw color values. Hidden from component pickers.' },
-            { title: 'brand-theme-semantics', desc: 'Light/Dark modes. Use these in all Figma components.' },
+            {
+              title: 'global-primitives',
+              desc: 'Raw color values. Hidden from component pickers.',
+            },
+            {
+              title: 'brand-theme-semantics',
+              desc: 'Light/Dark modes. Use these in all Figma components.',
+            },
             { title: 'display-semantics', desc: 'Spacing, radius, border, sizing. Single mode.' },
             { title: 'typography', desc: 'Font families, sizes, line heights, weights.' },
           ].map(item => (
-            <div key={item.title} style={{
-              padding: '14px 16px',
-              border: '1px solid var(--ds-color-border-subtle)',
-              borderRadius: 'var(--ds-radius-8)',
-            }}>
-              <p className="ds-text-small-2" style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 4px' }}>{item.title}</p>
-              <p className="ds-text-xsmall-1" style={{ color: 'var(--ds-color-text-secondary)', margin: 0 }}>{item.desc}</p>
+            <div
+              key={item.title}
+              style={{
+                padding: '14px 16px',
+                border: '1px solid var(--ds-color-border-subtle)',
+                borderRadius: 'var(--ds-radius-8)',
+              }}
+            >
+              <p
+                className="ds-text-small-2"
+                style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 4px' }}
+              >
+                {item.title}
+              </p>
+              <p
+                className="ds-text-xsmall-1"
+                style={{ color: 'var(--ds-color-text-secondary)', margin: 0 }}
+              >
+                {item.desc}
+              </p>
             </div>
           ))}
         </div>
@@ -246,22 +321,33 @@ function App() {
             'Icon color variants use --ds-color-icon-* tokens.',
           ].map((rule, i) => (
             <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-              <span style={{
-                flexShrink: 0,
-                width: 20, height: 20,
-                borderRadius: 'var(--ds-radius-full)',
-                background: 'var(--ds-color-brand-subtle)',
-                color: 'var(--ds-color-brand-text)',
-                fontSize: 11,
-                fontWeight: 600,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>{i + 1}</span>
-              <p className="ds-text-small-1" style={{ color: 'var(--ds-color-text-secondary)', margin: 0 }}>{rule}</p>
+              <span
+                style={{
+                  flexShrink: 0,
+                  width: 20,
+                  height: 20,
+                  borderRadius: 'var(--ds-radius-full)',
+                  background: 'var(--ds-color-brand-subtle)',
+                  color: 'var(--ds-color-brand-text)',
+                  fontSize: 11,
+                  fontWeight: 600,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {i + 1}
+              </span>
+              <p
+                className="ds-text-small-1"
+                style={{ color: 'var(--ds-color-text-secondary)', margin: 0 }}
+              >
+                {rule}
+              </p>
             </div>
           ))}
         </div>
       </Section>
-
     </div>
   ),
 };
