@@ -6,7 +6,6 @@ import {
   useInteractions,
   useTransitionStyles,
   FloatingArrow,
-  FloatingPortal,
   arrow,
   flip,
   shift,
@@ -58,7 +57,11 @@ export function Tooltip({
     open,
     onOpenChange: setOpen,
     placement,
-    strategy: 'fixed', // 'fixed' uses viewport coords directly — works correctly inside iframes/scroll containers
+    // 'fixed' uses viewport coords from getBoundingClientRect() directly —
+    // no scroll offset correction needed, works inside iframes and any scroll container.
+    // No FloatingPortal: portal can render into the wrong document when the
+    // component lives inside a Storybook iframe or a nested browsing context.
+    strategy: 'fixed',
     whileElementsMounted: autoUpdate,
     middleware,
   });
@@ -87,20 +90,18 @@ export function Tooltip({
         {children}
       </span>
       {isMounted && (
-        <FloatingPortal>
-          <div
-            ref={refs.setFloating} // eslint-disable-line react-hooks/refs
-            id={tooltipId}
-            role="tooltip"
-            className={`tooltip${title ? ' tooltip--has-title' : ''}`}
-            style={{ ...floatingStyles, ...transitionStyles }}
-            {...getFloatingProps()}
-          >
-            {title && <p className="tooltip__title">{title}</p>}
-            <p className="tooltip__content">{content}</p>
-            <FloatingArrow ref={arrowRef} context={context} className="tooltip__arrow" />
-          </div>
-        </FloatingPortal>
+        <div
+          ref={refs.setFloating} // eslint-disable-line react-hooks/refs
+          id={tooltipId}
+          role="tooltip"
+          className={`tooltip${title ? ' tooltip--has-title' : ''}`}
+          style={{ ...floatingStyles, ...transitionStyles }}
+          {...getFloatingProps()}
+        >
+          {title && <p className="tooltip__title">{title}</p>}
+          <p className="tooltip__content">{content}</p>
+          <FloatingArrow ref={arrowRef} context={context} className="tooltip__arrow" />
+        </div>
       )}
     </>
   );
