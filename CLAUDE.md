@@ -117,6 +117,7 @@ Before considering a new component done, verify:
 - [ ] HUG width verified by screenshot (not just set in code)
 - [ ] Loader/icon dependencies created before the component that uses them
 - [ ] **Structural check on absolute children**: overlay at x=0,y=0 fills component; loader/centered elements at `(compW-childW)/2`. Always verify programmatically — screenshot alone is not enough
+- [ ] **Overlay layer locked** — every `overlay` node must have `locked = true` so it doesn't block mouse selection of content layers beneath it
 - [ ] **Pre-build behaviour analysis done** (see section below) — no structural decisions before answering all behaviour questions
 
 ---
@@ -446,6 +447,27 @@ bubble.layoutSizingVertical   = 'HUG';
 - CSS `min-height` → `bubble.minHeight`
 
 Bind the value to the design variable when the token exists, not just set the raw number.
+
+---
+
+### 20. Overlay layer left unlocked, blocking content selection
+
+**What happened:** Every component variant had an `overlay` rectangle as the topmost absolutely-positioned layer. Because it was unlocked, clicking anywhere on the component in Figma selected the overlay instead of the text, icon, or other content beneath it — making it impossible to double-click into a text layer to edit it.
+
+**Why:** Created the overlay and never set `locked = true`.
+
+**Rule:** Every `overlay` node must be locked immediately after creation:
+```js
+overlay.locked = true;
+```
+
+This applies to any full-size transparent/semi-transparent layer used purely for hover/pressed visual effects — it must never intercept mouse events in the editor. Locking does not affect how the layer looks or how it behaves in prototypes.
+
+**Verification:** After building any component that uses an overlay, confirm with:
+```js
+const unlocked = compSet.findAll(n => n.name === 'overlay' && !n.locked);
+// must return []
+```
 
 ---
 
