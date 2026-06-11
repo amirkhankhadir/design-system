@@ -115,6 +115,54 @@ Before considering a new component done, verify:
 - [ ] HUG width verified by screenshot (not just set in code)
 - [ ] Loader/icon dependencies created before the component that uses them
 - [ ] **Structural check on absolute children**: overlay at x=0,y=0 fills component; loader/centered elements at `(compW-childW)/2`. Always verify programmatically — screenshot alone is not enough
+- [ ] **Pre-build behaviour analysis done** (see section below) — no structural decisions before answering all behaviour questions
+
+---
+
+### Pre-build behaviour analysis — required before writing any Figma component script
+
+Before writing a single line of `use_figma` code for a component, answer these questions:
+
+**1. What resizes, and in which direction?**
+- Which nodes grow when content changes? (bubble, card, list...)
+- Does it grow horizontally, vertically, or both?
+- Is there a maximum size? → set `maxWidth` / `maxHeight` bound to a token
+
+**2. What stays fixed while something else grows?**
+- An arrow/caret that must stay pinned to an edge
+- An icon that must stay at the center
+- A label that must not stretch
+→ These become `layoutPositioning = 'ABSOLUTE'` with `constraints` pinning to the right edge
+
+**3. How does text behave?**
+- Should it expand the container sideways? → `textAutoResize = 'WIDTH_AND_HEIGHT'`, `layoutSizingH = 'HUG'`
+- Should it wrap and grow the container downward? → `textAutoResize = 'HEIGHT'`, `layoutSizingH = 'FILL'`
+- Fixed size, clip overflow? → `textAutoResize = 'NONE'`
+
+**4. What is the layout direction of each container?**
+- Stacked vertically → `layoutMode = 'VERTICAL'`
+- Side by side → `layoutMode = 'HORIZONTAL'`
+- One floating element over another → outer frame with `layoutPositioning = 'ABSOLUTE'` on the floating child
+
+**5. Where does the padding live?**
+- Padding that belongs to the visual bubble → on the bubble frame
+- Padding that reserves space for an arrow/badge/badge overlay → on the wrapper component frame, on the arrow's side
+
+**6. What constraints does each absolutely-positioned child need?**
+- Arrow below a growing bubble → `constraints.vertical = 'MAX'` (stays at bottom edge)
+- Arrow above a growing bubble → `constraints.vertical = 'MIN'` (stays at top edge)
+- Arrow to the right of a growing bubble → `constraints.horizontal = 'MAX'`
+- Centered icon inside a growing frame → `constraints = { horizontal: 'CENTER', vertical: 'CENTER' }`
+
+**Template — write this out before coding any new component:**
+```
+Component: [layout direction] [HUG/FILL/FIXED] × [HUG/FILL/FIXED]
+  padding [side] = [value] — reserves space for [what]
+  └── [child name]: [in-flow / ABSOLUTE]
+        sizing: [HUG/FILL/FIXED] × [HUG/FILL/FIXED]
+        text: textAutoResize=[HEIGHT/WIDTH_AND_HEIGHT/NONE]
+        constraints (if ABSOLUTE): horizontal=[MIN/CENTER/MAX] vertical=[MIN/CENTER/MAX]
+```
 
 ---
 
