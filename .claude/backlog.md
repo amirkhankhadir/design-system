@@ -24,7 +24,7 @@ Visual before/after reference: `contrast-audit.html` at repo root.
 
 ---
 
-## B — Accessibility / Contrast documentation page in Storybook
+## ✅ B — Accessibility / Contrast documentation page in Storybook (done)
 
 Create `Accessibility.stories.tsx` under `title: 'Foundations'`.
 
