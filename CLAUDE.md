@@ -113,8 +113,11 @@ Then compare the output against what's rendered in `Colors.stories.tsx`. Every t
 
 **Every time you add or modify a color token, or create a new component, run a contrast check.**
 
+### Both themes — always
+**Every accessibility check must cover Light AND Dark themes.** A token that passes in Light may fail in Dark (and vice versa). Never audit only one mode.
+
 ### When tokens change
-- Any new or updated color in `brand-theme-semantics` → calculate contrast for all foreground/background pairs that use it
+- Any new or updated color in `brand-theme-semantics` → calculate contrast for all foreground/background pairs that use it, in **both** Light and Dark
 - Minimum ratios: **4.5:1** for text (normal size) · **3:1** for large text and UI components (icons, borders, indicators)
 - Disabled states are exempt (WCAG 1.4.3 exception)
 
@@ -133,9 +136,9 @@ function contrast(h1, h2) {
 ```
 
 ### When creating a new component
-- Check every text/background and icon/background pair used in the component
-- Document the ratios in the component's Storybook description
-- If a token fails → pick the nearest primitive that passes before shipping
+- Check every text/background and icon/background pair used in the component — in **both** Light and Dark
+- Document both ratios in the component's Storybook description
+- If a token fails in either theme → pick the nearest primitive that passes before shipping
 
 ### Contrast documentation
 Full audit with before/after illustrations: `contrast-audit.html` at repo root.
