@@ -8,7 +8,7 @@ const meta: Meta = {
     docs: {
       description: {
         component: `
-WCAG 2.1 AA compliance audit for all semantic color tokens.
+WCAG 2.1 AA compliance audit for all semantic color tokens — both Light and Dark themes.
 
 Thresholds: 4.5:1 for normal text · 3:1 for large text and UI components (icons, borders, indicators).
 Disabled states are exempt per WCAG 1.4.3.
@@ -104,25 +104,22 @@ function Req({ label, value }: { label: string; value: string }) {
 
 type BadgeKind = 'aaa' | 'aa' | 'aa-ui' | 'exempt';
 
+const BADGE_STYLES: Record<BadgeKind, { bg: string; color: string; label: string }> = {
+  aaa: { bg: '#dbfcee', color: '#137149', label: 'AAA' },
+  aa: { bg: '#e6f5fd', color: '#004063', label: 'AA' },
+  'aa-ui': { bg: '#e6f5fd', color: '#004063', label: 'AA · UI' },
+  exempt: { bg: '#f1f1f1', color: '#737373', label: 'Exempt' },
+};
+
 function Badge({ kind }: { kind: BadgeKind }) {
-  const styles: Record<BadgeKind, { bg: string; color: string; label: string }> = {
-    aaa: { bg: '#dbfcee', color: '#137149', label: 'AAA' },
-    aa: { bg: '#e6f5fd', color: '#004063', label: 'AA' },
-    'aa-ui': { bg: '#e6f5fd', color: '#004063', label: 'AA · UI' },
-    exempt: {
-      bg: 'var(--ds-color-background-muted)',
-      color: 'var(--ds-color-text-tertiary)',
-      label: 'Exempt',
-    },
-  };
-  const s = styles[kind];
+  const s = BADGE_STYLES[kind];
   return (
     <span
       className="ds-text-xsmall-2"
       style={{
         background: s.bg,
         color: s.color,
-        padding: '2px 8px',
+        padding: '2px 7px',
         borderRadius: 4,
         whiteSpace: 'nowrap',
       }}
@@ -137,17 +134,85 @@ function Badge({ kind }: { kind: BadgeKind }) {
 interface ContrastRowProps {
   token: string;
   cssVar: string;
-  fg: string;
-  bg: string;
-  ratio: string;
-  badge: BadgeKind;
+  /** light-mode foreground hex */
+  fgLight: string;
+  /** dark-mode foreground hex */
+  fgDark: string;
+  /** light-mode background hex (defaults to #ffffff) */
+  bgLight?: string;
+  /** dark-mode background hex (defaults to #161616) */
+  bgDark?: string;
+  ratioLight: string;
+  ratioDark: string;
+  badgeLight: BadgeKind;
+  badgeDark: BadgeKind;
   example: React.ReactNode;
   note?: string;
 }
 
-const COL = '220px 40px 80px 1fr 80px';
+// token | swatch×2 | light ratio | dark ratio | example
+const COL = '200px 68px 110px 110px 1fr';
 
-function ContrastRow({ token, cssVar, fg, bg, ratio, badge, example, note }: ContrastRowProps) {
+function Swatch({ hex, label }: { hex: string; label: string }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+      <div
+        style={{
+          width: 28,
+          height: 28,
+          borderRadius: 6,
+          background: hex,
+          border: '1px solid rgba(0,0,0,0.12)',
+        }}
+      />
+      <span
+        className="ds-text-xsmall-1"
+        style={{ color: 'var(--ds-color-text-tertiary)', fontSize: 9 }}
+      >
+        {label}
+      </span>
+    </div>
+  );
+}
+
+function RatioCell({ ratio, badge, bg }: { ratio: string; badge: BadgeKind; bg: string }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <p className="ds-text-small-2" style={{ color: 'var(--ds-color-text-primary)', margin: 0 }}>
+        {ratio}:1
+      </p>
+      <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+        <Badge kind={badge} />
+        <div
+          style={{
+            width: 12,
+            height: 12,
+            borderRadius: 2,
+            background: bg,
+            border: '1px solid rgba(0,0,0,0.12)',
+            flexShrink: 0,
+          }}
+          title={`on ${bg}`}
+        />
+      </div>
+    </div>
+  );
+}
+
+function ContrastRow({
+  token,
+  cssVar,
+  fgLight,
+  fgDark,
+  bgLight = '#ffffff',
+  bgDark = '#161616',
+  ratioLight,
+  ratioDark,
+  badgeLight,
+  badgeDark,
+  example,
+  note,
+}: ContrastRowProps) {
   return (
     <div
       style={{
@@ -159,7 +224,7 @@ function ContrastRow({ token, cssVar, fg, bg, ratio, badge, example, note }: Con
         borderBottom: '1px solid var(--ds-color-border-subtle)',
       }}
     >
-      {/* Token name + css var */}
+      {/* Token */}
       <div>
         <p
           className="ds-text-small-2"
@@ -187,38 +252,28 @@ function ContrastRow({ token, cssVar, fg, bg, ratio, badge, example, note }: Con
         )}
       </div>
 
-      {/* Swatch */}
+      {/* Swatches */}
+      <div style={{ display: 'flex', gap: 6 }}>
+        <Swatch hex={fgLight} label="Light" />
+        <Swatch hex={fgDark} label="Dark" />
+      </div>
+
+      {/* Light ratio */}
+      <RatioCell ratio={ratioLight} badge={badgeLight} bg={bgLight} />
+
+      {/* Dark ratio */}
+      <RatioCell ratio={ratioDark} badge={badgeDark} bg={bgDark} />
+
+      {/* Example — uses CSS vars, adapts to theme toggle */}
       <div
         style={{
-          width: 32,
-          height: 32,
-          borderRadius: 6,
-          background: fg,
-          border: '1px solid var(--ds-color-border-subtle)',
-          flexShrink: 0,
-        }}
-      />
-
-      {/* Ratio */}
-      <p className="ds-text-small-2" style={{ color: 'var(--ds-color-text-primary)', margin: 0 }}>
-        {ratio}:1
-      </p>
-
-      {/* Example */}
-      <div
-        style={{
-          background: bg,
+          background: 'var(--ds-color-background-subtle)',
           padding: '6px 10px',
           borderRadius: 6,
           border: '1px solid var(--ds-color-border-subtle)',
         }}
       >
         {example}
-      </div>
-
-      {/* Badge */}
-      <div>
-        <Badge kind={badge} />
       </div>
     </div>
   );
@@ -235,7 +290,7 @@ function TableHeader() {
         borderBottom: '1px solid var(--ds-color-border-subtle)',
       }}
     >
-      {['Token', 'Color', 'Ratio', 'Example', 'Status'].map(h => (
+      {['Token', 'Color', 'Light', 'Dark', 'Example'].map(h => (
         <p
           key={h}
           className="ds-text-xsmall-2"
@@ -258,10 +313,10 @@ function TableHeader() {
 export const Accessibility: Story = {
   name: 'Accessibility',
   render: () => (
-    <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)', maxWidth: 860 }}>
+    <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)', maxWidth: 900 }}>
       <PageTitle>Accessibility</PageTitle>
       <PageSubtitle>
-        WCAG 2.1 AA contrast audit — all semantic color tokens against their intended backgrounds.
+        WCAG 2.1 AA contrast audit — all semantic color tokens, Light and Dark themes.
       </PageSubtitle>
 
       {/* Requirements */}
@@ -275,17 +330,19 @@ export const Accessibility: Story = {
 
       <Divider />
 
-      {/* Text tokens */}
+      {/* Text */}
       <SectionLabel>Text — on background-default</SectionLabel>
       <div style={{ marginBottom: 40 }}>
         <TableHeader />
         <ContrastRow
           token="text-primary"
           cssVar="--ds-color-text-primary"
-          fg="#2a2a2a"
-          bg="#ffffff"
-          ratio="14.35"
-          badge="aaa"
+          fgLight="#2a2a2a"
+          fgDark="#f8f8f8"
+          ratioLight="14.35"
+          ratioDark="17.04"
+          badgeLight="aaa"
+          badgeDark="aaa"
           example={
             <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-text-primary)' }}>
               Page title
@@ -295,10 +352,12 @@ export const Accessibility: Story = {
         <ContrastRow
           token="text-secondary"
           cssVar="--ds-color-text-secondary"
-          fg="#5c5c5c"
-          bg="#ffffff"
-          ratio="6.69"
-          badge="aa"
+          fgLight="#5c5c5c"
+          fgDark="#d0d0d0"
+          ratioLight="6.69"
+          ratioDark="11.73"
+          badgeLight="aa"
+          badgeDark="aaa"
           example={
             <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-text-secondary)' }}>
               Supporting text
@@ -308,10 +367,12 @@ export const Accessibility: Story = {
         <ContrastRow
           token="text-tertiary"
           cssVar="--ds-color-text-tertiary"
-          fg="#737373"
-          bg="#ffffff"
-          ratio="4.74"
-          badge="aa"
+          fgLight="#737373"
+          fgDark="#a2a2a2"
+          ratioLight="4.74"
+          ratioDark="7.09"
+          badgeLight="aa"
+          badgeDark="aaa"
           example={
             <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-text-tertiary)' }}>
               Last updated 3 days ago
@@ -321,10 +382,12 @@ export const Accessibility: Story = {
         <ContrastRow
           token="text-disabled"
           cssVar="--ds-color-text-disabled"
-          fg="#b9b9b9"
-          bg="#ffffff"
-          ratio="1.96"
-          badge="exempt"
+          fgLight="#b9b9b9"
+          fgDark="#737373"
+          ratioLight="1.96"
+          ratioDark="3.82"
+          badgeLight="exempt"
+          badgeDark="exempt"
           example={
             <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-text-disabled)' }}>
               Disabled label
@@ -334,33 +397,41 @@ export const Accessibility: Story = {
         />
       </div>
 
-      {/* Text on colored backgrounds */}
+      {/* Text on colored bg */}
       <SectionLabel>Text — on colored backgrounds</SectionLabel>
       <div style={{ marginBottom: 40 }}>
         <TableHeader />
         <ContrastRow
           token="text-on-brand"
           cssVar="--ds-color-text-on-brand"
-          fg="#ffffff"
-          bg="#007bbd"
-          ratio="4.60"
-          badge="aa"
+          fgLight="#ffffff"
+          fgDark="#ffffff"
+          bgLight="#007bbd"
+          bgDark="#007bbd"
+          ratioLight="4.60"
+          ratioDark="4.60"
+          badgeLight="aa"
+          badgeDark="aa"
           example={
-            <span className="ds-text-medium-2" style={{ color: '#ffffff' }}>
+            <span className="ds-text-medium-2" style={{ color: 'var(--ds-color-text-on-brand)' }}>
               Save changes
             </span>
           }
-          note="On brand-default background"
+          note="White text on brand-default (#007bbd)"
         />
         <ContrastRow
           token="text-inverse"
           cssVar="--ds-color-text-inverse"
-          fg="#ffffff"
-          bg="#2a2a2a"
-          ratio="14.35"
-          badge="aaa"
+          fgLight="#ffffff"
+          fgDark="#2a2a2a"
+          bgLight="#2a2a2a"
+          bgDark="#f8f8f8"
+          ratioLight="14.35"
+          ratioDark="13.52"
+          badgeLight="aaa"
+          badgeDark="aaa"
           example={
-            <span className="ds-text-medium-1" style={{ color: '#ffffff' }}>
+            <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-text-inverse)' }}>
               Tooltip content
             </span>
           }
@@ -377,10 +448,12 @@ export const Accessibility: Story = {
         <ContrastRow
           token="icon-default"
           cssVar="--ds-color-icon-default"
-          fg="#454545"
-          bg="#ffffff"
-          ratio="9.59"
-          badge="aaa"
+          fgLight="#454545"
+          fgDark="#f1f1f1"
+          ratioLight="9.59"
+          ratioDark="16.02"
+          badgeLight="aaa"
+          badgeDark="aaa"
           example={
             <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-icon-default)' }}>
               ● Primary icon
@@ -390,10 +463,12 @@ export const Accessibility: Story = {
         <ContrastRow
           token="icon-secondary"
           cssVar="--ds-color-icon-secondary"
-          fg="#737373"
-          bg="#ffffff"
-          ratio="4.74"
-          badge="aa"
+          fgLight="#737373"
+          fgDark="#b9b9b9"
+          ratioLight="4.74"
+          ratioDark="9.22"
+          badgeLight="aa"
+          badgeDark="aaa"
           example={
             <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-icon-secondary)' }}>
               ● Secondary icon
@@ -403,10 +478,12 @@ export const Accessibility: Story = {
         <ContrastRow
           token="icon-disabled"
           cssVar="--ds-color-icon-disabled"
-          fg="#b9b9b9"
-          bg="#ffffff"
-          ratio="1.96"
-          badge="exempt"
+          fgLight="#b9b9b9"
+          fgDark="#737373"
+          ratioLight="1.96"
+          ratioDark="3.82"
+          badgeLight="exempt"
+          badgeDark="exempt"
           example={
             <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-icon-disabled)' }}>
               ● Disabled icon
@@ -425,10 +502,12 @@ export const Accessibility: Story = {
         <ContrastRow
           token="brand-default / brand-text"
           cssVar="--ds-color-brand-default"
-          fg="#007bbd"
-          bg="#ffffff"
-          ratio="4.60"
-          badge="aa"
+          fgLight="#007bbd"
+          fgDark="#007bbd"
+          ratioLight="4.60"
+          ratioDark="3.94"
+          badgeLight="aa"
+          badgeDark="aa-ui"
           example={
             <span
               className="ds-text-medium-2"
@@ -437,21 +516,25 @@ export const Accessibility: Story = {
               View details →
             </span>
           }
+          note="Dark: 3.94 passes UI 3:1 (button shape on dark bg)"
         />
         <ContrastRow
           token="border-focus"
           cssVar="--ds-color-border-focus"
-          fg="#039be6"
-          bg="#ffffff"
-          ratio="3.07"
-          badge="aa-ui"
+          fgLight="#039be6"
+          fgDark="#35afeb"
+          ratioLight="3.07"
+          ratioDark="7.31"
+          badgeLight="aa-ui"
+          badgeDark="aaa"
           example={
             <div
               style={{
                 display: 'inline-block',
                 padding: '4px 10px',
                 borderRadius: 6,
-                boxShadow: '0 0 0 2px #fff, 0 0 0 4px #039be6',
+                boxShadow:
+                  '0 0 0 2px var(--ds-color-background-default), 0 0 0 4px var(--ds-color-border-focus)',
               }}
             >
               <span className="ds-text-medium-2" style={{ color: 'var(--ds-color-text-primary)' }}>
@@ -459,23 +542,25 @@ export const Accessibility: Story = {
               </span>
             </div>
           }
-          note="Focus ring — UI component threshold applies"
+          note="Focus ring — UI component threshold (3:1) applies"
         />
       </div>
 
       <Divider />
 
-      {/* Status colors */}
+      {/* Status */}
       <SectionLabel>Status — on background-default</SectionLabel>
       <div style={{ marginBottom: 40 }}>
         <TableHeader />
         <ContrastRow
           token="status-success-default"
           cssVar="--ds-color-status-success-default"
-          fg="#1e9863"
-          bg="#ffffff"
-          ratio="3.67"
-          badge="aa-ui"
+          fgLight="#1e9863"
+          fgDark="#47d094"
+          ratioLight="3.67"
+          ratioDark="9.24"
+          badgeLight="aa-ui"
+          badgeDark="aaa"
           example={
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
               <span
@@ -499,10 +584,12 @@ export const Accessibility: Story = {
         <ContrastRow
           token="status-warning-default"
           cssVar="--ds-color-status-warning-default"
-          fg="#c8760b"
-          bg="#ffffff"
-          ratio="3.47"
-          badge="aa-ui"
+          fgLight="#c8760b"
+          fgDark="#ffa530"
+          ratioLight="3.47"
+          ratioDark="9.20"
+          badgeLight="aa-ui"
+          badgeDark="aaa"
           example={
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
               <span
@@ -526,10 +613,12 @@ export const Accessibility: Story = {
         <ContrastRow
           token="status-error-default"
           cssVar="--ds-color-status-error-default"
-          fg="#d6331f"
-          bg="#ffffff"
-          ratio="4.82"
-          badge="aa"
+          fgLight="#d6331f"
+          fgDark="#e94e3a"
+          ratioLight="4.82"
+          ratioDark="4.84"
+          badgeLight="aa"
+          badgeDark="aa"
           example={
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
               <span
@@ -553,10 +642,12 @@ export const Accessibility: Story = {
         <ContrastRow
           token="status-info-default"
           cssVar="--ds-color-status-info-default"
-          fg="#376be5"
-          bg="#ffffff"
-          ratio="4.78"
-          badge="aa"
+          fgLight="#376be5"
+          fgDark="#497cf6"
+          ratioLight="4.78"
+          ratioDark="4.74"
+          badgeLight="aa"
+          badgeDark="aa"
           example={
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
               <span
