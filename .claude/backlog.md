@@ -35,3 +35,16 @@ Content:
 - Note on disabled-state exemption
 
 Replaces `contrast-audit.html` as the canonical reference. Remove `contrast-audit.html` when done.
+
+---
+
+## C — Dark mode: Tooltip и IconButton
+
+Проверить почему Tooltip и IconButton некорректно отображаются в Storybook в тёмной теме.
+
+**Scope:**
+1. Открыть `Components/Tooltip` и `Components/Buttons/IconButton` в dark mode
+2. Зафиксировать все визуальные проблемы (скриншоты)
+3. Найти причину — токены, CSS specificity, `DARK_OVERRIDE` в preview.tsx, или что-то в компонентах
+4. Починить
+5. Задокументировать выводы в `.claude/mistakes.md` — паттерн ошибки и как избегать в будущих компонентах
