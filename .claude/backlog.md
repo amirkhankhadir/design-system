@@ -4,7 +4,7 @@ Items agreed but not yet started. Add new items here, mark done with ✅.
 
 ---
 
-## A — Contrast token fixes
+## ✅ A — Contrast token fixes (done)
 
 Apply the following semantic token changes (all values from existing primitives).
 Visual before/after reference: `contrast-audit.html` at repo root.

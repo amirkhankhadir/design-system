@@ -18,7 +18,7 @@
     "text": {
       "primary":   { "Light": "{color.neutral.5}",     "Dark": "{color.neutral.90}" },
       "secondary":  { "Light": "{color.neutral.20}",    "Dark": "{color.neutral.70}" },
-      "tertiary":   { "Light": "{color.neutral.40}",    "Dark": "{color.neutral.50}" },
+      "tertiary":   { "Light": "{color.neutral.30}",    "Dark": "{color.neutral.50}" },
       "disabled":   { "Light": "{color.neutral.60}",    "Dark": "{color.neutral.30}" },
       "inverse":      { "Light": "{color.base.white}",    "Dark": "{color.neutral.5}" },
       "on-brand":     { "Light": "{color.base.white}",    "Dark": "{color.base.white}" },
@@ -41,22 +41,22 @@
       "focus":   { "Light": "{color.primary.40}",       "Dark": "{color.primary.50}" }
     },
     "brand": {
-      "default": { "Light": "{color.primary.40}", "Dark": "{color.primary.50}" },
+      "default": { "Light": "{color.primary.20}", "Dark": "{color.primary.20}" },
       "subtle":  { "Light": "{color.primary.90}", "Dark": "{color.primary.10}" },
-      "text":    { "Light": "{color.primary.40}", "Dark": "{color.primary.50}" }
+      "text":    { "Light": "{color.primary.20}", "Dark": "{color.primary.20}" }
     },
     "status": {
       "success": {
-        "default": { "Light": "{color.success.30}", "Dark": "{color.success.40}" },
+        "default": { "Light": "{color.success.20}", "Dark": "{color.success.40}" },
         "subtle":  { "Light": "{color.success.80}", "Dark": "{color.success.10}" },
         "text":    { "Light": "{color.success.10}", "Dark": "{color.success.60}" },
-        "border":  { "Light": "{color.success.30}", "Dark": "{color.success.40}" }
+        "border":  { "Light": "{color.success.20}", "Dark": "{color.success.40}" }
       },
       "warning": {
-        "default": { "Light": "{color.warning.50}", "Dark": "{color.warning.50}" },
+        "default": { "Light": "{color.warning.30}", "Dark": "{color.warning.50}" },
         "subtle":  { "Light": "{color.warning.80}", "Dark": "{color.warning.20}" },
         "text":    { "Light": "{color.warning.10}", "Dark": "{color.warning.60}" },
-        "border":  { "Light": "{color.warning.50}", "Dark": "{color.warning.50}" }
+        "border":  { "Light": "{color.warning.30}", "Dark": "{color.warning.50}" }
       },
       "error": {
         "default": { "Light": "{color.danger.30}", "Dark": "{color.danger.40}" },
