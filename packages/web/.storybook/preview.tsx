@@ -37,7 +37,7 @@ const DARK_OVERRIDE = `
     color: var(--ds-color-text-secondary) !important;
   }
   .docblock-argstable input, .docblock-argstable select,
-  .docblock-argstable button {
+  .docblock-argstable textarea, .docblock-argstable button {
     background: var(--ds-color-background-muted) !important;
     color: var(--ds-color-text-primary) !important;
     border-color: var(--ds-color-border-default) !important;
@@ -54,6 +54,24 @@ const DARK_OVERRIDE = `
   /* "STORIES" section label — PascalCase only (CSS modules), won't match component kebab-case */
   [class*="GroupTitle"] {
     color: var(--ds-color-text-secondary) !important;
+  }
+
+  /* ── Inline code (e.g. prop values in descriptions) ───────── */
+  .sbdocs code, .sbdocs-content code,
+  [class*="InlineCode"], [class*="code-block"],
+  .docblock-source {
+    background: var(--ds-color-background-muted) !important;
+    color: var(--ds-color-text-primary) !important;
+    border-color: var(--ds-color-border-subtle) !important;
+  }
+
+  /* ── Body text in docs ─────────────────────────────────────── */
+  .sbdocs p, .sbdocs li, .sbdocs span,
+  .sbdocs-content p, .sbdocs-content li,
+  [class*="DocsContent"] p, [class*="DocsContent"] li,
+  [class*="Description"] p, [class*="Description"] li,
+  [class*="Markdown"] p, [class*="Markdown"] li {
+    color: var(--ds-color-text-primary) !important;
   }
 
   /* ── Toolbar ───────────────────────────────────────────────── */

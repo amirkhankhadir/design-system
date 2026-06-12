@@ -138,18 +138,18 @@ function buildTextStyleCSS() {
 
 // ─── Build elevation CSS classes ──────────────────────────────────────────────
 
-function buildElevationCSS() {
+function buildElevationCSS(mode) {
   const lines = ['\n/* ── Elevation ──────────────────────────────────────────────────── */'];
   const elevations = typography['effect-styles']?.elevation ?? {};
 
-  // Shadow colors live in semantics → resolve via primitives
+  // Shadow colors live in semantics → resolve via primitives for the given mode
   const semFlat = flatten(semantics.color ?? {});
   function resolveSem(alias) {
     const key = alias.slice(1, -1).replace(/^color\./, '');
     const semVal = semFlat[key];
     if (!semVal) return alias;
-    const lightVal = typeof semVal === 'object' && 'Light' in semVal ? semVal['Light'] : semVal;
-    return resolvePrim(lightVal);
+    const val = typeof semVal === 'object' && mode in semVal ? semVal[mode] : semVal;
+    return resolvePrim(val);
   }
 
   const colorMap = {
@@ -265,11 +265,12 @@ mkdirSync('dist/web',     { recursive: true });
 mkdirSync('dist/ios',     { recursive: true });
 mkdirSync('dist/android', { recursive: true });
 
-const textStyleCSS = buildTextStyleCSS();
-const elevationCSS = buildElevationCSS();
+const textStyleCSS    = buildTextStyleCSS();
+const elevationLightCSS = buildElevationCSS('Light');
+const elevationDarkCSS  = buildElevationCSS('Dark');
 
-writeFileSync('dist/web/tokens.light.css',     buildCSS('Light') + textStyleCSS + elevationCSS);
-writeFileSync('dist/web/tokens.dark.css',      buildCSS('Dark')  + textStyleCSS + elevationCSS);
+writeFileSync('dist/web/tokens.light.css',     buildCSS('Light') + textStyleCSS + elevationLightCSS);
+writeFileSync('dist/web/tokens.dark.css',      buildCSS('Dark')  + textStyleCSS + elevationDarkCSS);
 writeFileSync('dist/ios/DesignTokens.swift',   buildSwift());
 writeFileSync('dist/android/colors.xml',       buildAndroidColors());
 writeFileSync('dist/android/dimens.xml',       buildAndroidDimens());
