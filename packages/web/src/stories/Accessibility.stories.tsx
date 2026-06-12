@@ -10,7 +10,7 @@ const meta: Meta = {
         component: `
 WCAG 2.1 AA compliance audit for all semantic color tokens — both Light and Dark themes.
 
-Thresholds: 4.5:1 for normal text · 3:1 for large text and UI components (icons, borders, indicators).
+Thresholds: 4.5:1 for normal text · 3:1 for large text, UI components and icons.
 Disabled states are exempt per WCAG 1.4.3.
         `.trim(),
       },
@@ -20,107 +20,29 @@ Disabled states are exempt per WCAG 1.4.3.
 export default meta;
 type Story = StoryObj;
 
-// ── Shared layout ──────────────────────────────────────────
-
-function PageTitle({ children }: { children: React.ReactNode }) {
-  return (
-    <h1
-      className="ds-headline-large-2"
-      style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 8px' }}
-    >
-      {children}
-    </h1>
-  );
-}
-
-function PageSubtitle({ children }: { children: React.ReactNode }) {
-  return (
-    <p
-      className="ds-text-large-1"
-      style={{ color: 'var(--ds-color-text-secondary)', margin: '0 0 48px' }}
-    >
-      {children}
-    </p>
-  );
-}
-
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <p
-      className="ds-text-small-2"
-      style={{
-        color: 'var(--ds-color-text-tertiary)',
-        letterSpacing: '0.06em',
-        textTransform: 'uppercase',
-        margin: '0 0 12px',
-      }}
-    >
-      {children}
-    </p>
-  );
-}
-
-function Divider() {
-  return (
-    <div style={{ borderTop: '1px solid var(--ds-color-border-subtle)', margin: '8px 0 40px' }} />
-  );
-}
-
-// ── Requirement chips ──────────────────────────────────────
-
-function Req({ label, value }: { label: string; value: string }) {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 4,
-        padding: '12px 16px',
-        borderRadius: 10,
-        background: 'var(--ds-color-background-muted)',
-        border: '1px solid var(--ds-color-border-subtle)',
-        minWidth: 140,
-      }}
-    >
-      <p
-        className="ds-text-xsmall-2"
-        style={{
-          color: 'var(--ds-color-text-tertiary)',
-          margin: 0,
-          textTransform: 'uppercase',
-          letterSpacing: '0.06em',
-        }}
-      >
-        {label}
-      </p>
-      <p className="ds-text-large-2" style={{ color: 'var(--ds-color-text-primary)', margin: 0 }}>
-        {value}
-      </p>
-    </div>
-  );
-}
-
-// ── Badge ──────────────────────────────────────────────────
+// ── Badge ─────────────────────────────────────────────────────
 
 type BadgeKind = 'aaa' | 'aa' | 'aa-ui' | 'exempt';
 
-const BADGE_STYLES: Record<BadgeKind, { bg: string; color: string; label: string }> = {
-  aaa: { bg: '#dbfcee', color: '#137149', label: 'AAA' },
-  aa: { bg: '#e6f5fd', color: '#004063', label: 'AA' },
-  'aa-ui': { bg: '#e6f5fd', color: '#004063', label: 'AA · UI' },
-  exempt: { bg: '#f1f1f1', color: '#737373', label: 'Exempt' },
+const BADGE: Record<BadgeKind, { bg: string; color: string; label: string }> = {
+  aaa: { bg: '#dcfce7', color: '#166534', label: 'AAA' },
+  aa: { bg: '#dbeafe', color: '#1e40af', label: 'AA' },
+  'aa-ui': { bg: '#e0f2fe', color: '#0369a1', label: 'AA · UI' },
+  exempt: { bg: '#f4f4f5', color: '#71717a', label: 'Exempt' },
 };
 
 function Badge({ kind }: { kind: BadgeKind }) {
-  const s = BADGE_STYLES[kind];
+  const s = BADGE[kind];
   return (
     <span
-      className="ds-text-xsmall-2"
       style={{
-        background: s.bg,
-        color: s.color,
+        display: 'inline-block',
+        fontSize: 11,
+        fontWeight: 700,
         padding: '2px 7px',
         borderRadius: 4,
+        background: s.bg,
+        color: s.color,
         whiteSpace: 'nowrap',
       }}
     >
@@ -129,77 +51,84 @@ function Badge({ kind }: { kind: BadgeKind }) {
   );
 }
 
-// ── Contrast row ───────────────────────────────────────────
+// ── Dot icon (neutral, no semantic meaning) ───────────────────
 
-interface ContrastRowProps {
+function Dot({ color }: { color: string }) {
+  return (
+    <span
+      style={{
+        display: 'inline-block',
+        width: 12,
+        height: 12,
+        borderRadius: '50%',
+        background: color,
+        flexShrink: 0,
+      }}
+    />
+  );
+}
+
+// ── Theme preview (dot + text on real bg) ─────────────────────
+
+function ThemePreview({
+  fg,
+  bg,
+  ratio,
+  badge,
+}: {
+  fg: string;
+  bg: string;
+  ratio: string;
+  badge: BadgeKind;
+}) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1 }}>
+      <div
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 5,
+          padding: '4px 10px',
+          borderRadius: 6,
+          background: bg,
+          minWidth: 110,
+        }}
+      >
+        <Dot color={fg} />
+        <span style={{ fontSize: 12, color: fg }}>Sample text</span>
+      </div>
+      <span
+        style={{
+          fontSize: 15,
+          fontWeight: 700,
+          color: 'var(--ds-color-text-primary)',
+          minWidth: 42,
+        }}
+      >
+        {ratio}
+      </span>
+      <Badge kind={badge} />
+    </div>
+  );
+}
+
+// ── Checklist row ─────────────────────────────────────────────
+
+interface RowProps {
   token: string;
   cssVar: string;
-  /** light-mode foreground hex */
   fgLight: string;
-  /** dark-mode foreground hex */
   fgDark: string;
-  /** light-mode background hex (defaults to #ffffff) */
   bgLight?: string;
-  /** dark-mode background hex (defaults to #161616) */
   bgDark?: string;
   ratioLight: string;
   ratioDark: string;
   badgeLight: BadgeKind;
   badgeDark: BadgeKind;
-  example: React.ReactNode;
   note?: string;
 }
 
-// token | swatch×2 | light ratio | dark ratio | example
-const COL = '200px 68px 110px 110px 1fr';
-
-function Swatch({ hex, label }: { hex: string; label: string }) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-      <div
-        style={{
-          width: 28,
-          height: 28,
-          borderRadius: 6,
-          background: hex,
-          border: '1px solid rgba(0,0,0,0.12)',
-        }}
-      />
-      <span
-        className="ds-text-xsmall-1"
-        style={{ color: 'var(--ds-color-text-tertiary)', fontSize: 9 }}
-      >
-        {label}
-      </span>
-    </div>
-  );
-}
-
-function RatioCell({ ratio, badge, bg }: { ratio: string; badge: BadgeKind; bg: string }) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      <p className="ds-text-small-2" style={{ color: 'var(--ds-color-text-primary)', margin: 0 }}>
-        {ratio}:1
-      </p>
-      <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-        <Badge kind={badge} />
-        <div
-          style={{
-            width: 12,
-            height: 12,
-            borderRadius: 2,
-            background: bg,
-            border: '1px solid rgba(0,0,0,0.12)',
-            flexShrink: 0,
-          }}
-          title={`on ${bg}`}
-        />
-      </div>
-    </div>
-  );
-}
-
-function ContrastRow({
+function Row({
   token,
   cssVar,
   fgLight,
@@ -210,38 +139,35 @@ function ContrastRow({
   ratioDark,
   badgeLight,
   badgeDark,
-  example,
   note,
-}: ContrastRowProps) {
+}: RowProps) {
   return (
     <div
       style={{
-        display: 'grid',
-        gridTemplateColumns: COL,
+        display: 'flex',
         alignItems: 'center',
-        gap: 16,
-        padding: '10px 0',
+        gap: 0,
+        padding: '8px 0',
         borderBottom: '1px solid var(--ds-color-border-subtle)',
       }}
     >
       {/* Token */}
-      <div>
+      <div style={{ width: 200, flexShrink: 0, paddingRight: 16 }}>
         <p
-          className="ds-text-small-2"
-          style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 2px' }}
+          style={{
+            fontSize: 12,
+            fontWeight: 600,
+            color: 'var(--ds-color-text-primary)',
+            margin: '0 0 1px',
+          }}
         >
           {token}
         </p>
-        <p
-          className="ds-text-xsmall-1"
-          style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}
-        >
-          {cssVar}
-        </p>
+        <p style={{ fontSize: 10, color: 'var(--ds-color-text-tertiary)', margin: 0 }}>{cssVar}</p>
         {note && (
           <p
-            className="ds-text-xsmall-1"
             style={{
+              fontSize: 10,
               color: 'var(--ds-color-text-tertiary)',
               margin: '2px 0 0',
               fontStyle: 'italic',
@@ -252,89 +178,162 @@ function ContrastRow({
         )}
       </div>
 
-      {/* Swatches */}
-      <div style={{ display: 'flex', gap: 6 }}>
-        <Swatch hex={fgLight} label="Light" />
-        <Swatch hex={fgDark} label="Dark" />
-      </div>
+      {/* Light */}
+      <ThemePreview fg={fgLight} bg={bgLight} ratio={ratioLight} badge={badgeLight} />
 
-      {/* Light ratio */}
-      <RatioCell ratio={ratioLight} badge={badgeLight} bg={bgLight} />
-
-      {/* Dark ratio */}
-      <RatioCell ratio={ratioDark} badge={badgeDark} bg={bgDark} />
-
-      {/* Example — uses CSS vars, adapts to theme toggle */}
+      {/* Separator */}
       <div
         style={{
-          background: 'var(--ds-color-background-subtle)',
-          padding: '6px 10px',
-          borderRadius: 6,
-          border: '1px solid var(--ds-color-border-subtle)',
+          width: 1,
+          height: 28,
+          background: 'var(--ds-color-border-subtle)',
+          flexShrink: 0,
+          margin: '0 16px',
         }}
-      >
-        {example}
-      </div>
+      />
+
+      {/* Dark */}
+      <ThemePreview fg={fgDark} bg={bgDark} ratio={ratioDark} badge={badgeDark} />
     </div>
   );
 }
 
-function TableHeader() {
+// ── Section ───────────────────────────────────────────────────
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div style={{ marginBottom: 36 }}>
+      <p
+        style={{
+          fontSize: 10,
+          fontWeight: 700,
+          letterSpacing: '0.07em',
+          textTransform: 'uppercase',
+          color: 'var(--ds-color-text-tertiary)',
+          margin: '0 0 4px',
+        }}
+      >
+        {title}
+      </p>
+      {/* Column headers */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 0,
+          paddingBottom: 6,
+          borderBottom: '1px solid var(--ds-color-border-subtle)',
+        }}
+      >
+        <div style={{ width: 200, flexShrink: 0 }} />
+        <p
+          style={{
+            flex: 1,
+            fontSize: 10,
+            fontWeight: 600,
+            color: 'var(--ds-color-text-tertiary)',
+            margin: 0,
+            letterSpacing: '0.05em',
+          }}
+        >
+          ☀ Light
+        </p>
+        <div style={{ width: 1, margin: '0 16px' }} />
+        <p
+          style={{
+            flex: 1,
+            fontSize: 10,
+            fontWeight: 600,
+            color: 'var(--ds-color-text-tertiary)',
+            margin: 0,
+            letterSpacing: '0.05em',
+          }}
+        >
+          ◗ Dark
+        </p>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// ── Req chip ──────────────────────────────────────────────────
+
+function Req({ label, value }: { label: string; value: string }) {
   return (
     <div
       style={{
-        display: 'grid',
-        gridTemplateColumns: COL,
-        gap: 16,
-        paddingBottom: 8,
-        borderBottom: '1px solid var(--ds-color-border-subtle)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 4,
+        padding: '10px 14px',
+        borderRadius: 8,
+        background: 'var(--ds-color-background-muted)',
+        border: '1px solid var(--ds-color-border-subtle)',
+        minWidth: 130,
       }}
     >
-      {['Token', 'Color', 'Light', 'Dark', 'Example'].map(h => (
-        <p
-          key={h}
-          className="ds-text-xsmall-2"
-          style={{
-            color: 'var(--ds-color-text-tertiary)',
-            margin: 0,
-            textTransform: 'uppercase',
-            letterSpacing: '0.06em',
-          }}
-        >
-          {h}
-        </p>
-      ))}
+      <p
+        style={{
+          fontSize: 10,
+          fontWeight: 700,
+          color: 'var(--ds-color-text-tertiary)',
+          margin: 0,
+          textTransform: 'uppercase',
+          letterSpacing: '0.06em',
+        }}
+      >
+        {label}
+      </p>
+      <p
+        style={{ fontSize: 16, fontWeight: 700, color: 'var(--ds-color-text-primary)', margin: 0 }}
+      >
+        {value}
+      </p>
     </div>
   );
 }
 
-// ── Story ──────────────────────────────────────────────────
+// ── Story ─────────────────────────────────────────────────────
 
 export const Accessibility: Story = {
   name: 'Accessibility',
   render: () => (
-    <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)', maxWidth: 900 }}>
-      <PageTitle>Accessibility</PageTitle>
-      <PageSubtitle>
+    <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)', maxWidth: 820 }}>
+      <h1
+        style={{
+          fontSize: 24,
+          fontWeight: 700,
+          color: 'var(--ds-color-text-primary)',
+          margin: '0 0 8px',
+        }}
+      >
+        Accessibility
+      </h1>
+      <p
+        style={{
+          fontSize: 14,
+          color: 'var(--ds-color-text-secondary)',
+          margin: '0 0 32px',
+          lineHeight: 1.5,
+        }}
+      >
         WCAG 2.1 AA contrast audit — all semantic color tokens, Light and Dark themes.
-      </PageSubtitle>
+      </p>
 
-      {/* Requirements */}
-      <SectionLabel>WCAG 2.1 AA Thresholds</SectionLabel>
-      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 40 }}>
+      {/* Thresholds */}
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 40 }}>
         <Req label="Normal text" value="≥ 4.5:1" />
-        <Req label="Large text (≥ 18px)" value="≥ 3:1" />
-        <Req label="UI components & icons" value="≥ 3:1" />
-        <Req label="Disabled states" value="Exempt" />
+        <Req label="Large text ≥ 18px" value="≥ 3:1" />
+        <Req label="Icons & UI" value="≥ 3:1" />
+        <Req label="Disabled" value="Exempt" />
       </div>
 
-      <Divider />
+      <div style={{ borderTop: '1px solid var(--ds-color-border-subtle)', margin: '0 0 36px' }} />
 
       {/* Text */}
-      <SectionLabel>Text — on background-default</SectionLabel>
-      <div style={{ marginBottom: 40 }}>
-        <TableHeader />
-        <ContrastRow
+      <Section title="Text — on background-default">
+        <Row
           token="text-primary"
           cssVar="--ds-color-text-primary"
           fgLight="#2a2a2a"
@@ -343,13 +342,8 @@ export const Accessibility: Story = {
           ratioDark="17.04"
           badgeLight="aaa"
           badgeDark="aaa"
-          example={
-            <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-text-primary)' }}>
-              Page title
-            </span>
-          }
         />
-        <ContrastRow
+        <Row
           token="text-secondary"
           cssVar="--ds-color-text-secondary"
           fgLight="#5c5c5c"
@@ -358,13 +352,8 @@ export const Accessibility: Story = {
           ratioDark="11.73"
           badgeLight="aa"
           badgeDark="aaa"
-          example={
-            <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-text-secondary)' }}>
-              Supporting text
-            </span>
-          }
         />
-        <ContrastRow
+        <Row
           token="text-tertiary"
           cssVar="--ds-color-text-tertiary"
           fgLight="#737373"
@@ -373,13 +362,8 @@ export const Accessibility: Story = {
           ratioDark="7.09"
           badgeLight="aa"
           badgeDark="aaa"
-          example={
-            <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-text-tertiary)' }}>
-              Last updated 3 days ago
-            </span>
-          }
         />
-        <ContrastRow
+        <Row
           token="text-disabled"
           cssVar="--ds-color-text-disabled"
           fgLight="#b9b9b9"
@@ -388,20 +372,13 @@ export const Accessibility: Story = {
           ratioDark="3.82"
           badgeLight="exempt"
           badgeDark="exempt"
-          example={
-            <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-text-disabled)' }}>
-              Disabled label
-            </span>
-          }
           note="Inactive UI — exempt per WCAG 1.4.3"
         />
-      </div>
+      </Section>
 
       {/* Text on colored bg */}
-      <SectionLabel>Text — on colored backgrounds</SectionLabel>
-      <div style={{ marginBottom: 40 }}>
-        <TableHeader />
-        <ContrastRow
+      <Section title="Text — on colored backgrounds">
+        <Row
           token="text-on-brand"
           cssVar="--ds-color-text-on-brand"
           fgLight="#ffffff"
@@ -412,14 +389,9 @@ export const Accessibility: Story = {
           ratioDark="4.60"
           badgeLight="aa"
           badgeDark="aa"
-          example={
-            <span className="ds-text-medium-2" style={{ color: 'var(--ds-color-text-on-brand)' }}>
-              Save changes
-            </span>
-          }
-          note="White text on brand-default (#007bbd)"
+          note="White on brand-default"
         />
-        <ContrastRow
+        <Row
           token="text-inverse"
           cssVar="--ds-color-text-inverse"
           fgLight="#ffffff"
@@ -430,22 +402,17 @@ export const Accessibility: Story = {
           ratioDark="13.52"
           badgeLight="aaa"
           badgeDark="aaa"
-          example={
-            <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-text-inverse)' }}>
-              Tooltip content
-            </span>
-          }
           note="On background-inverse"
         />
-      </div>
+      </Section>
 
-      <Divider />
+      <div
+        style={{ borderTop: '1px solid var(--ds-color-border-subtle)', margin: '-8px 0 36px' }}
+      />
 
       {/* Icons */}
-      <SectionLabel>Icons — on background-default</SectionLabel>
-      <div style={{ marginBottom: 40 }}>
-        <TableHeader />
-        <ContrastRow
+      <Section title="Icons — on background-default">
+        <Row
           token="icon-default"
           cssVar="--ds-color-icon-default"
           fgLight="#454545"
@@ -454,13 +421,8 @@ export const Accessibility: Story = {
           ratioDark="16.02"
           badgeLight="aaa"
           badgeDark="aaa"
-          example={
-            <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-icon-default)' }}>
-              ● Primary icon
-            </span>
-          }
         />
-        <ContrastRow
+        <Row
           token="icon-secondary"
           cssVar="--ds-color-icon-secondary"
           fgLight="#737373"
@@ -469,13 +431,8 @@ export const Accessibility: Story = {
           ratioDark="9.22"
           badgeLight="aa"
           badgeDark="aaa"
-          example={
-            <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-icon-secondary)' }}>
-              ● Secondary icon
-            </span>
-          }
         />
-        <ContrastRow
+        <Row
           token="icon-disabled"
           cssVar="--ds-color-icon-disabled"
           fgLight="#b9b9b9"
@@ -484,22 +441,17 @@ export const Accessibility: Story = {
           ratioDark="3.82"
           badgeLight="exempt"
           badgeDark="exempt"
-          example={
-            <span className="ds-text-medium-1" style={{ color: 'var(--ds-color-icon-disabled)' }}>
-              ● Disabled icon
-            </span>
-          }
           note="Inactive UI — exempt per WCAG 1.4.3"
         />
-      </div>
+      </Section>
 
-      <Divider />
+      <div
+        style={{ borderTop: '1px solid var(--ds-color-border-subtle)', margin: '-8px 0 36px' }}
+      />
 
-      {/* Brand & focus */}
-      <SectionLabel>Brand & Focus — on background-default</SectionLabel>
-      <div style={{ marginBottom: 40 }}>
-        <TableHeader />
-        <ContrastRow
+      {/* Brand & Focus */}
+      <Section title="Brand & Focus — on background-default">
+        <Row
           token="brand-default / brand-text"
           cssVar="--ds-color-brand-default"
           fgLight="#007bbd"
@@ -508,17 +460,9 @@ export const Accessibility: Story = {
           ratioDark="3.94"
           badgeLight="aa"
           badgeDark="aa-ui"
-          example={
-            <span
-              className="ds-text-medium-2"
-              style={{ color: 'var(--ds-color-brand-text)', textDecoration: 'underline' }}
-            >
-              View details →
-            </span>
-          }
-          note="Dark: 3.94 passes UI 3:1 (button shape on dark bg)"
+          note="Dark: 3.94 passes UI 3:1"
         />
-        <ContrastRow
+        <Row
           token="border-focus"
           cssVar="--ds-color-border-focus"
           fgLight="#039be6"
@@ -527,32 +471,17 @@ export const Accessibility: Story = {
           ratioDark="7.31"
           badgeLight="aa-ui"
           badgeDark="aaa"
-          example={
-            <div
-              style={{
-                display: 'inline-block',
-                padding: '4px 10px',
-                borderRadius: 6,
-                boxShadow:
-                  '0 0 0 2px var(--ds-color-background-default), 0 0 0 4px var(--ds-color-border-focus)',
-              }}
-            >
-              <span className="ds-text-medium-2" style={{ color: 'var(--ds-color-text-primary)' }}>
-                Focused element
-              </span>
-            </div>
-          }
-          note="Focus ring — UI component threshold (3:1) applies"
+          note="Focus ring — UI threshold (3:1)"
         />
-      </div>
+      </Section>
 
-      <Divider />
+      <div
+        style={{ borderTop: '1px solid var(--ds-color-border-subtle)', margin: '-8px 0 36px' }}
+      />
 
       {/* Status */}
-      <SectionLabel>Status — on background-default</SectionLabel>
-      <div style={{ marginBottom: 40 }}>
-        <TableHeader />
-        <ContrastRow
+      <Section title="Status — on background-default">
+        <Row
           token="status-success-default"
           cssVar="--ds-color-status-success-default"
           fgLight="#1e9863"
@@ -561,27 +490,8 @@ export const Accessibility: Story = {
           ratioDark="9.24"
           badgeLight="aa-ui"
           badgeDark="aaa"
-          example={
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-              <span
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: '50%',
-                  background: 'var(--ds-color-status-success-default)',
-                  display: 'inline-block',
-                }}
-              />
-              <span
-                className="ds-text-medium-1"
-                style={{ color: 'var(--ds-color-status-success-text)' }}
-              >
-                Published
-              </span>
-            </span>
-          }
         />
-        <ContrastRow
+        <Row
           token="status-warning-default"
           cssVar="--ds-color-status-warning-default"
           fgLight="#c8760b"
@@ -590,27 +500,8 @@ export const Accessibility: Story = {
           ratioDark="9.20"
           badgeLight="aa-ui"
           badgeDark="aaa"
-          example={
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-              <span
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: '50%',
-                  background: 'var(--ds-color-status-warning-default)',
-                  display: 'inline-block',
-                }}
-              />
-              <span
-                className="ds-text-medium-1"
-                style={{ color: 'var(--ds-color-status-warning-text)' }}
-              >
-                In review
-              </span>
-            </span>
-          }
         />
-        <ContrastRow
+        <Row
           token="status-error-default"
           cssVar="--ds-color-status-error-default"
           fgLight="#d6331f"
@@ -619,27 +510,8 @@ export const Accessibility: Story = {
           ratioDark="4.84"
           badgeLight="aa"
           badgeDark="aa"
-          example={
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-              <span
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: '50%',
-                  background: 'var(--ds-color-status-error-default)',
-                  display: 'inline-block',
-                }}
-              />
-              <span
-                className="ds-text-medium-1"
-                style={{ color: 'var(--ds-color-status-error-text)' }}
-              >
-                Failed
-              </span>
-            </span>
-          }
         />
-        <ContrastRow
+        <Row
           token="status-info-default"
           cssVar="--ds-color-status-info-default"
           fgLight="#376be5"
@@ -648,27 +520,8 @@ export const Accessibility: Story = {
           ratioDark="4.74"
           badgeLight="aa"
           badgeDark="aa"
-          example={
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-              <span
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: '50%',
-                  background: 'var(--ds-color-status-info-default)',
-                  display: 'inline-block',
-                }}
-              />
-              <span
-                className="ds-text-medium-1"
-                style={{ color: 'var(--ds-color-status-info-text)' }}
-              >
-                Processing
-              </span>
-            </span>
-          }
         />
-      </div>
+      </Section>
     </div>
   ),
 };
