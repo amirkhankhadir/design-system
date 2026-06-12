@@ -108,6 +108,73 @@ Then compare the output against what's rendered in `Colors.stories.tsx`. Every t
 
 ---
 
+## Accessibility — Contrast Check Rule
+
+**Every time you add or modify a color token, or create a new component, run a contrast check.**
+
+### When tokens change
+- Any new or updated color in `brand-theme-semantics` → calculate contrast for all foreground/background pairs that use it
+- Minimum ratios: **4.5:1** for text (normal size) · **3:1** for large text and UI components (icons, borders, indicators)
+- Disabled states are exempt (WCAG 1.4.3 exception)
+
+### Quick check script
+```js
+function luminance(hex) {
+  const r=parseInt(hex.slice(1,3),16)/255, g=parseInt(hex.slice(3,5),16)/255, b=parseInt(hex.slice(5,7),16)/255;
+  const lin = c => c <= 0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4);
+  return 0.2126*lin(r) + 0.7152*lin(g) + 0.0722*lin(b);
+}
+function contrast(h1, h2) {
+  const l1=Math.max(luminance(h1),luminance(h2)), l2=Math.min(luminance(h1),luminance(h2));
+  return ((l1+0.05)/(l2+0.05)).toFixed(2);
+}
+// Example: contrast('#039be6', '#ffffff') → '3.07' ❌
+```
+
+### When creating a new component
+- Check every text/background and icon/background pair used in the component
+- Document the ratios in the component's Storybook description
+- If a token fails → pick the nearest primitive that passes before shipping
+
+### Contrast documentation
+The full audit with before/after illustrations lives in `contrast-audit.html` at the repo root.
+Storybook accessibility story is planned in the backlog (see below).
+
+---
+
+## Backlog
+
+Items agreed but not yet started. Pick up at the next session.
+
+### A — Contrast token fixes
+Apply the following semantic token changes (all values from existing primitives):
+
+| Semantic token | Current primitive | New primitive | Contrast change |
+|---|---|---|---|
+| `brand-default`, `brand-text` | `primary/40` (#039be6) | `primary/20` (#007bbd) | 3.07 → 4.60 ✅ |
+| `text-tertiary` | `neutral/40` (#8b8b8b) | `neutral/30` (#737373) | 3.41 → 4.74 ✅ |
+| `success-default`, `success-border` | `success/30` (#2db77b) | `success/20` (#1e9863) | 2.57 → 3.67 ✅ |
+| `warning-default`, `warning-border` | `warning/50` (#ffa530) | `warning/30` (#c8760b) | 1.97 → 3.47 ✅ |
+
+**Scope of changes per fix — touch all three layers:**
+1. Figma: update `brand-theme-semantics` variable values (Light + Dark modes)
+2. Tokens source files: update the semantic → primitive mappings
+3. Run `npm run build` to regenerate `dist/web/tokens.light.css` + `tokens.dark.css`
+4. Verify Storybook Colors story renders correctly
+
+### B — Accessibility / Contrast documentation page in Storybook
+Create `Accessibility.stories.tsx` under `title: 'Foundations'`.
+
+Content:
+- Intro: WCAG 2.1 AA requirements (4.5:1 text, 3:1 UI)
+- Contrast matrix table: all semantic token pairs with their ratios and pass/fail status
+- Live swatches (same style as Colors story)
+- Note on disabled-state exemption
+
+This replaces `contrast-audit.html` as the canonical reference.
+
+---
+
 ## Consistency Checklist
 
 **Code:**

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contrast Audit — Before / After</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8f8f8;
+      color: #2a2a2a;
+      padding: 48px 40px;
+    }
+    h1 { font-size: 24px; font-weight: 600; margin-bottom: 6px; }
+    .subtitle { font-size: 14px; color: #5c5c5c; margin-bottom: 48px; }
+
+    .section { margin-bottom: 56px; }
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #8b8b8b;
+      margin-bottom: 16px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 200px 1fr 1fr;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+    .row-label { font-size: 12px; color: #5c5c5c; padding-top: 12px; }
+
+    .card {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,.08);
+    }
+    .card-header {
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .before .card-header { background: #fff3f0; color: #d6331f; }
+    .after  .card-header { background: #e8f7ee; color: #137149; }
+
+    .demo {
+      padding: 20px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .demo-dark { background: #f1f1f1; }
+
+    /* ── Swatch ── */
+    .swatch-row { display: flex; align-items: center; gap: 12px; }
+    .swatch {
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,.08);
+      flex-shrink: 0;
+    }
+    .swatch-meta { font-size: 12px; line-height: 1.5; }
+    .swatch-name { font-weight: 600; color: #2a2a2a; }
+    .swatch-hex  { color: #737373; }
+    .ratio { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 4px; display: inline-block; margin-top: 2px; }
+    .fail { background: #ffe2de; color: #851203; }
+    .pass { background: #dbfcee; color: #137149; }
+    .passui { background: #e6f5fd; color: #004063; }
+
+    /* ── Preview samples ── */
+    .sample-btn {
+      display: inline-flex; align-items: center;
+      padding: 0 14px; height: 32px;
+      border-radius: 8px; border: none;
+      font-size: 14px; font-weight: 600;
+      cursor: default;
+      font-family: inherit;
+    }
+    .sample-link {
+      font-size: 14px; font-weight: 600;
+      text-decoration: underline;
+      cursor: default;
+    }
+    .sample-text {
+      font-size: 14px;
+    }
+    .sample-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 10px; border-radius: 999px;
+      font-size: 12px; font-weight: 600;
+      border: 1.5px solid;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    hr { border: none; border-top: 1px solid rgba(0,0,0,.08); margin: 32px 0; }
+  </style>
+</head>
+<body>
+
+<h1>Contrast Audit — Before / After</h1>
+<p class="subtitle">Все значения из существующей палитры примитивов. WCAG 2.1 AA: текст ≥ 4.5:1 · UI-компоненты ≥ 3:1</p>
+
+<!-- ─── 1. brand-default / brand-text ─────────────────── -->
+<div class="section">
+  <div class="section-title">1. brand-default &amp; brand-text — primary/40 → primary/20</div>
+  <div class="row">
+    <div class="row-label">
+      Primary button<br>
+      <small style="color:#8b8b8b">белый текст на бренде</small>
+    </div>
+
+    <div class="card before">
+      <div class="card-header">Before</div>
+      <div class="demo">
+        <div class="swatch-row">
+          <div class="swatch" style="background:#039be6"></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">primary/40</div>
+            <div class="swatch-hex">#039be6</div>
+            <span class="ratio fail">3.07:1 ❌</span>
+          </div>
+        </div>
+        <button class="sample-btn" style="background:#039be6;color:#ffffff">Save changes</button>
+      </div>
+    </div>
+
+    <div class="card after">
+      <div class="card-header">After</div>
+      <div class="demo">
+        <div class="swatch-row">
+          <div class="swatch" style="background:#007bbd"></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">primary/20</div>
+            <div class="swatch-hex">#007bbd</div>
+            <span class="ratio pass">4.60:1 ✅ AA</span>
+          </div>
+        </div>
+        <button class="sample-btn" style="background:#007bbd;color:#ffffff">Save changes</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="row-label">
+      Link button<br>
+      <small style="color:#8b8b8b">бренд-текст на белом</small>
+    </div>
+
+    <div class="card before">
+      <div class="card-header">Before</div>
+      <div class="demo">
+        <span class="sample-link" style="color:#039be6">View details →</span>
+        <span class="ratio fail" style="display:block;width:fit-content">3.07:1 ❌</span>
+      </div>
+    </div>
+
+    <div class="card after">
+      <div class="card-header">After</div>
+      <div class="demo">
+        <span class="sample-link" style="color:#007bbd">View details →</span>
+        <span class="ratio pass" style="display:block;width:fit-content">4.60:1 ✅ AA</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- ─── 2. text-tertiary ──────────────────────────────── -->
+<div class="section">
+  <div class="section-title">2. text-tertiary — neutral/40 → neutral/30</div>
+  <div class="row">
+    <div class="row-label">
+      Tertiary text<br>
+      <small style="color:#8b8b8b">подписи, плейсхолдеры</small>
+    </div>
+
+    <div class="card before">
+      <div class="card-header">Before</div>
+      <div class="demo">
+        <div class="swatch-row">
+          <div class="swatch" style="background:#8b8b8b"></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">neutral/40</div>
+            <div class="swatch-hex">#8b8b8b</div>
+            <span class="ratio fail">3.41:1 ❌</span>
+          </div>
+        </div>
+        <span class="sample-text" style="color:#8b8b8b">Last updated 3 days ago</span>
+      </div>
+    </div>
+
+    <div class="card after">
+      <div class="card-header">After</div>
+      <div class="demo">
+        <div class="swatch-row">
+          <div class="swatch" style="background:#737373"></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">neutral/30</div>
+            <div class="swatch-hex">#737373</div>
+            <span class="ratio pass">4.74:1 ✅ AA</span>
+          </div>
+        </div>
+        <span class="sample-text" style="color:#737373">Last updated 3 days ago</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- ─── 3. success-default ────────────────────────────── -->
+<div class="section">
+  <div class="section-title">3. success-default — success/30 → success/20</div>
+  <div class="row">
+    <div class="row-label">
+      Success badge<br>
+      <small style="color:#8b8b8b">иконка / бордер статуса</small>
+    </div>
+
+    <div class="card before">
+      <div class="card-header">Before</div>
+      <div class="demo">
+        <div class="swatch-row">
+          <div class="swatch" style="background:#2db77b"></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">success/30</div>
+            <div class="swatch-hex">#2db77b</div>
+            <span class="ratio fail">2.57:1 ❌</span>
+          </div>
+        </div>
+        <div class="sample-badge" style="color:#137149;border-color:#2db77b;background:#dbfcee">
+          <div class="dot" style="background:#2db77b"></div>
+          Published
+        </div>
+      </div>
+    </div>
+
+    <div class="card after">
+      <div class="card-header">After</div>
+      <div class="demo">
+        <div class="swatch-row">
+          <div class="swatch" style="background:#1e9863"></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">success/20</div>
+            <div class="swatch-hex">#1e9863</div>
+            <span class="ratio passui">3.67:1 ✅ AA (UI)</span>
+          </div>
+        </div>
+        <div class="sample-badge" style="color:#137149;border-color:#1e9863;background:#dbfcee">
+          <div class="dot" style="background:#1e9863"></div>
+          Published
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- ─── 4. warning-default ────────────────────────────── -->
+<div class="section">
+  <div class="section-title">4. warning-default — warning/50 → warning/30</div>
+  <div class="row">
+    <div class="row-label">
+      Warning badge<br>
+      <small style="color:#8b8b8b">иконка / бордер статуса</small>
+    </div>
+
+    <div class="card before">
+      <div class="card-header">Before</div>
+      <div class="demo">
+        <div class="swatch-row">
+          <div class="swatch" style="background:#ffa530"></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">warning/50</div>
+            <div class="swatch-hex">#ffa530</div>
+            <span class="ratio fail">1.97:1 ❌</span>
+          </div>
+        </div>
+        <div class="sample-badge" style="color:#774400;border-color:#ffa530;background:#ffe8c2">
+          <div class="dot" style="background:#ffa530"></div>
+          In review
+        </div>
+      </div>
+    </div>
+
+    <div class="card after">
+      <div class="card-header">After</div>
+      <div class="demo">
+        <div class="swatch-row">
+          <div class="swatch" style="background:#c8760b"></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">warning/30</div>
+            <div class="swatch-hex">#c8760b</div>
+            <span class="ratio passui">3.47:1 ✅ AA (UI)</span>
+          </div>
+        </div>
+        <div class="sample-badge" style="color:#774400;border-color:#c8760b;background:#ffe8c2">
+          <div class="dot" style="background:#c8760b"></div>
+          In review
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div style="background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:24px;max-width:620px">
+  <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#737373;margin-bottom:12px">Итоговые изменения примитивов</div>
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <thead>
+      <tr style="border-bottom:1px solid rgba(0,0,0,.08)">
+        <th style="text-align:left;padding:6px 0;color:#5c5c5c;font-weight:600">Семантический токен</th>
+        <th style="text-align:left;padding:6px 8px;color:#5c5c5c;font-weight:600">До</th>
+        <th style="text-align:left;padding:6px 8px;color:#5c5c5c;font-weight:600">После</th>
+        <th style="text-align:left;padding:6px 0;color:#5c5c5c;font-weight:600">Контраст</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid rgba(0,0,0,.06)">
+        <td style="padding:8px 0;font-weight:500">brand-default, brand-text</td>
+        <td style="padding:8px 8px;color:#5c5c5c">primary/40</td>
+        <td style="padding:8px 8px;color:#5c5c5c">primary/20</td>
+        <td style="padding:8px 0"><span class="ratio fail" style="font-size:10px">3.07</span> → <span class="ratio pass" style="font-size:10px">4.60</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid rgba(0,0,0,.06)">
+        <td style="padding:8px 0;font-weight:500">text-tertiary</td>
+        <td style="padding:8px 8px;color:#5c5c5c">neutral/40</td>
+        <td style="padding:8px 8px;color:#5c5c5c">neutral/30</td>
+        <td style="padding:8px 0"><span class="ratio fail" style="font-size:10px">3.41</span> → <span class="ratio pass" style="font-size:10px">4.74</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid rgba(0,0,0,.06)">
+        <td style="padding:8px 0;font-weight:500">success-default, success-border</td>
+        <td style="padding:8px 8px;color:#5c5c5c">success/30</td>
+        <td style="padding:8px 8px;color:#5c5c5c">success/20</td>
+        <td style="padding:8px 0"><span class="ratio fail" style="font-size:10px">2.57</span> → <span class="ratio passui" style="font-size:10px">3.67</span></td>
+      </tr>
+      <tr>
+        <td style="padding:8px 0;font-weight:500">warning-default, warning-border</td>
+        <td style="padding:8px 8px;color:#5c5c5c">warning/50</td>
+        <td style="padding:8px 8px;color:#5c5c5c">warning/30</td>
+        <td style="padding:8px 0"><span class="ratio fail" style="font-size:10px">1.97</span> → <span class="ratio passui" style="font-size:10px">3.47</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="margin-top:16px;font-size:12px;color:#737373">
+    brand-default — самое значимое изменение визуально (яркий голубой → средний синий).<br>
+    warning/30 — заметно темнее, стоит обсудить отдельно.
+  </p>
+</div>
+
+</body>
+</html>
