@@ -1,8 +1,30 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta = {
-  title: 'Foundations/Typography',
-  parameters: { layout: 'padded', controls: { disable: true } },
+  title: 'Foundations',
+  parameters: {
+    layout: 'padded',
+    controls: { disable: true },
+    docs: {
+      description: {
+        component: `
+**Typeface:** Source Sans 3
+
+**Three groups:**
+- \`display\` — 56–40px. Marketing and hero sections. Not for product UI.
+- \`headline\` — 32–20px. Page titles (H1) and section headers (H2, H3).
+- \`text\` — 18–10px. All UI body copy, labels, captions.
+
+**Suffix = weight tier:**
+- \`/1\` — Regular (400)
+- \`/2\` — SemiBold (600), or Medium (500) for \`headline/medium\` and \`headline/small\`
+- \`/3\` — Bold (700), or SemiBold (600) for \`headline/small\`
+
+**CSS class pattern:** \`ds-{group}-{size}-{number}\` — e.g. \`ds-text-medium-1\`, \`ds-headline-large-2\`
+        `.trim(),
+      },
+    },
+  },
 };
 export default meta;
 type Story = StoryObj;
@@ -80,7 +102,7 @@ function StyleRow({ className, label, meta }: { className: string; label: string
 }
 
 export const TextStyles: Story = {
-  name: 'Text Styles',
+  name: 'Typography',
   render: () => (
     <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)', maxWidth: 800 }}>
       <PageTitle>Typography</PageTitle>
@@ -166,49 +188,6 @@ export const TextStyles: Story = {
         <StyleRow className="ds-text-xsmall-1" label="text / xsmall / 1" meta="10 · 14 · 400" />
         <StyleRow className="ds-text-xsmall-2" label="text / xsmall / 2" meta="10 · 14 · 600" />
         <StyleRow className="ds-text-xsmall-3" label="text / xsmall / 3" meta="10 · 14 · 700" />
-      </div>
-    </div>
-  ),
-};
-
-export const Elevation: Story = {
-  name: 'Elevation',
-  render: () => (
-    <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)', maxWidth: 800 }}>
-      <PageTitle>Elevation</PageTitle>
-      <PageSubtitle>
-        Box-shadow levels — use to establish visual hierarchy between layers.
-      </PageSubtitle>
-
-      <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', padding: '32px 0' }}>
-        {[0, 1, 2, 3].map(level => (
-          <div key={level} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div
-              className={`ds-elevation-${level}`}
-              style={{
-                width: 160,
-                height: 100,
-                borderRadius: 'var(--ds-radius-12)',
-                background: 'var(--ds-color-background-default)',
-                border: level === 0 ? '1px solid var(--ds-color-border-default)' : undefined,
-              }}
-            />
-            <div>
-              <p
-                className="ds-text-small-2"
-                style={{ color: 'var(--ds-color-text-primary)', margin: '0 0 2px' }}
-              >
-                elevation-{level}
-              </p>
-              <p
-                className="ds-text-xsmall-1"
-                style={{ color: 'var(--ds-color-text-tertiary)', margin: 0 }}
-              >
-                .ds-elevation-{level}
-              </p>
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   ),

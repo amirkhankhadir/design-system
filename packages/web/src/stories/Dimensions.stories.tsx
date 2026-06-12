@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta = {
-  title: 'Foundations/Dimensions',
+  title: 'Foundations',
   parameters: { layout: 'padded', controls: { disable: true } },
 };
 export default meta;
@@ -51,8 +51,8 @@ function Divider() {
   );
 }
 
-export const All: Story = {
-  name: 'All Dimensions',
+export const Dimensions: Story = {
+  name: 'Dimensions',
   render: () => (
     <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)', maxWidth: 640 }}>
       <PageTitle>Dimensions</PageTitle>

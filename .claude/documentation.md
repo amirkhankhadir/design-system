@@ -86,6 +86,52 @@ Before finalizing Figma documentation, read the component's Storybook and check 
 
 ## Documentation Layout Rules
 
+### Every described behaviour needs a visual example
+
+**Never write text-only documentation.** Every card that describes a behaviour must have a visual preview — an instance, an illustration, or a diagram above the text.
+
+Checklist before finalising any section:
+- Tooltip card → show a button instance + tooltip appearing
+- Keyboard card → show key chip illustration (not just text)
+- State card → show the actual state variant (loading spinner, danger color, etc.)
+- Dos & Don'ts → the instances must USE meaningful icons/props, not the default placeholder
+
+**Scan the full doc before declaring done:** open each card mentally and ask "does a designer understand this without reading the text?"
+
+### Use instance swap for meaningful visual examples
+
+Never leave default icons in documentation instances. Always swap to the icon that makes the use case obvious:
+- aria-label example → `delete` icon (the label IS the icon name)
+- toolbar example → mix of `edit`, `delete`, `settings`, `close`
+- tooltip example → `settings` + `delete` (recognisable actions)
+
+```js
+// Safe swap — only when the new icon differs from the component default
+const iconKey = Object.keys(inst.componentProperties).find(k => k.startsWith('icon#'));
+if (inst.componentProperties[iconKey].value !== targetIconId) {
+  inst.setProperties({ [iconKey]: targetIconId });
+}
+```
+
+### Keyboard & focus illustrations — use key chips, not labels
+
+Text labels like "focused" are not enough. Show the interaction:
+
+```
+┌──────────────────┐  ┌─────────────────────────────┐
+│  [btn + ring]    │  │  [btn + ring]               │
+│                  │  │                             │
+│  ┌─────┐         │  │  ┌───────────────┐          │
+│  │ Tab │         │  │  │ Enter / Space │          │
+│  └─────┘         │  │  └───────────────┘          │
+│  Move focus      │  │  Activate                   │
+└──────────────────┘  └─────────────────────────────┘
+```
+
+Key chip recipe: auto-layout frame, padding 4/8, cornerRadius 6, fill=`color/background/subtle`, stroke=`color/border/subtle`, text style `text/small/2`.
+
+Focus ring on demo instances: apply `focus-ring` effect style (`S:522b85a120b1fe5afb5f45a5d197c3a6f2301c46`) to the instance — **only on variants with a solid background fill** (e.g. `primary`). Ghost/link variants have no fill and the ring will be invisible.
+
 ### Instances in comparison sections — use the most revealing variant
 
 In Placements, Variants, or any comparison section: always pick the variant that makes differences most visible.
@@ -108,6 +154,63 @@ Never document the same behavior in two sections. If "Placement" is its own sect
 ### Overview — consistent instance alignment
 
 All instances in an Overview row must have the same cell height. Use fixed-height cells with the instance centered inside.
+
+### Card visual style — match Tooltip doc exactly
+
+**Main doc frame:**
+- `paddingTop/Left/Right: 56px`, `paddingBottom: 64px`
+- `itemSpacing: 48px` between sections
+- Content area width = 688px (800 − 56×2)
+- `cornerRadius: 12`
+- `strokeWeight: 1`, `strokeAlign: INSIDE`, stroke = `color/border/subtle`
+- fill = `color/background/default`
+
+**All cards — required properties:**
+| Property | Value |
+|---|---|
+| `cornerRadius` | **8** (never 12) |
+| `padding` | **20px** all sides |
+| `itemSpacing` | **12** (content gap inside card) |
+| `strokeWeight` | 1, `strokeAlign: INSIDE` |
+
+**Card type → fill/stroke:**
+
+| Card type | `fills` | `strokes` |
+|---|---|---|
+| Regular content card (Variants, Sizes, Behavior, Icons) | `color/background/default` | `color/border/subtle` |
+| "When to use" / Dos cards | `color/status/success/subtle` | none |
+| "When NOT to use" / Don'ts cards | `color/status/error/subtle` | none |
+| Note / info pill | `color/border/subtle` as fill | none |
+
+**Section labels:**
+- Style: `text/xsmall/2` (10px SemiBold)
+- `letterSpacing: { value: 0, unit: 'PERCENT' }` — **never add letter-spacing**
+
+**No accent strips.** Colored cards use fill background only — no top strip, no additional decorations.
+
+### Wrapping tag/pill rows inside cards
+
+When a row of pills/tags can overflow the card width, use `layoutWrap = 'WRAP'` with **both** gap values set:
+
+```js
+tagsFrame.layoutWrap = 'WRAP';
+tagsFrame.itemSpacing = 6;          // horizontal gap between pills in the same row
+tagsFrame.counterAxisSpacing = 6;   // vertical gap between wrapped rows — DO NOT SKIP
+tagsFrame.layoutSizingHorizontal = 'FILL'; // fills the card's inner width so wrap triggers
+tagsFrame.counterAxisSizingMode = 'AUTO';  // card grows vertically as rows wrap
+```
+
+**Common mistake:** setting only `itemSpacing` and forgetting `counterAxisSpacing`. Result: pills wrap correctly but rows are squished together with no vertical gap. Always set both.
+
+### Dos & Don'ts — exact structure
+
+Each Do/Don't item is a **wrapper frame** (no fill, no stroke) containing:
+1. **Preview area** — FRAME, `cornerRadius:8`, `paddingTop:28`, `paddingLeft/Right:24`, fill = success/subtle (Do) or error/subtle (Don't)
+   - Button/component instance lives inside
+2. **"✓  Do" / "✗  Don't"** — TEXT, `text/small/2` (12px SemiBold), colored green/red
+3. **Description** — TEXT, `text/small/1` (12px Regular), secondary text color
+
+Layout: **Do | Don't** paired per row (not "all Dos then all Don'ts"). Max 2 per row for Dos & Don'ts.
 
 ---
 

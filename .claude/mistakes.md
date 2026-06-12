@@ -4,6 +4,16 @@ Each entry: what went wrong, why, and the correct behaviour. Add every new one h
 
 ---
 
+### 25. Making changes when the user asked a question
+
+**What happened:** User said "у нас нейминг не бьётся, ты бы сделал консистентно?" — это был вопрос для обсуждения. Claude сразу полез в Figma и переименовал коллекции без подтверждения.
+
+**Why:** Вопросительная формулировка ("имело ли это смысл", "ты бы сделал...") воспринималась как команда.
+
+**Rule:** Если пользователь задаёт вопрос или высказывает наблюдение — сначала обсуди, потом предложи план, потом жди явного "да, делай". Особенно когда речь о переименовании/реструктуризации — это необратимые изменения с последствиями.
+
+---
+
 ### 1. Claiming HUG width was applied when it wasn't
 **What happened:** Set `primaryAxisSizingMode = 'AUTO'` in the script, reported it as done. Figma still showed fixed width. User had to fix manually.
 **Why:** The code ran without error but the property wasn't actually taking effect — didn't verify with a screenshot or metadata check.
@@ -45,6 +55,21 @@ Each entry: what went wrong, why, and the correct behaviour. Add every new one h
 ### 7. Used `visible=false` for loading state instead of `opacity=0`
 **What happened:** Initially hid icon slots in `state=loading` with `visible = false`. This removes the node from the auto-layout flow, causing the button to shrink.
 **Rule:** In `state=loading`, hide all content (text, icon-left, icon-right) via `opacity = 0`, not `visible = false`. This keeps nodes in layout flow, preserving button width — mirrors `visibility: hidden` in CSS.
+
+---
+
+### 24. Moving or removing a story export without verifying downstream impact
+
+**What happened:** Removed the `Elevation` export from `Typography.stories.tsx` and created a new `Elevation.stories.tsx` — reported it as done after only running `tsc` and `format:check`. Did not check for imports or run a full build.
+
+**Why it matters:** Other files could import named exports from story files. CSS utility classes used in the moved story could theoretically break if the file structure changed unexpectedly. A full build is the only way to confirm nothing broke.
+
+**Rule:** After moving, renaming, or deleting any export from a story file, always run all three:
+1. `grep -r "from.*FileName.stories"` — check for imports of that file
+2. `npx tsc --noEmit` — TypeScript errors
+3. `npm run build-storybook` — full build confirms Storybook is intact
+
+Never report a move/delete as done without the full build passing.
 
 ---
 
@@ -186,6 +211,110 @@ Component wrapper  (auto-layout: VERTICAL or HORIZONTAL)
 3. Insert at correct alphabetical position with `figma.root.insertChild(index, page)`
 
 **Current page order:** `buttons → icon-button → loader → tooltip → --- → icons`
+
+---
+
+### 21. Never set fills, colors, spacing, or styles directly on instance child nodes
+
+**Core rule:** Setting any visual property (fill, stroke, corner radius, padding, text style) directly on a node that lives inside a Figma instance creates an **instance override**. Overrides sever the connection to the main component — future changes to the component will not propagate to those instances.
+
+**The only safe "override" is using a component's exposed properties** (INSTANCE_SWAP, TEXT, BOOLEAN via `setProperties`). These are intended entry points. Anything else is a broken link.
+
+---
+
+**What happened (concrete example):** Swapped icon on `primary` doc instances using `setProperties({'icon#238:0': sameDefaultId})`. This caused the icon fill to reset to `icon-default` (wrong). The "fix" attempt then manually set `vector.fills = [...]` — which added an override on a nested node. Both the broken fill AND the manual fix created overrides. Main component lost control of those instances.
+
+**Why `setProperties` with the same default breaks things:** When `setProperties` is called with the component's own default value, Figma performs a no-op swap that can drop fill overrides the variant had placed on the nested icon. Swapping to a *different* component than the default preserves those overrides correctly.
+
+---
+
+**Rules:**
+
+1. **Never set `fills`, `strokes`, `cornerRadius`, `padding`, `textStyleId`, or any other visual property on a node inside an instance.** If a visual property is wrong on an instance, the fix is always to fix the main component or recreate the instance — never to patch the instance directly.
+
+2. **Never call `setProperties` when the icon is already the component's default value.** Check first:
+   ```js
+   const currentIconId = inst.componentProperties['icon#238:0'].value;
+   if (currentIconId !== newIconId) {
+     inst.setProperties({ 'icon#238:0': newIconId });
+   }
+   // if currentIconId === newIconId → do nothing, the component controls the fill
+   ```
+
+3. **If an instance has incorrect fills due to a bad swap, recreate it fresh — do not patch fills:**
+   ```js
+   const parent = inst.parent;
+   const index  = parent.children.indexOf(inst);
+   const fresh  = comp.createInstance();       // zero overrides
+   parent.insertChild(index, fresh);
+   inst.remove();
+   // Do NOT call setProperties if icon equals the component default
+   ```
+
+4. **After any batch of icon swaps, audit for overrides:**
+   ```js
+   for (const inst of allInstances) {
+     const srcVarId  = inst.mainComponent.findOne(n => n.type === 'VECTOR')?.fills[0]?.boundVariables?.color?.id;
+     const instVarId = inst.findOne(n => n.type === 'VECTOR')?.fills[0]?.boundVariables?.color?.id;
+     if (srcVarId !== instVarId) console.error('override detected on', inst.id);
+   }
+   ```
+
+**Variants where fill ≠ `icon-default` (require extra care):**
+| Variant | Icon fill |
+|---|---|
+| `primary` | `color/icon/on-brand` (VariableID:125:12) |
+| `link` | `color/brand/default` (VariableID:125:17) |
+| `secondary`, `tertiary`, `ghost` | `icon-default` / `icon-secondary` — no risk |
+
+---
+
+### 23. `editComponentProperty` with any argument strips VARIANT key from all child names
+
+**What happened:** Called `compSet.editComponentProperty('variant', {})` with an empty object to test API support. This silently removed the `variant=` key prefix from all 90 child component names — turning `variant=primary, size=sm, state=default` into `=primary, size=sm, state=default`. Figma immediately showed "Some layers have invalid names" error and `componentPropertyDefinitions` became unreadable.
+
+**Why:** `editComponentProperty` on a VARIANT-type property is destructive even with an empty object. VARIANT properties are defined implicitly by child component names — calling `editComponentProperty` on them resets the property definition and strips the key from all children.
+
+**Fix applied:**
+```js
+for (const child of cs.children) {
+  if (child.name.startsWith('=')) {
+    child.name = 'variant' + child.name; // restore stripped prefix
+  }
+}
+```
+
+**Rules:**
+1. **Never call `editComponentProperty` on a VARIANT-type property.** VARIANT properties are owned by child names, not by the property definition object. There is no safe way to edit them via this API.
+2. **Never call `editComponentProperty` with an empty object `{}` to "test" it.** Even an empty call is destructive on VARIANT properties.
+3. **Only call `editComponentProperty` on TEXT, BOOLEAN, or INSTANCE_SWAP properties** — and only when you need to rename the property or change `defaultValue` / `preferredValues`.
+4. **Component property descriptions for VARIANT properties must be set manually in the Figma UI.** The Plugin API cannot safely touch them.
+
+**Safe usage of `editComponentProperty`:**
+```js
+// ✅ Rename an INSTANCE_SWAP property
+compSet.editComponentProperty('icon#238:0', { name: 'icon' });
+
+// ✅ Set preferred values on INSTANCE_SWAP
+compSet.editComponentProperty('icon#238:0', { preferredValues: [...] });
+
+// ✅ Change default value of a TEXT property
+compSet.editComponentProperty('label#203:0', { defaultValue: 'Button' });
+
+// ❌ Never touch VARIANT properties via this API
+compSet.editComponentProperty('variant', {}); // destroys all child names
+compSet.editComponentProperty('size', { description: '...' }); // same result
+```
+
+---
+
+### 22. Focus ring invisible on transparent-background instances
+
+**What happened:** Applied `focus-ring` effect style (DROP_SHADOW) to a `ghost` or `secondary` icon-button instance. The ring was invisible in Figma — the shadow rendered but wasn't visible against the transparent/white background.
+
+**Why:** Figma DROP_SHADOW effects require the node to have a visible fill for the shadow spread to appear clearly. Ghost and some secondary variants have no background fill — the ring blends into the canvas.
+
+**Rule:** When demonstrating focus rings in documentation, always use a variant that has a solid background fill (e.g. `primary`). The focus ring effect is visually meaningful only on elements with a contrasting fill.
 
 ---
 

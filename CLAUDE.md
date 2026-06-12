@@ -41,17 +41,25 @@
 | Page | Component set | ID | Variants | Status |
 |---|---|---|---|---|
 | `buttons` | `button` | `203:2` | 72 (4 variants × 3 sizes × 6 states) | ✅ complete |
-| `icons` | individual icon components | — | set by user | ✅ user-managed |
+| `icons` | individual icon components | — | `add` (199:3118), `settings` (199:3117), `delete` (391:135), `edit` (391:138), `close` (391:141) | ✅ user-managed |
 | `loader` | `loader` | `209:18` | 5 (color variants) | ✅ complete |
 | `tooltip` | `tooltip` | `266:26` | 24 (12 placements × 2 show-title states) | ✅ complete |
 
 **Page order:** `buttons → icon-button → loader → tooltip → --- → icons`
+
+**Effect styles:**
+| Name | ID | Purpose |
+|---|---|---|
+| `elevation/0–3` | existing | Box shadows |
+| `focus-ring` | `S:522b85a120b1fe5afb5f45a5d197c3a6f2301c46` | Focus indicator for documentation only. Two DROP_SHADOW: spread=2 white gap + spread=4 `color/border/focus`. Applied to instances in doc frames, **not** used in production component variants. |
 
 ### Figma Documentation (same file)
 
 | Page | Frame | ID | Sections | Status |
 |---|---|---|---|---|
 | `tooltip` | `DOCUMENTATION — Tooltip` | `297:26` | Overview, Anatomy, Placements, When to Use/Not, Behavior, Content Guidelines, Dos & Don'ts | ✅ finalized |
+| `buttons` | `DOCUMENTATION — Button` | `325:26` | Overview, Variants, Usage Guidelines, Sizes, Behavior, With Icons, Content Guidelines | ✅ finalized |
+| `icon-button` | `DOCUMENTATION — IconButton` | `366:253` | Overview, When to Use/Not, Variants (ghost vs tertiary), Sizes, Accessibility, Behavior, Dos & Don'ts | ✅ finalized |
 
 ---
 

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta = {
-  title: 'Foundations/Primitives',
+  title: 'Internal',
   parameters: { layout: 'padded', controls: { disable: true } },
 };
 export default meta;
@@ -150,8 +150,8 @@ function Scale({ name, swatches }: { name: string; swatches: { label: string; va
 
 // ── Story ──────────────────────────────────────────────────
 
-export const All: Story = {
-  name: 'All Primitives',
+export const Primitives: Story = {
+  name: 'Primitives',
   render: () => (
     <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)', maxWidth: 900 }}>
       <PageTitle>Primitives</PageTitle>

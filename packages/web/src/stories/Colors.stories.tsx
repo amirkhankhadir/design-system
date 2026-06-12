@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta = {
-  title: 'Foundations/Colors',
+  title: 'Foundations',
   parameters: { layout: 'padded', controls: { disable: true } },
 };
 export default meta;
@@ -204,8 +204,8 @@ function ColorTable({
 
 // ── Story ──────────────────────────────────────────────────
 
-export const All: Story = {
-  name: 'All Colors',
+export const Colors: Story = {
+  name: 'Colors',
   render: () => (
     <div style={{ fontFamily: 'var(--ds-font-family-primary, sans-serif)', maxWidth: 860 }}>
       <PageTitle>Colors</PageTitle>

@@ -117,7 +117,7 @@ const preview: Preview = {
     backgrounds: { disable: true },
     options: {
       storySort: {
-        order: ['Getting Started', 'Foundations', 'Components', 'Utilities'],
+        order: ['Getting Started', 'Foundations', 'Components', 'Utilities', 'Internal'],
       },
     },
   },
