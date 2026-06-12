@@ -91,6 +91,23 @@ Only proceed after confirmation.
 
 ---
 
+## Token ↔ Storybook Sync Rule
+
+**Every time a new variable is added to Figma**, immediately check that it appears in the corresponding Storybook story. And vice versa — when updating a Storybook story, verify all Figma variables for that group are represented.
+
+**How to audit (run in Figma plugin):**
+```js
+const collections = await figma.variables.getLocalVariableCollectionsAsync();
+const c = collections.find(c => c.name === 'brand-theme-semantics');
+const vars = await Promise.all(c.variableIds.map(id => figma.variables.getVariableByIdAsync(id)));
+return vars.map(v => v.name).sort();
+```
+Then compare the output against what's rendered in `Colors.stories.tsx`. Every token must have a row.
+
+**Applies to:** `Colors.stories.tsx` ↔ `brand-theme-semantics`, `Dimensions.stories.tsx` ↔ `display-semantics`
+
+---
+
 ## Consistency Checklist
 
 **Code:**

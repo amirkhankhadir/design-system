@@ -215,10 +215,10 @@ export const Colors: Story = {
 
       <SectionLabel>Background</SectionLabel>
       <ColorTable
-        rows={['default', 'subtle', 'muted']}
+        rows={['default', 'subtle', 'muted', 'inverse']}
         variants={['value']}
         getVariable={row => `--ds-color-background-${row}`}
-        showBorderFor={() => true}
+        showBorderFor={row => row !== 'inverse'}
       />
 
       <SectionLabel>Surface</SectionLabel>
