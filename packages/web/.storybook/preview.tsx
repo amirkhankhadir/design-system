@@ -65,9 +65,9 @@ const DARK_OVERRIDE = `
     border-color: var(--ds-color-border-subtle) !important;
   }
 
-  /* ── Body text in docs ─────────────────────────────────────── */
-  .sbdocs p, .sbdocs li, .sbdocs span,
-  .sbdocs-content p, .sbdocs-content li,
+  /* ── Body text in docs (Storybook CSS-module classes only — PascalCase) ──
+     Never use .sbdocs p / .sbdocs-content p — those reach into story canvas
+     and override component token colors (see mistakes.md #10 + #26).       */
   [class*="DocsContent"] p, [class*="DocsContent"] li,
   [class*="Description"] p, [class*="Description"] li,
   [class*="Markdown"] p, [class*="Markdown"] li {

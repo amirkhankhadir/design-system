@@ -38,7 +38,7 @@ Replaces `contrast-audit.html` as the canonical reference. Remove `contrast-audi
 
 ---
 
-## C — Dark mode: Tooltip и IconButton
+## ✅ C — Dark mode: Tooltip и IconButton (done)
 
 Проверить почему Tooltip и IconButton некорректно отображаются в Storybook в тёмной теме.
 

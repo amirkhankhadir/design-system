@@ -4,6 +4,25 @@ Each entry: what went wrong, why, and the correct behaviour. Add every new one h
 
 ---
 
+### 26. `.sbdocs p` / `.sbdocs-content p` selectors in DARK_OVERRIDE reach story canvas
+
+**What happened:** Added `.sbdocs p, .sbdocs li, .sbdocs span` and `.sbdocs-content p` to DARK_OVERRIDE to fix invisible description text in dark docs. These selectors matched `p` elements inside `.docs-story` (the story canvas), including `.tooltip__content p`. Result: `color: var(--ds-color-text-primary) !important` (light in dark mode) was applied to tooltip text, making it invisible on the light `background-inverse` tooltip background.
+
+**Why:** `.docs-story` is a descendant of `.sbdocs-content` in Storybook's DOM — broad tag selectors leak straight into rendered components.
+
+**Rule:** Never use bare tag selectors (p, li, span, a) scoped only to `.sbdocs` or `.sbdocs-content` in DARK_OVERRIDE. Only use Storybook's own CSS-module class names (always PascalCase, never kebab-case) — e.g. `[class*="Markdown"]`, `[class*="DocsContent"]`, `[class*="Description"]`. These never appear in our component markup which uses BEM kebab-case.
+
+**Safe pattern:**
+```css
+/* ✅ PascalCase CSS-module classes — never match component elements */
+[class*="DocsContent"] p, [class*="Markdown"] p, [class*="Description"] p { ... }
+
+/* ❌ Too broad — leaks into story canvas */
+.sbdocs p, .sbdocs-content p, .sbdocs span { ... }
+```
+
+---
+
 ### 25. Making changes when the user asked a question
 
 **What happened:** User said "у нас нейминг не бьётся, ты бы сделал консистентно?" — это был вопрос для обсуждения. Claude сразу полез в Figma и переименовал коллекции без подтверждения.
