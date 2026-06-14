@@ -84,6 +84,13 @@ Full details in `.claude/patterns-code.md` and `.claude/patterns-figma.md`.
 
 ---
 
+## Component Creation Order
+
+1. **Визуал первым** — написал код → сразу запускай Storybook (`preview_start`), показывай скриншоты в обеих темах, давай пользователю тестировать. Вноси правки пока не скажет "ок".
+2. **Проверки вторым** — только после ОК на визуал: `npm run lint && npm run lint:css && npm run format:check && npx tsc --noEmit`
+3. **Коммит/пуш последним** — только после финального согласования. Всегда напоминай: _"Визуал согласован — нужно закоммитить и запушить."_
+4. **Ошибки документируй сразу** — исправил баг → немедленно добавь правило в `.claude/mistakes.md`, не откладывай.
+
 ## Finalization Gate
 
 **Before running the checklist, ask the user:**
