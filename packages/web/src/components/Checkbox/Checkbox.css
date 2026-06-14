@@ -63,10 +63,22 @@
 .checkbox__icon {
   width: 10px;
   height: 10px;
-  display: block;
+  display: none; /* hidden by default; shown via :checked / indeterminate selectors */
   position: relative;
   z-index: 1; /* above ::after overlay */
   flex-shrink: 0;
+}
+
+.checkbox__input:checked ~ .checkbox__box .checkbox__icon--check {
+  display: block;
+}
+
+.checkbox--indeterminate .checkbox__box .checkbox__icon--check {
+  display: none;
+}
+
+.checkbox--indeterminate .checkbox__box .checkbox__icon--dash {
+  display: block;
 }
 
 /* ── Label text ──────────────────────────────────────────────── */

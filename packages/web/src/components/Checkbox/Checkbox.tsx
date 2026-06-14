@@ -94,27 +94,30 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
         {...rest}
       />
       <span className="checkbox__box" aria-hidden="true">
-        {(checked || indeterminate) && (
-          <svg
-            className="checkbox__icon"
-            viewBox="0 0 12 12"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            {indeterminate ? (
-              <path d="M2.5 6H9.5" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
-            ) : (
-              <path
-                d="M2 6L4.5 8.5L10 3"
-                stroke="currentColor"
-                strokeWidth="1.75"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            )}
-          </svg>
-        )}
+        <svg
+          className="checkbox__icon checkbox__icon--check"
+          viewBox="0 0 12 12"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <path
+            d="M2 6L4.5 8.5L10 3"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        <svg
+          className="checkbox__icon checkbox__icon--dash"
+          viewBox="0 0 12 12"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <path d="M2.5 6H9.5" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+        </svg>
       </span>
       {label && <span className="checkbox__label ds-text-medium-1">{label}</span>}
     </label>
