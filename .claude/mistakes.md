@@ -4,6 +4,35 @@ Each entry: what went wrong, why, and the correct behaviour. Add every new one h
 
 ---
 
+### 27. Conditional SVG rendering in custom checkbox creates split state between CSS and React
+
+**What happened:** In `Checkbox.tsx`, the SVG icon was rendered conditionally — `{(checked || indeterminate) && <svg ...>}`. Clicking an uncontrolled checkbox changed the native `<input>`'s state, so the CSS `:checked` selector fired and turned the box blue, but the React prop `checked` stayed `undefined`, so the SVG was never mounted. Result: blue box without a checkmark.
+
+**Why:** Two parallel state sources controlled the same visual: CSS (reads native DOM) and React conditional rendering (reads prop). For uncontrolled usage they diverge — CSS updates immediately, React doesn't re-render because no prop changed.
+
+**Rule:** In a custom-styled checkbox (hidden native input + custom visual box), always render all icon variants unconditionally in the DOM and control their visibility purely via CSS selectors. Never use React conditional rendering for states that CSS already tracks.
+
+**Correct pattern:**
+```tsx
+{/* Always in DOM — CSS shows the right one */}
+<svg className="checkbox__icon checkbox__icon--check" ...>
+  <path d="M2 6L4.5 8.5L10 3" ... />
+</svg>
+<svg className="checkbox__icon checkbox__icon--dash" ...>
+  <path d="M2.5 6H9.5" ... />
+</svg>
+```
+```css
+.checkbox__icon { display: none; }
+.checkbox__input:checked ~ .checkbox__box .checkbox__icon--check { display: block; }
+.checkbox--indeterminate .checkbox__box .checkbox__icon--check  { display: none; }
+.checkbox--indeterminate .checkbox__box .checkbox__icon--dash   { display: block; }
+```
+
+**Applies to:** any component where a hidden native input drives CSS pseudo-class state (`:checked`, `:disabled`, `:focus-visible`) while a custom visual element displays the result.
+
+---
+
 ### 26. `.sbdocs p` / `.sbdocs-content p` selectors in DARK_OVERRIDE reach story canvas
 
 **What happened:** Added `.sbdocs p, .sbdocs li, .sbdocs span` and `.sbdocs-content p` to DARK_OVERRIDE to fix invisible description text in dark docs. These selectors matched `p` elements inside `.docs-story` (the story canvas), including `.tooltip__content p`. Result: `color: var(--ds-color-text-primary) !important` (light in dark mode) was applied to tooltip text, making it invisible on the light `background-inverse` tooltip background.
