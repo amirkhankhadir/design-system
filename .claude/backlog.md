@@ -38,6 +38,24 @@ Replaces `contrast-audit.html` as the canonical reference. Remove `contrast-audi
 
 ---
 
+## D — Checkbox в Figma
+
+Сделать компонент `checkbox` в Figma по аналогии с Button/IconButton/Tooltip.
+
+**Состояния:**
+- Default: unchecked / checked / indeterminate
+- Error: unchecked / checked
+- Disabled: unchecked / checked / indeterminate
+- Standalone (без лейбла): unchecked / checked / indeterminate / disabled / error
+
+**Scope:**
+1. Создать страницу `checkbox` в файле `SmpZhN2JSWj1F6NplzoGUN`
+2. Компонент с вариантами по осям: `state` (default/error/disabled) × `checked` (false/true/indeterminate) × `has-label` (true/false)
+3. Все визуальные свойства привязаны к переменным
+4. Добавить в CLAUDE.md в таблицу Figma
+
+---
+
 ## ✅ C — Dark mode: Tooltip и IconButton (done)
 
 Проверить почему Tooltip и IconButton некорректно отображаются в Storybook в тёмной теме.

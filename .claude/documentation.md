@@ -232,6 +232,27 @@ Layout: **Do | Don't** paired per row (not "all Dos then all Don'ts"). Max 2 per
 
 ## Storybook Documentation Template
 
+Every new component story file **must** include `tags: ['autodocs']` in the meta object and an `argTypes` block with descriptions for every prop. Without `tags: ['autodocs']`, Storybook does not generate a Docs page and the component is undocumented in the sidebar.
+
+Also required: a `Default` story with `args` so the Docs page renders the component interactively with working controls.
+
+```tsx
+const meta: Meta<typeof MyComponent> = {
+  title: 'Components/MyComponent',
+  component: MyComponent,
+  tags: ['autodocs'],          // ← required for Docs page
+  parameters: { docs: { description: { component: '...' } } },
+  argTypes: {
+    variant: { control: 'select', options: [...], description: '...' },
+    // one entry per prop
+  },
+};
+
+export const Default: Story = {
+  args: { /* meaningful defaults */ },
+};
+```
+
 Every finalized component must have all three layers:
 
 ### 1. JSDoc on the component function

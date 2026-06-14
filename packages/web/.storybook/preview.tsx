@@ -42,6 +42,22 @@ const DARK_OVERRIDE = `
     color: var(--ds-color-text-primary) !important;
     border-color: var(--ds-color-border-default) !important;
   }
+  /* BooleanControl toggle — label is a pill with input + two spans.
+     Active span always gets white bg (Storybook CSS) → text must be dark regardless of theme.
+     Inactive span sits on our dark bg → text must be light.
+     Never set color on <label> itself — it inherits into the active span, making white-on-white. */
+  .docblock-argstable label {
+    background: var(--ds-color-background-muted) !important;
+    border-color: var(--ds-color-border-default) !important;
+  }
+  .docblock-argstable label input:not(:checked) ~ span:first-of-type,
+  .docblock-argstable label input:checked ~ span:last-of-type {
+    color: #1f2328 !important;
+  }
+  .docblock-argstable label input:checked ~ span:first-of-type,
+  .docblock-argstable label input:not(:checked) ~ span:last-of-type {
+    color: var(--ds-color-text-secondary) !important;
+  }
 
   /* ── Docs page ─────────────────────────────────────────────── */
   .docs-story { background: var(--ds-color-background-default) !important; }
@@ -67,10 +83,15 @@ const DARK_OVERRIDE = `
 
   /* ── Body text in docs (Storybook CSS-module classes only — PascalCase) ──
      Never use .sbdocs p / .sbdocs-content p — those reach into story canvas
-     and override component token colors (see mistakes.md #10 + #26).       */
+     and override component token colors (see mistakes.md #10 + #26).
+     Exception: .sbdocs-content > p with DIRECT CHILD selector (>) is safe —
+     the component description sits here and story canvases are nested deeper. */
   [class*="DocsContent"] p, [class*="DocsContent"] li,
   [class*="Description"] p, [class*="Description"] li,
   [class*="Markdown"] p, [class*="Markdown"] li {
+    color: var(--ds-color-text-primary) !important;
+  }
+  html[data-theme="dark"] .sbdocs-content > p {
     color: var(--ds-color-text-primary) !important;
   }
 
@@ -86,15 +107,6 @@ const preview: Preview = {
   globalTypes: {
     theme: {
       description: 'Color theme',
-      toolbar: {
-        title: 'Theme',
-        icon: 'circlehollow',
-        items: [
-          { value: 'light', title: 'Light', icon: 'sun' },
-          { value: 'dark',  title: 'Dark',  icon: 'moon' },
-        ],
-        dynamicTitle: true,
-      },
     },
   },
   initialGlobals: {

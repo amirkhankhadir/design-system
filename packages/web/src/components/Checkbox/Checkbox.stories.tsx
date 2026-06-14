@@ -6,6 +6,7 @@ import { CheckboxGroup } from './CheckboxGroup';
 const meta: Meta<typeof Checkbox> = {
   title: 'Components/Checkbox',
   component: Checkbox,
+  tags: ['autodocs'],
   parameters: {
     layout: 'padded',
     docs: {
@@ -22,6 +23,43 @@ const meta: Meta<typeof Checkbox> = {
       </div>
     ),
   ],
+  argTypes: {
+    checked: {
+      control: 'boolean',
+      description:
+        'Whether the checkbox is checked. Omit for uncontrolled usage; provide together with `onChange` for controlled.',
+    },
+    indeterminate: {
+      control: 'boolean',
+      description:
+        'Third visual state — neither checked nor unchecked. Typically used for a "select all" checkbox when only some children are selected. Takes visual priority over `checked`.',
+    },
+    error: {
+      control: 'boolean',
+      description: 'Marks the field as invalid. Renders a red border.',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Prevents interaction and applies muted styling.',
+    },
+    label: {
+      control: 'text',
+      description:
+        'Text label rendered to the right of the checkbox. Omit for standalone usage (e.g. inside a table cell).',
+    },
+    onChange: {
+      description: 'Called with the new `checked` value when the user toggles the checkbox.',
+    },
+  },
+};
+
+// ── Default (for autodocs controls) ──────────────────────────
+
+export const Default: Story = {
+  args: {
+    label: 'Accept terms and conditions',
+    checked: false,
+  },
 };
 
 export default meta;

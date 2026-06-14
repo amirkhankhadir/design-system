@@ -4,6 +4,41 @@ Each entry: what went wrong, why, and the correct behaviour. Add every new one h
 
 ---
 
+### 29. Setting `color` on BooleanControl `<label>` breaks the active span in dark mode
+
+**What happened:** DARK_OVERRIDE had `.docblock-argstable label { color: var(--ds-color-text-primary) !important }`. In dark mode `--ds-color-text-primary` is white/light. Storybook's BooleanControl renders as `<label><input><span>False</span><span>True</span></label>` — the active span gets a white background via Storybook's CSS. The child spans inherit the label's `color`, so the active span ends up white-text-on-white-background: invisible.
+
+**Root cause:** CSS `color` is inherited. Setting it on a container affects all descendants, including those that receive a contrasting background.
+
+**Rule:** Never set `color` on `.docblock-argstable label` in DARK_OVERRIDE. Handle the toggle spans explicitly:
+```css
+/* Active span always has white bg — hardcode dark text */
+.docblock-argstable label input:not(:checked) ~ span:first-of-type,
+.docblock-argstable label input:checked ~ span:last-of-type {
+  color: #1f2328 !important;
+}
+/* Inactive span on dark bg — use light token */
+.docblock-argstable label input:checked ~ span:first-of-type,
+.docblock-argstable label input:not(:checked) ~ span:last-of-type {
+  color: var(--ds-color-text-secondary) !important;
+}
+```
+
+---
+
+### 28. Created component stories without `tags: ['autodocs']` — no Docs page in Storybook
+
+**What happened:** Checkbox.stories.tsx was written without `tags: ['autodocs']` and without a `Default` story with `args`. Result: Storybook showed only individual stories (All States, Interactive, Group) with no generated Docs page — component appeared undocumented in the sidebar.
+
+**Rule:** Every new component stories file must include, from the start:
+1. `tags: ['autodocs']` in the meta object — generates the Docs tab
+2. `argTypes` block with a description for every prop
+3. A `Default` story with `args` — gives the Docs page an interactive canvas
+
+Without these, the component has no documentation page. Add them when creating the file, not as an afterthought.
+
+---
+
 ### 27. Conditional SVG rendering in custom checkbox creates split state between CSS and React
 
 **What happened:** In `Checkbox.tsx`, the SVG icon was rendered conditionally — `{(checked || indeterminate) && <svg ...>}`. Clicking an uncontrolled checkbox changed the native `<input>`'s state, so the CSS `:checked` selector fired and turned the box blue, but the React prop `checked` stayed `undefined`, so the SVG was never mounted. Result: blue box without a checkmark.
