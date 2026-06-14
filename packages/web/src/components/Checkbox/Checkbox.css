@@ -69,12 +69,11 @@
   flex-shrink: 0;
 }
 
-.checkbox__input:checked ~ .checkbox__box .checkbox__icon--check {
+.checkbox:not(.checkbox--indeterminate)
+  .checkbox__input:checked
+  ~ .checkbox__box
+  .checkbox__icon--check {
   display: block;
-}
-
-.checkbox--indeterminate .checkbox__box .checkbox__icon--check {
-  display: none;
 }
 
 .checkbox--indeterminate .checkbox__box .checkbox__icon--dash {
