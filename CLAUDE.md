@@ -84,14 +84,9 @@ Full details in `.claude/patterns-code.md` and `.claude/patterns-figma.md`.
 
 ---
 
-## Component Creation Order
-
-1. **Визуал первым** — написал код → сразу запускай Storybook (`preview_start`), показывай скриншоты в обеих темах, давай пользователю тестировать. Вноси правки пока не скажет "ок".
-2. **Проверки вторым** — только после ОК на визуал: `npm run lint && npm run lint:css && npm run format:check && npx tsc --noEmit`
-3. **Коммит/пуш последним** — только после финального согласования. Всегда напоминай: _"Визуал согласован — нужно закоммитить и запушить."_
-4. **Ошибки документируй сразу** — исправил баг → немедленно добавь правило в `.claude/mistakes.md`, не откладывай.
-
 ## Finalization Gate
+
+**Сначала визуал** — запусти Storybook, покажи скриншоты в обеих темах, дай пользователю потестировать. Вноси правки пока не скажет "ок". Только после этого запускай checklist.
 
 **Before running the checklist, ask the user:**
 > "Компонент готов — финализируем?"
@@ -186,7 +181,7 @@ Pending backlog items: see `.claude/backlog.md`.
 
 ## Post-Component Audit
 
-Run after every completed component. Steps 1–3 in parallel.
+Run after visual is agreed and user confirms finalization. Steps 1–3 in parallel.
 
 **1. Git**
 ```bash
@@ -207,3 +202,5 @@ npm run build-storybook
 **4. Figma visual check** — screenshot the component set. Change `content` to a long string — bubble must grow, arrow stays pinned.
 
 **If any step fails → fix before starting the next component.**
+
+After all steps pass → remind the user: _"Всё прошло — нужно закоммитить и запушить."_ Do not commit/push without explicit confirmation.
