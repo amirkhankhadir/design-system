@@ -36,6 +36,7 @@
 | `Icon` | `Icon.tsx`, `Icon.stories.tsx` | `Utilities/Icon` | Wraps `@material-symbols/svg-400` |
 | `Loader` | `Loader.tsx`, `Loader.css`, `Loader.stories.tsx` | `Utilities/Loader` | SVG spinner, 5 color variants, any px size |
 | `Tooltip` | `Tooltip.tsx`, `Tooltip.css`, `Tooltip.stories.tsx` | `Components/Tooltip` | 12 placements, optional title, pure CSS positioning |
+| `Checkbox` | `Checkbox.tsx`, `Checkbox.css`, `CheckboxGroup.tsx`, `index.ts`, `Checkbox.stories.tsx` | `Components/Checkbox` | indeterminate state, error state, standalone mode, CheckboxGroup with vertical/horizontal orientation |
 
 ### Figma (file `SmpZhN2JSWj1F6NplzoGUN`)
 

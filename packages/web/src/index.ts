@@ -12,3 +12,6 @@ export type { LoaderProps, LoaderSize, LoaderColor } from './components/Loader';
 
 export { Tooltip } from './components/Tooltip';
 export type { TooltipProps, TooltipPlacement } from './components/Tooltip';
+
+export { Checkbox, CheckboxGroup } from './components/Checkbox';
+export type { CheckboxProps, CheckboxGroupProps } from './components/Checkbox';

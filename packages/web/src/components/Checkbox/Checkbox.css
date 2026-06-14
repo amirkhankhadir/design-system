@@ -1,0 +1,197 @@
+/* ── Checkbox wrapper (label element) ────────────────────────── */
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-8);
+  cursor: pointer;
+  position: relative;
+}
+
+.checkbox--disabled {
+  cursor: not-allowed;
+}
+
+/* ── Hidden native input ─────────────────────────────────────── */
+
+.checkbox__input {
+  position: absolute;
+  width: var(--ds-spacing-16);
+  height: var(--ds-spacing-16);
+  opacity: 0;
+  margin: 0;
+  cursor: inherit;
+
+  /* sit on top of .checkbox__box to receive mouse events */
+  z-index: 1;
+}
+
+/* ── Visual box ──────────────────────────────────────────────── */
+
+.checkbox__box {
+  flex-shrink: 0;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ds-spacing-16);
+  height: var(--ds-spacing-16);
+  border-radius: var(--ds-radius-4);
+  border: var(--ds-border-width-1) solid var(--ds-color-border-default);
+  background: transparent;
+  color: transparent;
+  box-sizing: border-box;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    box-shadow 120ms ease;
+}
+
+/* Surface overlay — hover / active (same pattern as Button/IconButton) */
+.checkbox__box::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: transparent;
+  transition: background 120ms ease;
+}
+
+/* ── Check / dash icon ───────────────────────────────────────── */
+
+.checkbox__icon {
+  width: 10px;
+  height: 10px;
+  display: block;
+  position: relative;
+  z-index: 1; /* above ::after overlay */
+  flex-shrink: 0;
+}
+
+/* ── Label text ──────────────────────────────────────────────── */
+
+.checkbox__label {
+  color: var(--ds-color-text-primary);
+
+  /* line-height from ds-text-medium-1 aligns the first text line
+     with the vertical centre of the 16px checkbox box */
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CHECKED & INDETERMINATE
+══════════════════════════════════════════════════════════════ */
+
+.checkbox__input:checked ~ .checkbox__box,
+.checkbox--indeterminate .checkbox__box {
+  background: var(--ds-color-brand-default);
+  border-color: var(--ds-color-brand-default);
+  color: var(--ds-color-icon-on-brand);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HOVER — unchecked
+══════════════════════════════════════════════════════════════ */
+
+.checkbox:not(.checkbox--disabled):hover .checkbox__box {
+  border-color: var(--ds-color-border-strong);
+}
+
+/* Hover — checked / indeterminate: surface overlay on brand bg */
+.checkbox:not(.checkbox--disabled):hover .checkbox__input:checked ~ .checkbox__box::after,
+.checkbox:not(.checkbox--disabled):hover.checkbox--indeterminate .checkbox__box::after {
+  background: var(--ds-color-surface-1);
+}
+
+/* Keep brand border on hover for checked / indeterminate */
+.checkbox:not(.checkbox--disabled):hover .checkbox__input:checked ~ .checkbox__box,
+.checkbox:not(.checkbox--disabled):hover.checkbox--indeterminate .checkbox__box {
+  border-color: var(--ds-color-brand-default);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ACTIVE — pressed
+══════════════════════════════════════════════════════════════ */
+
+.checkbox:not(.checkbox--disabled):active .checkbox__box::after {
+  background: var(--ds-color-surface-2);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FOCUS VISIBLE
+══════════════════════════════════════════════════════════════ */
+
+.checkbox__input:focus-visible ~ .checkbox__box {
+  box-shadow:
+    0 0 0 var(--ds-border-width-2) var(--ds-color-background-default),
+    0 0 0 var(--ds-spacing-4) var(--ds-color-border-focus);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ERROR
+══════════════════════════════════════════════════════════════ */
+
+.checkbox--error .checkbox__box {
+  border-color: var(--ds-color-status-error-default);
+}
+
+.checkbox--error:not(.checkbox--disabled):hover .checkbox__box {
+  border-color: var(--ds-color-status-error-default);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DISABLED — always last to win specificity
+══════════════════════════════════════════════════════════════ */
+
+.checkbox--disabled .checkbox__box {
+  background: var(--ds-color-background-muted);
+  border-color: var(--ds-color-border-subtle);
+  color: transparent;
+}
+
+.checkbox--disabled .checkbox__input:checked ~ .checkbox__box,
+.checkbox--disabled.checkbox--indeterminate .checkbox__box {
+  background: var(--ds-color-background-muted);
+  border-color: var(--ds-color-border-subtle);
+  color: var(--ds-color-icon-disabled);
+}
+
+.checkbox--disabled .checkbox__box::after {
+  display: none;
+}
+
+.checkbox--disabled .checkbox__label {
+  color: var(--ds-color-text-disabled);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CHECKBOX GROUP
+══════════════════════════════════════════════════════════════ */
+
+.checkbox-group {
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-inline-size: 0; /* reset fieldset browser default */
+}
+
+.checkbox-group__label {
+  display: block;
+  padding: 0;
+  margin-bottom: var(--ds-spacing-8);
+  color: var(--ds-color-text-secondary);
+}
+
+.checkbox-group__items {
+  display: flex;
+  gap: var(--ds-spacing-8);
+}
+
+.checkbox-group--vertical .checkbox-group__items {
+  flex-direction: column;
+}
+
+.checkbox-group--horizontal .checkbox-group__items {
+  flex-flow: row wrap;
+  gap: var(--ds-spacing-16);
+}
