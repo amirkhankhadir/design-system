@@ -55,7 +55,9 @@ Replaces `contrast-audit.html` as the canonical reference. Remove `contrast-audi
 
 ---
 
-## F — Radio в Figma
+## ✅ F — Radio в Figma (done)
+
+Компонент `radio` (`567:133`), 10 вариантов (`checked: unchecked/checked` × `state`), top-align с самого начала (box-wrapper paddingTop spacing/2), props `show-label`/`label` в правильном порядке. Структурный аудит — 0 проблем. Документация `DOCUMENTATION — Radio` (`572:133`, 8 секций, +Grouping) финализирована.
 
 Сделать компонент `radio` в Figma по аналогии с Checkbox (которая уже готова — см. пункт D). При сборке сразу применить `align-items: flex-start` (top-align) на корневом auto-layout — не наследовать center, как было изначально в Checkbox (см. пункт E).
 

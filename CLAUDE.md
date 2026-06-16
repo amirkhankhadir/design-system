@@ -48,8 +48,9 @@
 | `loader` | `loader` | `209:18` | 5 (color variants) | ✅ complete |
 | `tooltip` | `tooltip` | `266:26` | 24 (12 placements × 2 show-title states) | ✅ complete |
 | `checkbox` | `checkbox` | `500:133` | 15 (checked × state: unchecked/checked/indeterminate × default/hover/pressed/disabled/error) | ✅ complete — `label` (TEXT) / `show-label` (BOOLEAN) component properties |
+| `radio` | `radio` | `567:133` | 10 (checked: unchecked/checked × state: default/hover/pressed/disabled/error) | ✅ complete — `show-label` (BOOLEAN) / `label` (TEXT) props, top-aligned box-wrapper |
 
-**Page order:** `buttons → checkbox → icon-button → loader → tooltip → --- → icons`
+**Page order:** `buttons → checkbox → icon-button → loader → radio → tooltip → --- → icons`
 
 **Effect styles:**
 | Name | ID | Purpose |
@@ -65,6 +66,7 @@
 | `buttons` | `DOCUMENTATION — Button` | `325:26` | Overview, Variants, Usage Guidelines, Sizes, Behavior, With Icons, Content Guidelines | ✅ finalized |
 | `icon-button` | `DOCUMENTATION — IconButton` | `366:253` | Overview, When to Use/Not, Variants (ghost vs tertiary), Sizes, Accessibility, Behavior, Dos & Don'ts | ✅ finalized |
 | `checkbox` | `DOCUMENTATION — Checkbox` | `520:148` | Overview, Anatomy, When to Use/Not, States, Behavior, Content Guidelines, Dos & Don'ts | ✅ finalized |
+| `radio` | `DOCUMENTATION — Radio` | `572:133` | Overview, Anatomy, When to Use/Not, Grouping, States, Behavior, Content Guidelines, Dos & Don'ts | ✅ finalized |
 
 ---
 
@@ -178,6 +180,7 @@ Pending backlog items: see `.claude/backlog.md`.
 - [ ] Loader/icon dependencies created before the component
 - [ ] Structural check on absolute children (overlay at 0,0; loader centered) — programmatic, not just screenshot
 - [ ] All overlay nodes locked (`locked = true`)
+- [ ] **Per-state color audit** — `grep` the component CSS for each state class (`--disabled`, `--error`) and assert in the structural-audit script that every variant's label/secondary-element color matches (e.g. disabled label = `text-disabled`, not `text-primary`). Audit must FAIL on a wrong per-state color, not just on missing structure. See mistakes.md #32.
 - [ ] Pre-build behaviour analysis done (see `.claude/patterns-figma.md`)
 
 ---

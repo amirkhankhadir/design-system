@@ -82,6 +82,20 @@ Each entry: what went wrong, why, and the correct behaviour. Add every new one h
 
 **Rule:** Before cloning a component into N state variants, `grep` the component's actual CSS file for the state class name (e.g. `.checkbox--disabled`) and list EVERY property it touches — not just the ones intuitively expected. Cross-check the per-variant diff table against that grep output, not memory, especially for less-visually-obvious properties like text/icon color on secondary elements (labels, captions).
 
+**⚠️ RECURRED on Radio (despite this entry existing).** This exact bug happened again building the Radio Figma component — disabled label stayed `text-primary` black instead of `text-disabled` gray — because the rule above is a *passive reminder* ("remember to grep") that is trivially skipped under momentum. A note you have to remember to act on is not a safeguard. The fix is to make it an **active, mechanical gate**:
+
+1. **The post-build structural audit (run after every component build, before showing the user) MUST include an explicit per-state assertion for label/secondary-element color**, derived from the CSS — not just structural checks (overlay locked, sizing, bindings exist). Minimum for any component with a `disabled` state and a label:
+   ```js
+   // in the audit loop, per variant:
+   const labelVar = label.fills[0]?.boundVariables?.color?.id;
+   if (isDisabled && labelVar !== TEXT_DISABLED_ID) issues.push(`${v.name}: disabled label not text-disabled`);
+   if (!isDisabled && labelVar !== TEXT_PRIMARY_ID) issues.push(`${v.name}: non-disabled label wrong color`);
+   ```
+   A structural audit that returns "0 issues" while the disabled label is the wrong color is an **incomplete audit** — it must assert the per-state colors the CSS dictates, or it gives false confidence.
+2. Before writing the per-variant diff table, actually run the grep (`grep '\-\-disabled' Component.css`) and paste the matched properties into the build script as the source of truth for what each state changes.
+
+The lesson is meta: when a documented mistake recurs, the documentation format was wrong (passive recall), not just the execution. Convert it into a check that runs automatically.
+
 ---
 
 ### 31. `setBoundVariableForPaint` literal color/opacity must be set from the variable's resolved value, not a placeholder
