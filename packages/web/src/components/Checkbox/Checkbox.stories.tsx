@@ -116,6 +116,11 @@ export const AllStates: Story = {
         <Checkbox disabled />
         <Checkbox error />
       </Row>
+      <Row label="Long label (wraps)">
+        <div style={{ maxWidth: 240 }}>
+          <Checkbox label="I would like to receive promotional emails, product updates, and occasional surveys about my experience" />
+        </div>
+      </Row>
     </div>
   ),
 };

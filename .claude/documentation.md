@@ -98,6 +98,16 @@ Checklist before finalising any section:
 
 **Scan the full doc before declaring done:** open each card mentally and ask "does a designer understand this without reading the text?"
 
+### Use realistic content, not placeholder text
+
+The same rule that applies to icons (below) applies to any TEXT property on a documentation instance: never leave the component's generic default ("Checkbox label", "Button", "Label") in a card that's making a specific point. Set realistic, context-appropriate copy that matches what the card is actually teaching.
+
+- "Use a statement, not a question" → label the instance with an actual statement ("Email me weekly updates"), not the literal phrase "statement"
+- "Don't write long labels" → use a genuinely long, real-sounding sentence, not a short placeholder — the example needs to actually be wrong to be convincing
+- Dos & Don'ts pairs comparing two states of the same idea (e.g. error before/after checked) → reuse the *same* realistic label on both sides, so the only variable is the thing being illustrated
+
+**If a long/realistic string causes overflow or clipping** (e.g. a wrapped label pushing past a card's edge), that's a real layout bug to fix on that instance — not a reason to fall back to a short placeholder. Shortening the text hides the problem instead of demonstrating it; fix the wrap/sizing instead (see Checkbox mistakes #32+ for an example).
+
 ### Use instance swap for meaningful visual examples
 
 Never leave default icons in documentation instances. Always swap to the icon that makes the use case obvious:

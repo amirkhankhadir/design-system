@@ -38,7 +38,45 @@ Replaces `contrast-audit.html` as the canonical reference. Remove `contrast-audi
 
 ---
 
-## D — Checkbox в Figma
+## ✅ E — Checkbox/Radio: top-align вместо center при многострочном лейбле (done)
+
+Сейчас `.checkbox` и `.radio` используют `align-items: center` — при переносе лейбла на несколько строк box визуально "плавает" по центру блока текста, теряя связь с первой строкой. В списке чекбоксов с разной длиной текста это создаёт скачущее выравнивание между строками.
+
+**Решение:** `align-items: flex-start` вместо `center`. Для однострочных лейблов (основной случай использования) визуально ничего не меняется — риск регрессии минимален.
+
+**Scope — везде, где используется этот паттерн:**
+1. `packages/web/src/components/Checkbox/Checkbox.css` — `.checkbox`
+2. `packages/web/src/components/Radio/Radio.css` — `.radio`
+3. Figma-компонент `checkbox` (страница `checkbox`) — пересобрать выравнивание в каждом из 15 вариантов
+4. Figma-компонент `radio` — когда будет создан (см. пункт D)
+5. Storybook: добавить multi-line label кейс в `AllStates`/стори, чтобы регрессия была видна сразу
+
+**Обнаружено:** при ревью документации Checkbox в Figma (длинный лейбл "Don't write long labels" пример).
+
+---
+
+## F — Radio в Figma
+
+Сделать компонент `radio` в Figma по аналогии с Checkbox (которая уже готова — см. пункт D). При сборке сразу применить `align-items: flex-start` (top-align) на корневом auto-layout — не наследовать center, как было изначально в Checkbox (см. пункт E).
+
+---
+
+## G — Toggle компонент + секция «Checkbox vs Toggle» в документации
+
+Пользователь просил добавить в документацию Checkbox раздел «когда Checkbox, а когда Toggle». Отложено, потому что компонента Toggle ещё нет (ни в коде, ни в Figma), а правило документации требует реального визуального примера в каждой секции — заглушку ставить нельзя.
+
+**Scope:**
+1. Создать компонент `Toggle` в коде (`packages/web/src/components/Toggle/`) — switch-control для мгновенного вкл/выкл, по аналогии с Checkbox/Radio.
+2. Создать `Toggle` в Figma.
+3. Вернуться к `DOCUMENTATION — Checkbox` (`520:148`) и добавить секцию «Checkbox vs Toggle» с реальными инстансами обоих компонентов: Checkbox = отложенный выбор (применяется при submit формы), Toggle = немедленное действие (применяется сразу).
+
+**Обнаружено:** при создании документации Checkbox в Figma (эта сессия).
+
+---
+
+## ✅ D — Checkbox в Figma (done)
+
+Компонент `checkbox` (`500:133`), 15 вариантов (`checked` × `state`), + документация `DOCUMENTATION — Checkbox` (`520:148`). Готово.
 
 Сделать компонент `checkbox` в Figma по аналогии с Button/IconButton/Tooltip.
 

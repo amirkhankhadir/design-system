@@ -52,6 +52,16 @@ Every token used must make semantic sense for its role:
 - **Danger + disabled block always last** in the CSS file.
 - `disabled={disabled || loading}` in TSX.
 
+### Visual alignment check — required before calling any layout "done"
+
+**Every component with a fixed-size control next to text (checkbox/radio box + label, icon + text, etc.) must be screenshotted and checked for vertical alignment** — both the common single-line case AND a long/wrapping-text case. These two cases pull against each other:
+- `align-items: center` on the row looks right for one line, but drags the control toward the vertical center of the whole text block once it wraps (control ends up floating mid-paragraph).
+- `align-items: flex-start` fixes the wrapped case but, by itself, leaves the control sitting slightly high against a single line whose line-height is taller than the control (e.g. 20px line-height vs a 16px box) — control and text no longer look centered relative to each other.
+
+**Fix:** `align-items: flex-start` on the row, plus a small `margin-top` on the control equal to half the gap between the line-height and the control's size (e.g. `(20px line-height − 16px box) / 2 = 2px` → `margin-top: var(--ds-spacing-2)`). This optically centers the control against the *first* line without dragging it down when the label wraps. See `Checkbox.css` / `Radio.css` `.checkbox__box` / `.radio__circle` for the worked example.
+
+**Don't trust a single screenshot of the default/short-label story** — verify both the short-label and a deliberately long/wrapping-label story before considering a label-plus-control layout finished.
+
 ## Loader Colors
 
 Valid `LoaderColor` values: `'brand' | 'inverse' | 'on-brand' | 'static-white' | 'static-black'`

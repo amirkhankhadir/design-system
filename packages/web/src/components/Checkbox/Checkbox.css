@@ -2,7 +2,7 @@
 
 .checkbox {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--ds-spacing-8);
   cursor: pointer;
   position: relative;
@@ -36,6 +36,12 @@
   justify-content: center;
   width: var(--ds-spacing-16);
   height: var(--ds-spacing-16);
+
+  /* optical alignment: half the gap between the 16px box and the label's
+     20px line-height (ds-text-medium-1), so the box centers against the
+     FIRST line only — needed because the wrapper uses align-items: flex-start
+     so multi-line labels don't drag the box to their vertical center */
+  margin-top: var(--ds-spacing-2);
   border-radius: var(--ds-radius-4);
   border: var(--ds-border-width-1) solid var(--ds-color-border-default);
   background: transparent;
@@ -84,9 +90,6 @@
 
 .checkbox__label {
   color: var(--ds-color-text-primary);
-
-  /* line-height from ds-text-medium-1 aligns the first text line
-     with the vertical centre of the 16px checkbox box */
 }
 
 /* ══════════════════════════════════════════════════════════════

@@ -114,6 +114,14 @@ export const AllStates: Story = {
         <Radio name="all-states-standalone-3" disabled />
         <Radio name="all-states-standalone-4" error />
       </Row>
+      <Row label="Long label (wraps)">
+        <div style={{ maxWidth: 240 }}>
+          <Radio
+            name="all-states-long-label"
+            label="I would like to receive promotional emails, product updates, and occasional surveys about my experience"
+          />
+        </div>
+      </Row>
     </div>
   ),
 };

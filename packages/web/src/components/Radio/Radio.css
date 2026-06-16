@@ -2,7 +2,7 @@
 
 .radio {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--ds-spacing-8);
   cursor: pointer;
   position: relative;
@@ -36,6 +36,12 @@
   justify-content: center;
   width: var(--ds-spacing-16);
   height: var(--ds-spacing-16);
+
+  /* optical alignment: half the gap between the 16px circle and the label's
+     20px line-height (ds-text-medium-1), so the circle centers against the
+     FIRST line only — needed because the wrapper uses align-items: flex-start
+     so multi-line labels don't drag the circle to their vertical center */
+  margin-top: var(--ds-spacing-2);
   border-radius: 50%;
   border: var(--ds-border-width-1) solid var(--ds-color-border-default);
   background: var(--ds-color-background-default);

@@ -199,7 +199,7 @@ compSet.dashPattern  = [10, 5];
 | `icon-left` | INSTANCE_SWAP | `iconLeft` string value |
 
 **Property naming**: `show-*` (not `has-*`) for boolean visibility.
-**Property ordering**: related properties must be adjacent.
+**Property ordering**: related properties must be adjacent, AND the `show-*` BOOLEAN toggle must come BEFORE the property it controls (`show-left-icon` before `icon-left`, `show-label` before `label`). The control that turns a thing on/off reads first in the panel, the value it gates reads second.
 
 ## Loading State — hide content via opacity
 

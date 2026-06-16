@@ -47,8 +47,9 @@
 | `icons` | individual icon components | — | `add` (199:3118), `settings` (199:3117), `delete` (391:135), `edit` (391:138), `close` (391:141) | ✅ user-managed |
 | `loader` | `loader` | `209:18` | 5 (color variants) | ✅ complete |
 | `tooltip` | `tooltip` | `266:26` | 24 (12 placements × 2 show-title states) | ✅ complete |
+| `checkbox` | `checkbox` | `500:133` | 15 (checked × state: unchecked/checked/indeterminate × default/hover/pressed/disabled/error) | ✅ complete — `label` (TEXT) / `show-label` (BOOLEAN) component properties |
 
-**Page order:** `buttons → icon-button → loader → tooltip → --- → icons`
+**Page order:** `buttons → checkbox → icon-button → loader → tooltip → --- → icons`
 
 **Effect styles:**
 | Name | ID | Purpose |
@@ -63,6 +64,7 @@
 | `tooltip` | `DOCUMENTATION — Tooltip` | `297:26` | Overview, Anatomy, Placements, When to Use/Not, Behavior, Content Guidelines, Dos & Don'ts | ✅ finalized |
 | `buttons` | `DOCUMENTATION — Button` | `325:26` | Overview, Variants, Usage Guidelines, Sizes, Behavior, With Icons, Content Guidelines | ✅ finalized |
 | `icon-button` | `DOCUMENTATION — IconButton` | `366:253` | Overview, When to Use/Not, Variants (ghost vs tertiary), Sizes, Accessibility, Behavior, Dos & Don'ts | ✅ finalized |
+| `checkbox` | `DOCUMENTATION — Checkbox` | `520:148` | Overview, Anatomy, When to Use/Not, States, Behavior, Content Guidelines, Dos & Don'ts | ✅ finalized |
 
 ---
 

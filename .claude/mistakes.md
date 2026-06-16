@@ -4,6 +4,111 @@ Each entry: what went wrong, why, and the correct behaviour. Add every new one h
 
 ---
 
+### 39. Figma text style `text/medium/1·2·3` had `line-height: 18px` while code's `ds-text-medium-1·2·3` has `line-height: 20px` — a real cross-platform token drift, not a rounding nuance
+
+**What happened:** Applied an optical-alignment fix (margin-top on the checkbox box, to center it against the label's first line) using the line-height documented for `ds-text-medium-1` in code (20px), giving `margin-top: 2px` (half of `20 − 16`). In Storybook this produced a perfectly symmetric 2px/2px gap above and below the box (verified via `getComputedStyle`). But the equivalent Figma instance still looked off — because the user manually built a test instance and found `1px` top + `1px` bottom looked right there, not `2px`/`0px`. Investigating showed the Figma text node rendered at 18px tall, not 20px — the *Figma text style itself* had `lineHeight: 18px` bound, while every other text style in the file (`text/large/1`, `text/small/1`, `headline/small/2`, etc.) matched its code counterpart exactly. Only the `medium` size group (1/2/3, all at font-size 14) had drifted.
+
+**Why:** Assumed the number written in `Typography.stories.tsx`'s description string ("14 · 20 · 400") and the actual Figma `TextStyle.lineHeight` property would agree, since nothing in the file's history flagged a typography mismatch. They'd quietly diverged for one size group only — easy to miss because the visual difference (18 vs 20px line box) is only ~2px and doesn't break anything by itself; it only surfaces once you do pixel-level optical alignment against that exact text style.
+
+**Rule:** When doing optical/pixel alignment against a text style in Figma, don't trust the "documented" line-height from Storybook descriptions or memory — read the actual bound `TextStyle.lineHeight` value via the Plugin API (`figma.getLocalTextStylesAsync()`) and compare it against the real browser-computed value (`getComputedStyle(...).lineHeight` in Storybook) before computing any compensation offset. If they disagree, that's a token sync bug to fix at the source (the Figma text style), not something to paper over with a different padding split per-platform. Per "code wins," fix the Figma side to match.
+
+**The actual fix, once line-heights matched:** `margin-top: var(--ds-spacing-2)` in code, and an equivalent `box-wrapper` auto-layout frame around the box in Figma with `paddingTop` bound to `spacing/2` and `paddingBottom: 0` — both now produce the identical 2px gap above the box, 2px below, against a real 20px-tall label.
+
+---
+
+### 38. Created `label` (TEXT) before `show-label` (BOOLEAN) — toggle property must come first
+
+**What happened:** Added Checkbox's component properties in the order `label` then `show-label`, so the Figma properties panel showed the text value above the boolean that controls whether it's even visible. Button's existing `show-left-icon` → `icon-left` pair already established the opposite, correct order, but it was only implied by the build-step numbering in `patterns-figma.md`, never stated as an explicit rule — easy to invert when building a new component from scratch.
+
+**Why:** The control that turns something on/off is the first decision a designer makes; the value it gates only matters once that's on. Reading the value first, then discovering a toggle below it that might hide it entirely, is backwards.
+
+**Rule:** Always create the `show-*` BOOLEAN property before the property it gates (`show-label` before `label`, `show-left-icon` before `icon-left`). There's no reorder API for component properties — fixing a wrong order means `deleteComponentProperty` on both, then `addComponentProperty` again in the correct order, then re-linking `componentPropertyReferences` on every variant's child node.
+
+---
+
+### 37. `primaryAxisSizingMode`/`counterAxisSizingMode = 'AUTO'` set BEFORE `resize()` gets silently reverted to FIXED
+
+**What happened:** Built the Checkbox documentation header by setting `header.primaryAxisSizingMode = 'AUTO'` then immediately calling `header.resize(688, 10)`. The frame's height stayed locked at the literal `10` passed to `resize()` and never hugged its text children — title and description rendered overlapping at the top of an undersized frame.
+
+**Why:** `resize(w, h)` always sets BOTH axis sizing modes to `FIXED` as a side effect, regardless of what was set immediately before it. Setting the sizing mode first and resizing after silently throws the sizing-mode assignment away — there's no error, just a frame that quietly never hugs.
+
+**Rule:** Call `resize()` FIRST, then set `primaryAxisSizingMode`/`counterAxisSizingMode = 'AUTO'` AFTER, for whichever axis should hug. Better: use `figma.createAutoLayout()` for any frame that should hug by default — it sets the modes without ever calling `resize()`, so this trap doesn't apply.
+
+---
+
+### 36. `node.screenshot()` called multiple times in one script can return stale/cached images for different nodes
+
+**What happened:** Validated three different Checkbox variant IDs in one script with three sequential `await node.screenshot()` calls. All three returned the visually identical image (same blue box, gray dash, reddish border) despite the nodes having confirmed-different names and bound-variable metadata.
+
+**Why:** Batched inline `node.screenshot()` calls in a single script don't reliably re-render per node — at least one came back cached/stale. The underlying data was actually correct (verified via metadata and via the dedicated `get_screenshot` tool called separately per node).
+
+**Rule:** When visually spot-checking multiple distinct nodes in the same script, don't trust several inline `node.screenshot()` calls back-to-back. Use the dedicated `get_screenshot` tool with one call per node (separate tool invocations) before concluding there's a real visual bug.
+
+---
+
+### 35. `node.remove()` then `appendChild(removedNode)` throws — `appendChild` already re-parents, no manual remove needed
+
+**What happened:** To move an existing title text node into a new wrapper frame, called `titleText.remove()` then `titleRow.appendChild(titleText)`. Threw `"The node with id ... does not exist"`.
+
+**Why:** `.remove()` destroys the node outright, not just detaches it from its parent. The following `appendChild` call referenced a dead node ID.
+
+**Rule:** `parent.appendChild(existingNode)` already moves a node from its current parent to the new parent — never call `.remove()` on a node you intend to re-append. Only call `.remove()` when actually deleting a node for good.
+
+---
+
+### 34. Unicode dingbat glyphs (✗ U+2717, ✕ U+2715) are missing from Source Sans 3 — render as mismatched fallback font or nothing
+
+**What happened:** Used "✗ When NOT to use" as a Figma documentation section title. Source Sans 3 SemiBold doesn't include that glyph, so Figma substituted a different font for just that character, producing a visually mismatched italic serif "X". Replacing it with "✕" (a different cross character) rendered as nothing at all — completely invisible. The checkmark "✓" (U+2713) elsewhere in the same doc rendered correctly, which masked the pattern until the cross character was inspected closely in a screenshot.
+
+**Why:** Don't assume a font supports a Unicode symbol just because a visually-related symbol in the same family works — glyph coverage is per-character, not per-"family of dingbats."
+
+**Rule:** For "no/don't" indicators in this font, use a plain ASCII capital "X" letter instead of a dingbat cross character — guaranteed to render correctly in any font. Always verify non-ASCII glyphs by zooming into the actual rendered screenshot, never trust that setting `characters` to a Unicode symbol "worked" just because no error was thrown.
+
+---
+
+### 33. `figma.createAutoLayout()` frames default to a visible white fill — set `fills = []` explicitly on purely structural wrappers
+
+**What happened:** Built the Anatomy section's "breakdown" column wrapper via `figma.createAutoLayout()` without setting `fills = []`. It kept Figma's default solid-white frame fill, which rendered as a visible white rectangle floating inside the surrounding gray card — low-contrast enough (white on light gray) to be easy to miss at a glance, only obvious on close inspection.
+
+**Rule:** Every auto-layout frame created purely for grouping/spacing — not meant to have its own visible background — must have `fills = []` set explicitly right after creation. Never assume a "wrapper" frame is invisible by default.
+
+---
+
+### 32. Clone-based variant building silently drops state-dependent properties that weren't in the diff list — disabled Checkbox label stayed black instead of gray
+
+**What happened:** Built all 15 Checkbox variants by cloning a base `unchecked/default` component and overriding only `{border, background, overlay fill, icon visibility/color}` per combination. The label's text color was never part of that diff list, so all 15 variants — including the 3 `state=disabled` ones — kept the base's `text/primary` (black) fill. Storybook's CSS correctly sets `.checkbox--disabled .checkbox__label { color: text-disabled }` (gray), so the Figma component silently diverged from the live component. Caught only when the user compared the Figma disabled checkbox side-by-side with Storybook's disabled checkbox.
+
+**Why:** Enumerating "what changes per state" from memory/intuition (border, background, icon — the visually loud properties) misses quieter CSS rules like label color, which don't visually announce themselves as wrong in isolation — only a direct comparison against the live component surfaces the gap.
+
+**Rule:** Before cloning a component into N state variants, `grep` the component's actual CSS file for the state class name (e.g. `.checkbox--disabled`) and list EVERY property it touches — not just the ones intuitively expected. Cross-check the per-variant diff table against that grep output, not memory, especially for less-visually-obvious properties like text/icon color on secondary elements (labels, captions).
+
+---
+
+### 31. `setBoundVariableForPaint` literal color/opacity must be set from the variable's resolved value, not a placeholder
+
+**What happened:** Built 15 Checkbox variants in Figma, binding box/icon paints to color variables via `figma.variables.setBoundVariableForPaint(paint, 'color', varRef)`, using an arbitrary placeholder literal (e.g. `{r:0.5,g:0.5,b:0.5}`, `opacity` left unset → defaults to 1) as the base paint object before binding. Several tokens in this system (`border/default`, `border/strong`, `border/subtle`, `surface/1`, `surface/2`) resolve to **semi-transparent black** primitives (e.g. `color/overlay/black/12` = `{r:0,g:0,b:0,a:0.12}`), not opaque colors. The placeholder's opaque `opacity:1` was never corrected, so the rendered paint used the literal (opaque, wrong) values instead of the resolved alpha — icons rendered gray instead of white, and `pressed`/`hover` borders rendered solid black instead of a faint 12%/32% black tint.
+
+**Why:** A bound variable's `boundVariables` metadata does not retroactively fix up the paint's literal `color`/`opacity` fields — those must be set explicitly to match. The one case that accidentally rendered correctly (the very first hand-written box stroke) only worked because, by chance, a separate code path set the right opacity; every later clone+rebind via a placeholder-literal helper did not.
+
+**Rule:** Whenever binding a Figma color variable to a paint, resolve the variable's actual value first (walk the alias chain to the primitive, which is the only place where opacity/`a` lives) and set **both** `color: {r,g,b}` and `opacity: a ?? 1` on the paint to match — never leave a placeholder literal in place after binding. Verify with `get_screenshot` (not just metadata) since the `boundVariables` field alone won't reveal an opacity mismatch.
+
+```js
+async function resolveColor(variableId) {
+  let variable = await figma.variables.getVariableByIdAsync(variableId);
+  let modeKey = Object.keys(variable.valuesByMode).find(k => k.endsWith(':0')) || Object.keys(variable.valuesByMode)[0];
+  let val = variable.valuesByMode[modeKey];
+  while (val?.type === 'VARIABLE_ALIAS') {
+    variable = await figma.variables.getVariableByIdAsync(val.id);
+    modeKey = Object.keys(variable.valuesByMode).find(k => k.endsWith(':0')) || Object.keys(variable.valuesByMode)[0];
+    val = variable.valuesByMode[modeKey];
+  }
+  return val; // {r, g, b, a}
+}
+// then: paint = { ...paint, color: {r,g,b}, opacity: resolved.a ?? 1 }
+```
+
+---
+
 ### 30. `:checked` selector outranked `--disabled` modifier, leaking brand color into disabled+selected state
 
 **What happened:** Radio's checked-border rule was `.radio__input:checked ~ .radio__circle { border-color: var(--ds-color-brand-default); }` — specificity (0,3,0) (2 classes + 1 pseudo-class). The disabled override was `.radio--disabled .radio__circle { border-color: var(--ds-color-border-subtle); }` — specificity (0,2,0). Lower specificity loses regardless of source order, so a disabled+checked radio kept the blue brand border instead of the muted disabled border.
