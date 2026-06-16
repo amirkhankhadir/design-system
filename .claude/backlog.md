@@ -63,16 +63,17 @@ Replaces `contrast-audit.html` as the canonical reference. Remove `contrast-audi
 
 ---
 
-## G — Toggle компонент + секция «Checkbox vs Toggle» в документации
+## G — Toggle: документация + секция «Checkbox vs Toggle»
 
-Пользователь просил добавить в документацию Checkbox раздел «когда Checkbox, а когда Toggle». Отложено, потому что компонента Toggle ещё нет (ни в коде, ни в Figma), а правило документации требует реального визуального примера в каждой секции — заглушку ставить нельзя.
+**Сделано:**
+1. ✅ Компонент `Toggle` в коде (`packages/web/src/components/Toggle/`) — switch для мгновенного вкл/выкл.
+2. ✅ `Toggle` в Figma (`591:133`, 8 вариантов).
 
-**Scope:**
-1. Создать компонент `Toggle` в коде (`packages/web/src/components/Toggle/`) — switch-control для мгновенного вкл/выкл, по аналогии с Checkbox/Radio.
-2. Создать `Toggle` в Figma.
-3. Вернуться к `DOCUMENTATION — Checkbox` (`520:148`) и добавить секцию «Checkbox vs Toggle» с реальными инстансами обоих компонентов: Checkbox = отложенный выбор (применяется при submit формы), Toggle = немедленное действие (применяется сразу).
+**Осталось:**
+3. Документация `DOCUMENTATION — Toggle` в Figma (по аналогии с Checkbox/Radio; подумать какие секции актуальны именно для toggle).
+4. Вернуться к `DOCUMENTATION — Checkbox` (`520:148`) и добавить секцию «Checkbox vs Toggle» с реальными инстансами обоих: Checkbox = отложенный выбор (применяется при submit формы), Toggle = немедленное действие (применяется сразу). Теперь Toggle есть — заглушек не будет.
 
-**Обнаружено:** при создании документации Checkbox в Figma (эта сессия).
+**Обнаружено:** при создании документации Checkbox в Figma.
 
 ---
 

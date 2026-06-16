@@ -4,6 +4,18 @@ Each entry: what went wrong, why, and the correct behaviour. Add every new one h
 
 ---
 
+### 40. Use `await node.setEffectStyleIdAsync(id)`, not the sync `node.effectStyleId = id`, to link an effect style in use_figma
+
+**What happened:** Applied `elevation/1` to the Toggle thumb with the sync setter `thumb.effectStyleId = 'S:b3259b…,'`. The API read the value back correctly (`effectStyleId` matched the style, `idsMatch: true`), so the audit passed — but in Figma's UI the thumb's Effects panel showed two editable raw "Drop shadow" rows (with per-effect delete icons) instead of a single connected-style reference. The user noticed the component "wasn't using our elevation styles." Re-applying with `await thumb.setEffectStyleIdAsync(elev1Id)` established a proper linked-style reference.
+
+**Why:** In `use_figma`, the sync style-id setters behave like several other sync setters (`figma.currentPage =`, etc.) — they can set the underlying value without fully establishing the binding the UI recognizes, leaving the node visually "detached." The async `set*StyleIdAsync` methods are the supported way and create a real style link. Reading `effectStyleId` back is NOT sufficient proof the link is proper — it returns the set string either way.
+
+**Rule:** Always link styles with the async methods — `await node.setEffectStyleIdAsync(id)`, `await node.setFillStyleIdAsync(id)`, `await text.setTextStyleIdAsync(id)` (already used for text) — never the sync `node.effectStyleId = id` / `fillStyleId =` setters. To remove a style, `await node.setEffectStyleIdAsync('')` then clear `node.effects = []` if no local effects should remain.
+
+**Note — this was a Figma-linking issue only, not a code bug.** In code the thumb uses the `ds-elevation-1` utility class (`<span className="toggle__thumb ds-elevation-1" />`), which is the correct code equivalent of the elevation token. The two shadow layers shown in Figma are inherent to `elevation/1` (a 2-layer shadow: radius 3 + radius 2), same as the two `box-shadow` layers in `.ds-elevation-1`.
+
+---
+
 ### 39. Figma text style `text/medium/1·2·3` had `line-height: 18px` while code's `ds-text-medium-1·2·3` has `line-height: 20px` — a real cross-platform token drift, not a rounding nuance
 
 **What happened:** Applied an optical-alignment fix (margin-top on the checkbox box, to center it against the label's first line) using the line-height documented for `ds-text-medium-1` in code (20px), giving `margin-top: 2px` (half of `20 − 16`). In Storybook this produced a perfectly symmetric 2px/2px gap above and below the box (verified via `getComputedStyle`). But the equivalent Figma instance still looked off — because the user manually built a test instance and found `1px` top + `1px` bottom looked right there, not `2px`/`0px`. Investigating showed the Figma text node rendered at 18px tall, not 20px — the *Figma text style itself* had `lineHeight: 18px` bound, while every other text style in the file (`text/large/1`, `text/small/1`, `headline/small/2`, etc.) matched its code counterpart exactly. Only the `medium` size group (1/2/3, all at font-size 14) had drifted.

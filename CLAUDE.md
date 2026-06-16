@@ -50,8 +50,9 @@
 | `tooltip` | `tooltip` | `266:26` | 24 (12 placements × 2 show-title states) | ✅ complete |
 | `checkbox` | `checkbox` | `500:133` | 15 (checked × state: unchecked/checked/indeterminate × default/hover/pressed/disabled/error) | ✅ complete — `label` (TEXT) / `show-label` (BOOLEAN) component properties |
 | `radio` | `radio` | `567:133` | 10 (checked: unchecked/checked × state: default/hover/pressed/disabled/error) | ✅ complete — `show-label` (BOOLEAN) / `label` (TEXT) props, top-aligned box-wrapper |
+| `toggle` | `toggle` | `591:133` | 8 (checked: off/on × state: default/hover/pressed/disabled) | ✅ complete — `show-label`/`label` props; thumb position via track `primaryAxisAlignItems`; thumb uses `elevation/1` (none when disabled); no error state |
 
-**Page order:** `buttons → checkbox → icon-button → loader → radio → tooltip → --- → icons`
+**Page order:** `buttons → checkbox → icon-button → loader → radio → toggle → tooltip → --- → icons`
 
 **Effect styles:**
 | Name | ID | Purpose |
