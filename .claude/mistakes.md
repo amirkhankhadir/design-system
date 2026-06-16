@@ -4,6 +4,16 @@ Each entry: what went wrong, why, and the correct behaviour. Add every new one h
 
 ---
 
+### 30. `:checked` selector outranked `--disabled` modifier, leaking brand color into disabled+selected state
+
+**What happened:** Radio's checked-border rule was `.radio__input:checked ~ .radio__circle { border-color: var(--ds-color-brand-default); }` — specificity (0,3,0) (2 classes + 1 pseudo-class). The disabled override was `.radio--disabled .radio__circle { border-color: var(--ds-color-border-subtle); }` — specificity (0,2,0). Lower specificity loses regardless of source order, so a disabled+checked radio kept the blue brand border instead of the muted disabled border.
+
+**Why:** Checkbox avoided this because its checked rule sets `background` (which the disabled rule also overrides at equal specificity (0,2,0) — both targeting `.checkbox__box` directly, no pseudo-class tipping the scale). Radio's checked rule targets the border via a `:checked` pseudo-class on a sibling selector, adding specificity the disabled rule didn't anticipate.
+
+**Rule:** When a state modifier (`:checked`, `:hover`, `:focus`) and a top-level modifier class (`--disabled`, `--error`) can both apply to the same element, explicitly write the combined selector (`.radio--disabled .radio__input:checked ~ .radio__circle`) rather than assuming the modifier class alone will win. Don't rely on "disabled is always last in the file" — specificity beats source order every time pseudo-classes are involved.
+
+---
+
 ### 29. Setting `color` on BooleanControl `<label>` breaks the active span in dark mode
 
 **What happened:** DARK_OVERRIDE had `.docblock-argstable label { color: var(--ds-color-text-primary) !important }`. In dark mode `--ds-color-text-primary` is white/light. Storybook's BooleanControl renders as `<label><input><span>False</span><span>True</span></label>` — the active span gets a white background via Storybook's CSS. The child spans inherit the label's `color`, so the active span ends up white-text-on-white-background: invisible.

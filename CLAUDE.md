@@ -37,6 +37,7 @@
 | `Loader` | `Loader.tsx`, `Loader.css`, `Loader.stories.tsx` | `Utilities/Loader` | SVG spinner, 5 color variants, any px size |
 | `Tooltip` | `Tooltip.tsx`, `Tooltip.css`, `Tooltip.stories.tsx` | `Components/Tooltip` | 12 placements, optional title, pure CSS positioning |
 | `Checkbox` | `Checkbox.tsx`, `Checkbox.css`, `CheckboxGroup.tsx`, `index.ts`, `Checkbox.stories.tsx` | `Components/Checkbox` | indeterminate state, error state, standalone mode, CheckboxGroup with vertical/horizontal orientation |
+| `Radio` | `Radio.tsx`, `Radio.css`, `RadioGroup.tsx`, `index.ts`, `Radio.stories.tsx` | `Components/Radio` | circular selection dot, error state, standalone mode, RadioGroup propagates `name`/`disabled` via context |
 
 ### Figma (file `SmpZhN2JSWj1F6NplzoGUN`)
 

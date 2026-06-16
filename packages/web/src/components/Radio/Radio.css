@@ -1,0 +1,189 @@
+/* ── Radio wrapper (label element) ───────────────────────────── */
+
+.radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-8);
+  cursor: pointer;
+  position: relative;
+}
+
+.radio--disabled {
+  cursor: not-allowed;
+}
+
+/* ── Hidden native input ─────────────────────────────────────── */
+
+.radio__input {
+  position: absolute;
+  width: var(--ds-spacing-16);
+  height: var(--ds-spacing-16);
+  opacity: 0;
+  margin: 0;
+  cursor: inherit;
+
+  /* sit on top of .radio__circle to receive mouse events */
+  z-index: 1;
+}
+
+/* ── Visual circle ───────────────────────────────────────────── */
+
+.radio__circle {
+  flex-shrink: 0;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ds-spacing-16);
+  height: var(--ds-spacing-16);
+  border-radius: 50%;
+  border: var(--ds-border-width-1) solid var(--ds-color-border-default);
+  background: var(--ds-color-background-default);
+  box-sizing: border-box;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    box-shadow 120ms ease;
+}
+
+/* Surface overlay — hover / active (same pattern as Checkbox/Button) */
+.radio__circle::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: transparent;
+  transition: background 120ms ease;
+}
+
+/* ── Selection dot ───────────────────────────────────────────── */
+
+.radio__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ds-color-brand-default);
+  position: relative;
+  z-index: 1; /* above ::after overlay */
+  transform: scale(0);
+  transition: transform 120ms ease;
+}
+
+.radio__input:checked ~ .radio__circle .radio__dot {
+  transform: scale(1);
+}
+
+/* ── Label text ──────────────────────────────────────────────── */
+
+.radio__label {
+  color: var(--ds-color-text-primary);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CHECKED
+══════════════════════════════════════════════════════════════ */
+
+.radio__input:checked ~ .radio__circle {
+  border-color: var(--ds-color-brand-default);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HOVER
+══════════════════════════════════════════════════════════════ */
+
+.radio:not(.radio--disabled):hover .radio__circle {
+  border-color: var(--ds-color-border-strong);
+}
+
+.radio:not(.radio--disabled):hover .radio__circle::after {
+  background: var(--ds-color-surface-1);
+}
+
+.radio:not(.radio--disabled):hover .radio__input:checked ~ .radio__circle {
+  border-color: var(--ds-color-brand-default);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ACTIVE — pressed
+══════════════════════════════════════════════════════════════ */
+
+.radio:not(.radio--disabled):active .radio__circle::after {
+  background: var(--ds-color-surface-2);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FOCUS VISIBLE
+══════════════════════════════════════════════════════════════ */
+
+.radio__input:focus-visible ~ .radio__circle {
+  box-shadow:
+    0 0 0 var(--ds-border-width-2) var(--ds-color-background-default),
+    0 0 0 var(--ds-spacing-4) var(--ds-color-border-focus);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ERROR
+══════════════════════════════════════════════════════════════ */
+
+.radio--error .radio__circle {
+  border-color: var(--ds-color-status-error-default);
+}
+
+.radio--error:not(.radio--disabled):hover .radio__circle {
+  border-color: var(--ds-color-status-error-default);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DISABLED — always last to win specificity
+══════════════════════════════════════════════════════════════ */
+
+.radio--disabled .radio__circle,
+.radio--disabled .radio__input:checked ~ .radio__circle {
+  background: var(--ds-color-background-muted);
+  border-color: var(--ds-color-border-subtle);
+}
+
+.radio--disabled .radio__dot {
+  background: var(--ds-color-icon-disabled);
+}
+
+.radio--disabled .radio__circle::after {
+  display: none;
+}
+
+.radio--disabled .radio__label {
+  color: var(--ds-color-text-disabled);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RADIO GROUP
+══════════════════════════════════════════════════════════════ */
+
+.radio-group {
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-inline-size: 0; /* reset fieldset browser default */
+}
+
+.radio-group__label {
+  display: block;
+  padding: 0;
+  margin-bottom: var(--ds-spacing-8);
+  color: var(--ds-color-text-secondary);
+}
+
+.radio-group__items {
+  display: flex;
+  gap: var(--ds-spacing-8);
+}
+
+.radio-group--vertical .radio-group__items {
+  flex-direction: column;
+}
+
+.radio-group--horizontal .radio-group__items {
+  flex-flow: row wrap;
+  gap: var(--ds-spacing-16);
+}

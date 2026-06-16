@@ -15,3 +15,6 @@ export type { TooltipProps, TooltipPlacement } from './components/Tooltip';
 
 export { Checkbox, CheckboxGroup } from './components/Checkbox';
 export type { CheckboxProps, CheckboxGroupProps } from './components/Checkbox';
+
+export { Radio, RadioGroup } from './components/Radio';
+export type { RadioProps, RadioGroupProps } from './components/Radio';
