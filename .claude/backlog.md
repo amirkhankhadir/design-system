@@ -77,6 +77,21 @@ Replaces `contrast-audit.html` as the canonical reference. Remove `contrast-audi
 
 ---
 
+## 📌 Незакрытая документация (следующая сессия)
+
+Сводка того, что осталось по документации на момент конца сессии:
+
+| # | Что | Где | Статус |
+|---|-----|-----|--------|
+| 1 | `DOCUMENTATION — Toggle` (Figma doc-фрейм) | страница `toggle` | ❌ не начато (см. G.3) |
+| 2 | Секция «Checkbox vs Toggle» | `DOCUMENTATION — Checkbox` (`520:148`) | ❌ не начато (см. G.4) |
+
+Всё остальное по компонентам Checkbox / Radio / Toggle закрыто: код + Storybook autodocs + Figma-компоненты + Figma-документация (кроме Toggle-дока). Storybook-документация у всех трёх есть.
+
+Напоминание про процесс дока: каждый компонент свой — не копировать секции вслепую, думать какие актуальны (см. как делали Grouping у Radio, которого нет у Checkbox).
+
+---
+
 ## ✅ D — Checkbox в Figma (done)
 
 Компонент `checkbox` (`500:133`), 15 вариантов (`checked` × `state`), + документация `DOCUMENTATION — Checkbox` (`520:148`). Готово.
