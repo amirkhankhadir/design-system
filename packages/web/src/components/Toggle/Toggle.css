@@ -1,0 +1,146 @@
+/* ── Toggle wrapper (label element) ──────────────────────────── */
+
+.toggle {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--ds-spacing-8);
+  cursor: pointer;
+  position: relative;
+}
+
+.toggle--disabled {
+  cursor: not-allowed;
+}
+
+/* ── Hidden native input ─────────────────────────────────────── */
+
+.toggle__input {
+  position: absolute;
+  width: 36px; /* matches track width — full click target */
+  height: var(--ds-spacing-20);
+  opacity: 0;
+  margin: 0;
+  cursor: inherit;
+
+  /* sit on top of .toggle__track to receive mouse events */
+  z-index: 1;
+}
+
+/* ── Track (pill) ────────────────────────────────────────────── */
+
+.toggle__track {
+  flex-shrink: 0;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+
+  /* fixed component geometry: 36×20 track holds a 16px thumb with 2px inset,
+     giving 16px of travel (36 − 16 − 2 − 2). 20px height matches the label's
+     20px line-height, so flex-start aligns the track with the first text line */
+  width: 36px;
+  height: var(--ds-spacing-20);
+  padding: var(--ds-spacing-2);
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-color-border-strong);
+  box-sizing: border-box;
+  transition:
+    background 120ms ease,
+    box-shadow 120ms ease;
+}
+
+/* Surface overlay — hover / active (same pattern as Checkbox/Radio/Button) */
+.toggle__track::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: transparent;
+  transition: background 120ms ease;
+}
+
+/* ── Thumb ───────────────────────────────────────────────────── */
+
+.toggle__thumb {
+  width: var(--ds-spacing-16);
+  height: var(--ds-spacing-16);
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-color-icon-static-white);
+  position: relative;
+  z-index: 1; /* above ::after overlay */
+  flex-shrink: 0;
+  transition: transform 120ms ease;
+}
+
+/* ── On state ────────────────────────────────────────────────── */
+
+.toggle__input:checked ~ .toggle__track {
+  background: var(--ds-color-brand-default);
+}
+
+.toggle__input:checked ~ .toggle__track .toggle__thumb {
+  transform: translateX(16px);
+}
+
+/* ── Label text ──────────────────────────────────────────────── */
+
+.toggle__label {
+  color: var(--ds-color-text-primary);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HOVER
+══════════════════════════════════════════════════════════════ */
+
+.toggle:not(.toggle--disabled):hover .toggle__track::after {
+  background: var(--ds-color-surface-1);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ACTIVE — pressed
+══════════════════════════════════════════════════════════════ */
+
+.toggle:not(.toggle--disabled):active .toggle__track::after {
+  background: var(--ds-color-surface-2);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FOCUS VISIBLE
+══════════════════════════════════════════════════════════════ */
+
+.toggle__input:focus-visible ~ .toggle__track {
+  box-shadow:
+    0 0 0 var(--ds-border-width-2) var(--ds-color-background-default),
+    0 0 0 var(--ds-spacing-4) var(--ds-color-border-focus);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DISABLED — always last to win specificity
+══════════════════════════════════════════════════════════════ */
+
+.toggle--disabled .toggle__track {
+  background: var(--ds-color-background-muted);
+}
+
+/* disabled + on keeps a muted-brand track so the on-state stays readable
+   (a plain gray track would look identical to disabled-off) */
+.toggle--disabled .toggle__input:checked ~ .toggle__track {
+  background: var(--ds-color-brand-subtle);
+}
+
+/* muted thumb (not crisp white) + no shadow, so a disabled toggle clearly
+   reads as inactive vs the active off-state — the active off has a bright
+   white, elevated thumb, which is the main differentiator in Dark theme
+   where the muted track alone is too close to the default off track */
+.toggle--disabled .toggle__thumb {
+  background: var(--ds-color-icon-disabled);
+  box-shadow: none;
+}
+
+.toggle--disabled .toggle__track::after {
+  display: none;
+}
+
+.toggle--disabled .toggle__label {
+  color: var(--ds-color-text-disabled);
+}

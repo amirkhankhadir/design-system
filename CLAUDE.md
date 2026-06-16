@@ -38,6 +38,7 @@
 | `Tooltip` | `Tooltip.tsx`, `Tooltip.css`, `Tooltip.stories.tsx` | `Components/Tooltip` | 12 placements, optional title, pure CSS positioning |
 | `Checkbox` | `Checkbox.tsx`, `Checkbox.css`, `CheckboxGroup.tsx`, `index.ts`, `Checkbox.stories.tsx` | `Components/Checkbox` | indeterminate state, error state, standalone mode, CheckboxGroup with vertical/horizontal orientation |
 | `Radio` | `Radio.tsx`, `Radio.css`, `RadioGroup.tsx`, `index.ts`, `Radio.stories.tsx` | `Components/Radio` | circular selection dot, error state, standalone mode, RadioGroup propagates `name`/`disabled` via context |
+| `Toggle` | `Toggle.tsx`, `Toggle.css`, `index.ts`, `Toggle.stories.tsx` | `Components/Toggle` | switch (`role="switch"`) for immediate on/off; no error/size props; disabled-on keeps muted-brand track; off-state iOS-style contrast (documented in stories) |
 
 ### Figma (file `SmpZhN2JSWj1F6NplzoGUN`)
 
@@ -92,6 +93,8 @@ Full details in `.claude/patterns-code.md` and `.claude/patterns-figma.md`.
 ## Finalization Gate
 
 **Сначала визуал** — запусти Storybook, покажи скриншоты в обеих темах, дай пользователю потестировать. Вноси правки пока не скажет "ок". Только после этого запускай checklist.
+
+**Re-run checks after ANY edit.** Every time code changes — whether a fix you made or an edit the user made on their side — re-run the quality suite (`npm run lint && npm run lint:css && npm run format:check && npx tsc --noEmit`, plus `npm run build-storybook` before finalizing). Never report a fix as done without re-running checks on the new state. If you notice the working tree changed (e.g. `git status` shows files you didn't touch), assume the user edited them and re-run checks before continuing.
 
 **Before running the checklist, ask the user:**
 > "Компонент готов — финализируем?"
