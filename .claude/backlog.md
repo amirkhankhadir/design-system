@@ -9,11 +9,7 @@ Items agreed but not yet started. Add new items here, mark done with ✅.
 Raised during the 2026-06-16 hand-off strategy discussion (see memory `project-handoff-strategy-discussion`). Not urgent — захвачено, чтобы не потерять перед реальной передачей разработчикам.
 
 1. **Publish `@design-system/web` to a registry.** Currently npm-shaped (exports/types/lib build, changesets configured) but `npm run release` never run, root is `private`. Decide registry (public npm vs private/GitHub Packages), then enable publishing so web-разработчики могут `npm install` вместо копирования из репо.
-2. **Complete mobile token output (CONFIRMED gap).** `build-tokens.js` emits typography + elevation only for Web. iOS `buildSwift` outputs Color/Spacing/Radius; Android outputs colors.xml + dimens.xml. Add:
-   - iOS: typography (font sizes, line-heights, text styles) + elevation (shadows) → Swift.
-   - Android: typography (text appearances / sp dimens) + elevation → XML.
-   - Source data already exists in `tokens/typography.json` (text-styles + effect-styles/elevation). Web build (`buildTextStyleCSS`, `buildElevationCSS`) is the reference.
-3. After (2): regenerate `dist/`, update `README.md` Current Status table (mobile Tokens row → ✅).
+2. ✅ **Complete mobile token output (done 2026-06-17).** `build-tokens.js` now emits typography + elevation for iOS (`Typography`/`Elevation` enums in Swift) and Android (`type.xml` text styles + `ds_elevation_*` dp in dimens.xml). 28 text styles per platform, matching web. Android elevation is an approximate dp (noted in README). `dist/` regenerated, README Current Status updated.
 
 ---
 

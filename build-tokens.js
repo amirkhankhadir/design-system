@@ -3,11 +3,12 @@
  * Reads tokens/ JSON → generates platform outputs in dist/
  *
  * Outputs:
- *   dist/web/tokens.light.css   — CSS custom properties, light theme
+ *   dist/web/tokens.light.css   — CSS custom properties, light theme (colors, type, elevation)
  *   dist/web/tokens.dark.css    — CSS custom properties, dark theme
- *   dist/ios/DesignTokens.swift — Swift constants for SwiftUI
+ *   dist/ios/DesignTokens.swift — Swift constants (Color, Spacing, Radius, Typography, Elevation)
  *   dist/android/colors.xml     — Android color resources
- *   dist/android/dimens.xml     — Android dimension resources
+ *   dist/android/dimens.xml     — Android dimension resources (+ elevation dp)
+ *   dist/android/type.xml       — Android text-style resources (sp)
  */
 
 import { readFileSync, mkdirSync, writeFileSync } from 'fs';
@@ -114,6 +115,22 @@ function buildCSS(mode) {
 // ─── Build text-style CSS classes ─────────────────────────────────────────────
 
 const WEIGHT_MAP = { Regular: 400, Medium: 500, SemiBold: 600, Bold: 700 };
+const SWIFT_WEIGHT = { Regular: '.regular', Medium: '.medium', SemiBold: '.semibold', Bold: '.bold' };
+
+// Resolve a shadow color alias like "{color.shadow.sm}" to its value for a mode
+const shadowSemFlat = flatten(semantics.color ?? {});
+function resolveShadowColor(alias, mode) {
+  const key = alias.slice(1, -1).replace(/^color\./, '');
+  const semVal = shadowSemFlat[key];
+  if (!semVal) return alias;
+  const val = typeof semVal === 'object' && mode in semVal ? semVal[mode] : semVal;
+  return resolvePrim(val);
+}
+
+// camelCase text-style name: text/medium/1 → textMedium1
+function styleCamel(category, size, variant) {
+  return category + size.charAt(0).toUpperCase() + size.slice(1) + variant;
+}
 
 function buildTextStyleCSS() {
   const lines = ['\n/* ── Text styles ────────────────────────────────────────────────── */'];
@@ -223,6 +240,53 @@ function buildSwift() {
     ).join('');
     lines.push(`    public static let ${name}: CGFloat = ${v}`);
   }
+  lines.push('  }', '');
+
+  // Typography (text styles)
+  lines.push('  public enum Typography {');
+  const fontFamily = typography.variables?.['font-family']?.primary ?? 'System';
+  lines.push(`    public static let fontFamily = "${fontFamily}"`);
+  lines.push('    public struct TextStyle {');
+  lines.push('      public let size: CGFloat');
+  lines.push('      public let lineHeight: CGFloat');
+  lines.push('      public let weight: UIFont.Weight');
+  lines.push('    }');
+  const swiftStyles = typography['text-styles'] ?? {};
+  for (const [category, sizes] of Object.entries(swiftStyles)) {
+    for (const [size, variants] of Object.entries(sizes)) {
+      for (const [variant, def] of Object.entries(variants)) {
+        const nm = styleCamel(category, size, variant);
+        lines.push(`    public static let ${nm} = TextStyle(size: ${def.size}, lineHeight: ${def.lineHeight}, weight: ${SWIFT_WEIGHT[def.weight] ?? '.regular'})`);
+      }
+    }
+  }
+  lines.push('  }', '');
+
+  // Elevation (shadows) — theme-aware shadow colors
+  lines.push('  public enum Elevation {');
+  lines.push('    public struct Shadow {');
+  lines.push('      public let color: UIColor');
+  lines.push('      public let x: CGFloat');
+  lines.push('      public let y: CGFloat');
+  lines.push('      public let blur: CGFloat');
+  lines.push('      public let spread: CGFloat');
+  lines.push('    }');
+  const swiftElevs = typography['effect-styles']?.elevation ?? {};
+  for (const [level, shadows] of Object.entries(swiftElevs)) {
+    if (!Array.isArray(shadows) || shadows.length === 0) {
+      lines.push(`    public static let level${level}: [Shadow] = []`);
+      continue;
+    }
+    const items = shadows.map(s => {
+      const lightC = resolveShadowColor(s.boundColor, 'Light');
+      const darkC = resolveShadowColor(s.boundColor, 'Dark');
+      const colorExpr = `UIColor { t in t.userInterfaceStyle == .dark ? UIColor(hex: "${darkC}") : UIColor(hex: "${lightC}") }`;
+      return `Shadow(color: ${colorExpr}, x: ${s.offset.x}, y: ${s.offset.y}, blur: ${s.radius}, spread: ${s.spread})`;
+    });
+    lines.push(`    public static let level${level}: [Shadow] = [`);
+    items.forEach((it, i) => lines.push(`      ${it}${i < items.length - 1 ? ',' : ''}`));
+    lines.push('    ]');
+  }
   lines.push('  }');
 
   lines.push('}');
@@ -255,6 +319,37 @@ function buildAndroidDimens() {
       lines.push(`  <dimen name="${name}">${v}dp</dimen>`);
     }
   }
+
+  // Elevation — Android renders elevation as a single dp value (system shadow);
+  // these dp values approximate the layered shadow defined in tokens/typography.json.
+  // For the exact multi-layer shadow spec, see the web (CSS) or iOS (Swift) output.
+  lines.push('  <!-- Elevation (approximate dp; exact shadow spec in web/iOS output) -->');
+  const elevDp = { '0': 0, '1': 2, '2': 8, '3': 16 };
+  const androidElevs = typography['effect-styles']?.elevation ?? {};
+  for (const level of Object.keys(androidElevs)) {
+    lines.push(`  <dimen name="ds_elevation_${level}">${elevDp[level] ?? 0}dp</dimen>`);
+  }
+
+  lines.push('</resources>');
+  return lines.join('\n') + '\n';
+}
+
+// Typography → Android TextAppearance-style resources (sp units)
+function buildAndroidType() {
+  const lines = ['<?xml version="1.0" encoding="utf-8"?>', '<!-- Auto-generated — do not edit -->', '<resources>'];
+  const styles = typography['text-styles'] ?? {};
+  for (const [category, sizes] of Object.entries(styles)) {
+    for (const [size, variants] of Object.entries(sizes)) {
+      for (const [variant, def] of Object.entries(variants)) {
+        const name = `ds_${category}_${size}_${variant}`;
+        lines.push(`  <style name="${name}">`);
+        lines.push(`    <item name="android:textSize">${def.size}sp</item>`);
+        lines.push(`    <item name="android:lineHeight">${def.lineHeight}sp</item>`);
+        lines.push(`    <item name="android:textFontWeight">${WEIGHT_MAP[def.weight] ?? 400}</item>`);
+        lines.push('  </style>');
+      }
+    }
+  }
   lines.push('</resources>');
   return lines.join('\n') + '\n';
 }
@@ -274,9 +369,11 @@ writeFileSync('dist/web/tokens.dark.css',      buildCSS('Dark')  + textStyleCSS 
 writeFileSync('dist/ios/DesignTokens.swift',   buildSwift());
 writeFileSync('dist/android/colors.xml',       buildAndroidColors());
 writeFileSync('dist/android/dimens.xml',       buildAndroidDimens());
+writeFileSync('dist/android/type.xml',         buildAndroidType());
 
 console.log('✓ dist/web/tokens.light.css');
 console.log('✓ dist/web/tokens.dark.css');
-console.log('✓ dist/ios/DesignTokens.swift');
+console.log('✓ dist/ios/DesignTokens.swift  (colors, spacing, radius, typography, elevation)');
 console.log('✓ dist/android/colors.xml');
-console.log('✓ dist/android/dimens.xml');
+console.log('✓ dist/android/dimens.xml      (dimensions + elevation)');
+console.log('✓ dist/android/type.xml        (text styles)');
