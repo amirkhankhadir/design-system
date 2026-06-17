@@ -27,6 +27,8 @@
 
 ## Current State
 
+> **High-level purpose + platform-readiness status live in `README.md`** ("Purpose" + "Current Status" sections). When platform readiness, the component list, token output, or publish status changes, update `README.md` too — not just the tables here. The tables below are Claude's detailed working reference (file names, Figma node IDs); README is the human-facing summary.
+
 ### Code (`packages/web/src/components/`)
 
 | Component | Files | Storybook title | Notes |

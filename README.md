@@ -4,6 +4,37 @@ Universal design system — tokens, components, documentation.
 
 ---
 
+## Purpose
+
+A single **source of truth for the visual language** (colors, typography, spacing, radius, elevation) that is meant to be shared across **Web, iOS, and Android**, plus a **reference component implementation** and **documentation** (Figma for designers, Storybook for developers).
+
+The intended adoption model:
+- **Tokens** are generated from one source (`tokens/*.json`) into each platform's native format, so every platform speaks the same visual language with built-in Light/Dark support.
+- **Components** are provided as ready-to-use code for the web; other platforms either consume the web components (if they use the web) or **re-implement the components natively** using the Figma + Storybook documentation as the spec.
+
+This mirrors how mature design systems (Material, Polaris, Atlassian) hand off: shared tokens + per-platform component implementations.
+
+---
+
+## Current Status
+
+> **Keep this section up to date.** Whenever platform readiness, the component list, the token output, or the publish status changes, update the table below.
+
+| Layer | Web | iOS | Android |
+|---|---|---|---|
+| **Tokens** | ✅ colors, dimensions, typography, elevation — CSS custom properties | ⚠️ colors + dimensions only — Swift (`DesignTokens.swift`). **No typography / elevation yet** | ⚠️ colors + dimensions only — XML (`colors.xml`, `dimens.xml`). **No typography / elevation yet** |
+| **Components** | ✅ React 18 + TypeScript — Button, IconButton, Icon, Loader, Tooltip, Checkbox, Radio, Toggle | ❌ none (build natively from spec) | ❌ none (build natively from spec) |
+| **Documentation** | ✅ Storybook (autodocs) + Figma | uses Figma / Storybook as the spec | uses Figma / Storybook as the spec |
+| **Distribution** | ⚠️ packaged as `@design-system/web` (npm-shaped, versioned via changesets) but **not yet published to a registry** | — | — |
+
+**Known gaps before a real product hand-off:**
+1. The web package is **not published** to any npm registry yet (set up, but `npm run release` never run).
+2. **No native mobile components** — mobile teams get tokens, then build components themselves.
+3. **Mobile token output is incomplete** — iOS/Android emit only colors + dimensions; typography and elevation exist in the source and in the web output but are not yet generated for Swift/XML (`build-tokens.js` → `buildSwift` / `buildAndroid*` don't handle them).
+4. Web components require **React 18** (peer dependency); non-React web stacks can use the token CSS but not the components.
+
+---
+
 ## Architecture
 
 ```
