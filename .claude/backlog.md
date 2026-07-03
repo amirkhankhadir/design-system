@@ -4,6 +4,41 @@ Items agreed but not yet started. Add new items here, mark done with ✅.
 
 ---
 
+## J — Figma documentation: canon-compliance audit (raised 2026-07-03)
+
+Discovered while building the Toggle doc: docs were historically built by copying a sibling frame, not derived from `.claude/documentation.md` (see mistakes #41). An audit of all 6 doc frames against the canon surfaced the items below. **Scheduled work — do not fix inline.**
+
+### J1 — ✗/✕ glyph bug (recurrence of mistakes #34) · HIGH
+`✗` (U+2717) and `✕` (U+2715) aren't in Source Sans 3 → render as a mismatched serif glyph or nothing at all. Replace with ASCII **"X"** (Checkbox/Radio/Toggle already do this correctly).
+- **Tooltip** (`297:26`): "✗ When NOT to use" (`299:108`), "✗ Don't write long tooltips" (`305:190`), "✗ Don't" (`301:137`)
+- **Button** (`325:26`): "✕" markers in the When-NOT-to-use list (`334:228`, `334:234`, …)
+- **IconButton** (`366:253`): "✗ Don't" ×3 (`371:334`, `371:353`, `371:372`)
+- Verify each in a screenshot before/after. Leave Checkbox/Radio/Toggle (already "X").
+
+### J2 — Behavior/keyboard cards are text-only · MED
+Canon: "Never write text-only documentation; keyboard card → key-chip illustration." Text-only keyboard cards:
+- **Checkbox** behavior-Keyboard (`524:225`), **Radio** Keyboard navigation (`574:218`), **Toggle** Behavior/Keyboard.
+- Upgrade to Tab/Space key-chips using the pattern already shipped in **IconButton** (`420:400`) and **Tooltip** (`286:340`). Key-chip recipe is in `documentation.md`.
+
+### J3 — Missing Composition sections · MED
+- **Toggle**: add "Composition — toggle in a settings row" (mirror the `SettingsList` story).
+- **Checkbox**: add Grouping/Composition for `CheckboxGroup` (vertical/horizontal) — Radio has a Grouping section, Checkbox doesn't, despite shipping CheckboxGroup.
+
+### J4 — "Checkbox vs Toggle" section (was G.4) · MED
+Add to `DOCUMENTATION — Checkbox` (`520:148`) with real instances of both: Checkbox = deferred choice (applies on submit), Toggle = immediate action. Now that Toggle exists, no placeholders. (Moved here from G.4.)
+
+### J5 — Reconcile `documentation.md` with the actual family standard · LOW
+The guide's "Card visual style" section still describes the Tooltip-era spec; the whole family has since standardized on a newer look. Make guide and docs agree (one source of truth):
+- section separators: divider line + 40px spacers (guide says `itemSpacing: 48`)
+- doc frame `paddingBottom: 80` (guide says 64)
+- cards: fill `surface` (`71:77`), **no** stroke (guide says fill `background/default` + `border/subtle` stroke)
+- section-label letter-spacing: docs use 0; guide contradicts itself (line ~69 says 8%, line ~197 says never add). Pick 0, fix the table.
+
+### J6 — Finalize Toggle doc · after J2/J3
+Toggle doc (`662:133`, page `toggle`) is built and visually approved, but pending J2 (key-chips) + J3 (Composition) before it fully matches canon. Finalize (and confirm CLAUDE.md row) once those land.
+
+---
+
 ## I — Portfolio case: design system + mini-app, angle "работа с ИИ"
 
 Идея (обсуждали 2026-06-17): упаковать этот проект как портфолио-кейс для собеседований. **Стержень нарратива — сотрудничество дизайнера с ИИ** (где вёл, где ловил баги, какие решения принимал), а не просто «вот моя дизайн-система».
@@ -107,8 +142,8 @@ Replaces `contrast-audit.html` as the canonical reference. Remove `contrast-audi
 
 | # | Что | Где | Статус |
 |---|-----|-----|--------|
-| 1 | `DOCUMENTATION — Toggle` (Figma doc-фрейм) | страница `toggle` | ❌ не начато (см. G.3) |
-| 2 | Секция «Checkbox vs Toggle» | `DOCUMENTATION — Checkbox` (`520:148`) | ❌ не начато (см. G.4) |
+| 1 | `DOCUMENTATION — Toggle` (Figma doc-фрейм) | страница `toggle` (`662:133`) | ✅ построен и визуально одобрен 2026-07-03; canon-полировка в J6 (см. J2/J3) |
+| 2 | Секция «Checkbox vs Toggle» | `DOCUMENTATION — Checkbox` (`520:148`) | ❌ не начато — перенесено в **J4** |
 
 Всё остальное по компонентам Checkbox / Radio / Toggle закрыто: код + Storybook autodocs + Figma-компоненты + Figma-документация (кроме Toggle-дока). Storybook-документация у всех трёх есть.
 

@@ -4,6 +4,16 @@ Each entry: what went wrong, why, and the correct behaviour. Add every new one h
 
 ---
 
+### 41. Built a Figma doc by copying a sibling doc (Radio) instead of reading `documentation.md`'s section guide first
+
+**What happened:** Asked to build `DOCUMENTATION — Toggle`, I used the existing Radio doc frame as the reference for *which sections to include and how to structure them* — "adapting the Radio template." I never re-read `.claude/documentation.md`, which is the canonical guide (listed in CLAUDE.md's detail-files table). The result was decent but inherited Radio's own gaps rather than following the spec: Behavior/Accessibility cards were **text-only** (canon: "Never write text-only documentation. Every card that describes a behaviour must have a visual preview"; Keyboard specifically must use key-chip illustrations), and I **omitted Composition** ("Toggle in a settings row" — the single most common real toggle pattern, and one we even ship as the `SettingsList` story). The user caught it: "Radio не эталон по разделам."
+
+**Why:** A sibling doc looks like a ready-made template, so copying it feels safe and fast. But a sibling is just one *instance* of the spec — and it may itself have drifted from the spec (Radio had: bottom-padding 80 vs canon 64; divider lines vs canon "itemSpacing 48"; cards without the canon's `border/subtle` stroke). Copying an instance propagates its drift and its omissions; only the written guide encodes the full menu of sections and the "every behaviour needs a visual" rule.
+
+**Rule:** Before building ANY Figma documentation frame, **read `.claude/documentation.md` first** — the 13-section "Recommended Sections" menu, the "not a rigid template — pick what helps a designer, omit the rest" principle, the "every described behaviour needs a visual example / key-chips for keyboard" rule, and the card visual spec. Derive the section list from that guide + the component's own code/stories (e.g. the `SettingsList` story implies a Composition section), THEN look at a sibling doc only for visual consistency of styling — never let the sibling decide *which sections exist*. If the sibling contradicts the guide, that's drift to flag, not a pattern to copy.
+
+---
+
 ### 40. Use `await node.setEffectStyleIdAsync(id)`, not the sync `node.effectStyleId = id`, to link an effect style in use_figma
 
 **What happened:** Applied `elevation/1` to the Toggle thumb with the sync setter `thumb.effectStyleId = 'S:b3259b…,'`. The API read the value back correctly (`effectStyleId` matched the style, `idsMatch: true`), so the audit passed — but in Figma's UI the thumb's Effects panel showed two editable raw "Drop shadow" rows (with per-effect delete icons) instead of a single connected-style reference. The user noticed the component "wasn't using our elevation styles." Re-applying with `await thumb.setEffectStyleIdAsync(elev1Id)` established a proper linked-style reference.

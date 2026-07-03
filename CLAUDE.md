@@ -71,6 +71,7 @@
 | `icon-button` | `DOCUMENTATION — IconButton` | `366:253` | Overview, When to Use/Not, Variants (ghost vs tertiary), Sizes, Accessibility, Behavior, Dos & Don'ts | ✅ finalized |
 | `checkbox` | `DOCUMENTATION — Checkbox` | `520:148` | Overview, Anatomy, When to Use/Not, States, Behavior, Content Guidelines, Dos & Don'ts | ✅ finalized |
 | `radio` | `DOCUMENTATION — Radio` | `572:133` | Overview, Anatomy, When to Use/Not, Grouping, States, Behavior, Content Guidelines, Dos & Don'ts | ✅ finalized |
+| `toggle` | `DOCUMENTATION — Toggle` | `662:133` | Overview, Anatomy, When to Use/Not, States (no error), Behavior, Accessibility, Content Guidelines, Dos & Don'ts | 🚧 built + visually approved 2026-07-03 — canon polish pending (backlog J2/J3/J6) |
 
 ---
 
