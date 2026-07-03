@@ -235,8 +235,25 @@ Layout: **Do | Don't** paired per row (not "all Dos then all Don'ts"). Max 2 per
 1. Remove "CONCEPT DRAFT" chip from header
 2. Rename frame to `DOCUMENTATION — [Component]`
 3. Record finalized structure in CLAUDE.md under "What's been built → Figma documentation"
+4. **Link the component to its doc — automatically, no need to ask.** As soon as a component's documentation frame exists, set the component set's **`documentationLinks`** (the "Link to documentation" field) to an in-file deep-link to that frame. This is a standing rule — do it without asking for permission.
 
 **Rule:** Never start building a final frame without an approved concept.
+
+### Auto-link component → documentation (standing rule)
+
+Whenever documentation for a component is ready, set its `documentationLinks` right away — no permission needed.
+
+```js
+// on the COMPONENT_SET (or COMPONENT) node:
+set.documentationLinks = [{
+  uri: "https://www.figma.com/design/SmpZhN2JSWj1F6NplzoGUN/Claude-Design-System?node-id=<DOC-FRAME-ID-WITH-DASH>"
+}];
+```
+
+- URL format: file key + `?node-id=<id>` where the node id uses a **dash** (e.g. frame `662:133` → `node-id=662-133`).
+- Point it at the component's own doc frame in this file (in-file deep-link, so a click jumps straight to the spec).
+- One link per component is enough. Verify it persisted with a read-back (`node.documentationLinks`), not just the setter's return.
+- Skip components with no doc frame (e.g. `loader`) until one exists.
 
 ---
 
